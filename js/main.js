@@ -1,8 +1,11 @@
 /**
  * Spire – page behaviour
- *  1. Spire AI side panel: open / close, focus handling, modal on mobile
- *  2. Chat flow: user message -> "Thinking" -> canned AI answer
- *  3. Mobile navigation drawer
+ *  1. Spire AI side panel: open / close
+ *     desktop: the panel takes the rail's column and pushes the main content
+ *     mobile:  a full-screen sheet that slides in from the right (modal)
+ *  2. Chat: a scripted conversation that restarts on every open
+ *  3. Files-in-context tray
+ *  4. Mobile navigation drawer
  */
 (() => {
   'use strict';
@@ -13,8 +16,8 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  /** Wait for the element's transition to end (with a safety timeout). */
-  const afterTransition = (el, done, timeout = 600) => {
+  /** Run `done` when `el`'s own transition ends (with a safety timeout). */
+  const afterTransition = (el, done, timeout = 650) => {
     let finished = false;
     const finish = (event) => {
       if (finished || (event && event.target !== el)) return;
@@ -31,27 +34,27 @@
   /* ======================================================================
      1. Spire AI panel
      ====================================================================== */
+  const app = $('.app');
   const panel = $('#ai-panel');
+  const rail = $('.rail');
   const openers = $$('[data-ai-open]');
   const composer = $('[data-composer]');
   const composerInput = $('#ai-input');
-  const rail = $('.rail');
-  // everything outside the panel that should be inert while it is modal
+  const heroInput = $('#hero-ask');
+  // everything outside the panel that is inert while the mobile sheet is open
   const pageRegions = $$('.skip-link, .topbar, .sidenav, .main, .rail');
 
   let lastTrigger = null;
-  // source of truth for the panel; the .is-open class follows it a frame later
+  // source of truth for the panel; the classes follow it a frame later
   let panelOpen = false;
-
-  const isPanelOpen = () => panelOpen;
 
   const setExpanded = (open) => {
     openers.forEach((btn) => btn.setAttribute('aria-expanded', String(open)));
   };
 
   /**
-   * Mobile: full-screen modal, the page behind is inert.
-   * Desktop: non-modal, only the rail (fully covered by the panel) is inert.
+   * Mobile: modal sheet, the page behind it is inert and can't scroll.
+   * Desktop: part of the layout; only the rail it replaces is inert.
    */
   const applyPanelMode = () => {
     const modal = panelOpen && !desktopMq.matches;
@@ -61,33 +64,54 @@
     setLocked(modal || isNavOpen());
   };
 
-  const openPanel = (trigger) => {
+  /**
+   * @param trigger  element to return focus to on close
+   * @param question optional text typed before opening (hero input)
+   */
+  /** Returns false if `question` couldn't be sent (a reply is still pending). */
+  const openPanel = (trigger, question = '') => {
     if (panelOpen) {
       composerInput.focus();
-      return;
+      return question ? sendMessage(question) : true;
     }
     panelOpen = true;
     lastTrigger = trigger || null;
+
+    // every open starts a fresh conversation
+    resetChat();
+    if (question) sendMessage(question);
+    else if (desktopMq.matches) startConversation();
+
     panel.hidden = false;
     setExpanded(true);
     applyPanelMode();
-    // next frame so the closed styles are painted before the transition runs
+    // next frame, so the closed state is painted before the transition runs
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         if (!panelOpen) return; // closed again before we got here
+        app.classList.add('is-ai-open');
         panel.classList.add('is-open');
-        composerInput.focus({ preventScroll: true });
+        // welcome screen (mobile): focus its start button, so the on-screen
+        // keyboard doesn't cover the greeting; otherwise the message input
+        const target = panel.dataset.state === 'welcome' ? $('[data-ai-start]') : composerInput;
+        target.focus({ preventScroll: true });
       });
     });
+    return true;
   };
 
   const closePanel = () => {
     if (!panelOpen) return;
     panelOpen = false;
+    stopReply();
+    closeFiles();
+    app.classList.remove('is-ai-open');
     panel.classList.remove('is-open');
     setExpanded(false);
     applyPanelMode();
-    afterTransition(panel, () => {
+
+    // desktop animates the grid column, mobile slides the sheet
+    afterTransition(desktopMq.matches ? app : panel, () => {
       if (!panelOpen) panel.hidden = true;
     });
 
@@ -99,11 +123,18 @@
 
   openers.forEach((btn) => {
     btn.addEventListener('click', () => {
-      const heroInput = $('#hero-ask');
-      const pending = btn.closest('[data-ask-form]') ? heroInput.value.trim() : '';
-      openPanel(btn);
-      if (pending && sendMessage(pending)) heroInput.value = '';
+      // the hero pill's button also sends whatever was typed next to it;
+      // the text is only cleared once it was actually sent
+      const typed = btn.closest('[data-ask-form]') ? heroInput.value.trim() : '';
+      if (openPanel(btn, typed) && typed) heroInput.value = '';
     });
+  });
+
+  // Hero pill: typing + Enter opens the panel with that question
+  $('[data-ask-form]').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const typed = heroInput.value.trim();
+    if (openPanel(heroInput, typed) && typed) heroInput.value = '';
   });
 
   $$('[data-ai-close]').forEach((btn) => btn.addEventListener('click', closePanel));
@@ -112,14 +143,29 @@
 
   /* ======================================================================
      2. Chat
+     The first question gets an answer with document suggestions; picking
+     one (or asking anything else) gets an answer citing several sources.
      ====================================================================== */
+  const FIRST_QUESTION = 'Out of Gate Analysis for 22-27 March';
+  const DOC_SUGGESTIONS = [
+    'Summarize this document',
+    'Where does it talk about eligibility?',
+    'What are the key points?',
+  ];
+  const REPLIES = [
+    { sources: [1], suggestions: DOC_SUGGESTIONS },
+    { sources: [1, 3, 3, 1], suggestions: [] },
+  ];
+  const THINKING_MS = 4000;
+  const SOURCES_SHOWN = 2; // the rest hide behind a "more" button
+
   const chatLog = $('[data-chat-log]');
-  const filesTray = $('[data-files]');
   const tplUser = $('#tpl-user-msg');
   const tplThinking = $('#tpl-thinking');
   const tplAi = $('#tpl-ai-msg');
+  const tplChip = $('#tpl-chip');
 
-  const THINKING_MS = 1400;
+  let turn = 0;
   let replyTimer = 0;
 
   const setView = (view) => { panel.dataset.state = view; };
@@ -131,19 +177,12 @@
     });
   };
 
-  const append = (template) => {
-    const node = template.content.firstElementChild.cloneNode(true);
+  const clone = (template) => template.content.firstElementChild.cloneNode(true);
+
+  const append = (node) => {
     chatLog.append(node);
     scrollChatToEnd();
     return node;
-  };
-
-  const resetChat = () => {
-    window.clearTimeout(replyTimer);
-    chatLog.replaceChildren();
-    filesTray.hidden = true;
-    composer.removeAttribute('aria-busy');
-    setView('welcome');
   };
 
   const announcer = $('[data-announcer]');
@@ -155,8 +194,64 @@
 
   const isBusy = () => composer.getAttribute('aria-busy') === 'true';
 
-  /** Returns false (and keeps the caller's text) while a reply is pending. */
-  function sendMessage(text) {
+  const stopReply = () => {
+    window.clearTimeout(replyTimer);
+    composer.removeAttribute('aria-busy');
+  };
+
+  const resetChat = () => {
+    stopReply();
+    turn = 0;
+    chatLog.replaceChildren();
+    closeFiles();
+    setView('welcome');
+  };
+
+  function startConversation() {
+    sendMessage(FIRST_QUESTION);
+  }
+
+  /** "1 3 •••" – the first sources, plus a toggle for the rest */
+  function renderSources(container, sources) {
+    sources.forEach((number, index) => {
+      const cite = document.createElement('sup');
+      cite.className = 'cite';
+      cite.innerHTML = `<span class="visually-hidden">source </span>${number}`;
+      if (index >= SOURCES_SHOWN) cite.hidden = true;
+      container.append(cite);
+    });
+
+    if (sources.length > SOURCES_SHOWN) {
+      const more = document.createElement('button');
+      more.type = 'button';
+      more.className = 'cite-more';
+      more.dataset.sourcesToggle = '';
+      more.setAttribute('aria-expanded', 'false');
+      more.setAttribute('aria-label', `Show all ${sources.length} sources`);
+      container.append(more);
+    }
+  }
+
+  function renderReply({ sources, suggestions }) {
+    const reply = clone(tplAi);
+    renderSources($('[data-cites]', reply), sources);
+
+    const actions = $('[data-actions]', reply);
+    suggestions.forEach((text) => {
+      const chip = clone(tplChip);
+      $('.chip__text', chip).textContent = text;
+      actions.append(chip);
+    });
+    if (!suggestions.length) actions.remove();
+
+    return reply;
+  }
+
+  /**
+   * Adds the user's bubble, shows "Thinking" and then the scripted reply.
+   * Returns false (so callers keep their text) while a reply is pending.
+   */
+  function sendMessage(text, { fromSuggestion = false } = {}) {
     if (isBusy()) {
       nudge(composer);
       announce('Please wait for Spire AI to finish replying.');
@@ -164,18 +259,22 @@
     }
 
     setView('chat');
-    const userMsg = append(tplUser);
-    $('.msg__bubble', userMsg).textContent = text;
+    const userMsg = clone(tplUser);
+    $('.msg__text', userMsg).textContent = text;
+    $('.msg__icon', userMsg).hidden = !fromSuggestion;
+    append(userMsg);
 
     composer.setAttribute('aria-busy', 'true');
-    const thinking = append(tplThinking);
+    const thinking = append(clone(tplThinking));
+
+    const reply = REPLIES[Math.min(turn, REPLIES.length - 1)];
+    turn += 1;
 
     replyTimer = window.setTimeout(() => {
       thinking.remove();
-      append(tplAi);
-      filesTray.hidden = false;
+      append(renderReply(reply));
       composer.removeAttribute('aria-busy');
-    }, reducedMotionMq.matches ? 300 : THINKING_MS);
+    }, THINKING_MS);
 
     return true;
   }
@@ -198,52 +297,38 @@
     if (sendMessage(text)) composerInput.value = '';
   });
 
-  // Hero pill: typing + Enter opens the panel and sends the question
-  $('[data-ask-form]').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const heroInput = $('#hero-ask');
-    const text = heroInput.value.trim();
-    openPanel(heroInput);
-    if (text && sendMessage(text)) heroInput.value = '';
+  // Mobile welcome screen: tapping the greeting starts the conversation
+  $('[data-ai-start]').addEventListener('click', () => {
+    startConversation();
+    composerInput.focus({ preventScroll: true });
   });
 
-  // Search is out of scope for the task: keep Enter from navigating away
-  $('.search').addEventListener('submit', (event) => event.preventDefault());
-
+  // Mobile "back": return to the welcome screen
   $('[data-ai-back]').addEventListener('click', () => {
     resetChat();
-    composerInput.focus();
+    $('[data-ai-start]').focus();
   });
 
   // Delegated handlers for content rendered from templates
   chatLog.addEventListener('click', (event) => {
     const suggestion = event.target.closest('[data-suggest]');
     if (suggestion) {
-      sendMessage(suggestion.textContent.trim());
+      sendMessage($('.chip__text', suggestion).textContent, { fromSuggestion: true });
       return;
     }
 
-    const feedback = event.target.closest('[data-feedback]');
-    if (feedback) {
-      const pressed = feedback.getAttribute('aria-pressed') === 'true';
-      $$('[data-feedback]', feedback.parentElement).forEach((btn) => btn.setAttribute('aria-pressed', 'false'));
-      feedback.setAttribute('aria-pressed', String(!pressed));
-      return;
-    }
-
-    const copy = event.target.closest('[data-copy]');
-    if (copy) {
-      const answer = copy.closest('.msg__bubble').querySelector('p').textContent.replace(/\s+/g, ' ').trim();
-      const copied = () => {
-        copy.classList.add('is-done');
-        announce('Answer copied to clipboard.');
-        window.setTimeout(() => copy.classList.remove('is-done'), 1600);
-      };
-      const failed = () => announce('Copy failed. Select the text to copy it manually.');
-      if (navigator.clipboard) navigator.clipboard.writeText(answer).then(copied, failed);
-      else failed();
+    const toggle = event.target.closest('[data-sources-toggle]');
+    if (toggle) {
+      const expand = toggle.getAttribute('aria-expanded') !== 'true';
+      const cites = $$('.cite', toggle.parentElement);
+      cites.forEach((cite, index) => { cite.hidden = !expand && index >= SOURCES_SHOWN; });
+      toggle.setAttribute('aria-expanded', String(expand));
+      toggle.setAttribute('aria-label', expand ? 'Show fewer sources' : `Show all ${cites.length} sources`);
     }
   });
+
+  // Search is out of scope for the task: keep Enter from navigating away
+  $('.search').addEventListener('submit', (event) => event.preventDefault());
 
   // Voice buttons: visual toggle only (no speech API in scope)
   $$('[data-mic]').forEach((btn) => {
@@ -254,13 +339,36 @@
   });
 
   /* ======================================================================
-     3. Mobile navigation drawer
+     3. Files-in-context tray
+     ====================================================================== */
+  const files = $('[data-files]');
+  const filesToggle = $('[data-files-toggle]');
+  const filesList = $('#ai-files-list');
+
+  const isFilesOpen = () => filesToggle.getAttribute('aria-expanded') === 'true';
+
+  function setFilesOpen(open) {
+    filesToggle.setAttribute('aria-expanded', String(open));
+    filesList.hidden = !open;
+    files.classList.toggle('is-open', open);
+  }
+
+  function closeFiles() {
+    if (isFilesOpen()) setFilesOpen(false);
+  }
+
+  filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
+
+  /* ======================================================================
+     4. Mobile navigation drawer
      ====================================================================== */
   const nav = $('#sidenav');
   const navToggle = $('[data-nav-toggle]');
   const scrim = $('.scrim');
 
-  const isNavOpen = () => nav.classList.contains('is-open');
+  function isNavOpen() {
+    return nav.classList.contains('is-open');
+  }
 
   // what sits behind the drawer
   const navBackdropRegions = $$('.skip-link, .topbar, .main');
@@ -315,6 +423,9 @@
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     if (isNavOpen()) closeNav();
-    else if (isPanelOpen()) closePanel();
+    else if (isFilesOpen()) {
+      setFilesOpen(false);
+      filesToggle.focus();
+    } else if (panelOpen) closePanel();
   });
 })();

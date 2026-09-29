@@ -28,12 +28,13 @@
   --line: #e0e6eb;
   --line-soft: #f3f3f1;
   --text-muted: #8e9aa0;
+  --gray-dark: #a2b3c3; /* Figma "Grays/Dark": idle nav icons */
   --text-placeholder: #8e9296;
   --text-thinking: #8898a8;
 
-  /* type */
-  --font: "STC Forward", "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Poppins", var(--font);
+  /* type – Poppins (all weights loaded) is the site font */
+  --font: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font);
 
   /* effects */
   --shadow-sm: 0 7px 5px rgb(0 0 0 / 0.03);
@@ -161,49 +162,15 @@ button {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--white);
-  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur);
-}
-
-.icon-btn:hover {
-  border-color: var(--purple-20);
-  box-shadow: var(--shadow-sm);
-}
-
-.icon-btn:active {
-  transform: scale(0.96);
-}
-
-/* the exported svg already draws its own box */
-.icon-btn--bare {
-  border: 0;
-  background: none;
-}
-
-.icon-btn--bare:hover {
-  box-shadow: none;
-}
-
-.icon-btn--bare img {
-  transition: transform var(--dur) var(--ease-out);
-}
-
-.icon-btn--bare:hover img {
-  transform: translateY(-1px);
+  color: var(--onyx); /* inline svg icons draw with currentColor */
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0;
 }
 
-.brand__mark {
-  width: 36.5px;
-  height: 36.5px;
-  margin-inline: 18.25px 11.25px;
-  /* mark sits centred in a 73px slot, name starts 7px into it */
-}
-
+/* the wordmark as text, used in the mobile drawer header */
 .brand__name {
   font-size: 25px;
   font-weight: 500;
@@ -304,14 +271,6 @@ button {
   flex: 1;
 }
 
-.topbar .brand__mark {
-  display: none;
-}
-
-.topbar .brand__name {
-  font-size: 19.2px;
-}
-
 .topbar__actions {
   display: flex;
   align-items: center;
@@ -326,8 +285,8 @@ button {
   display: none;
 }
 
+/* the orb is exported larger than the button; the box crops it */
 .topbar__ai {
-  position: relative;
   overflow: hidden;
 }
 
@@ -336,23 +295,6 @@ button {
   max-width: none;
   height: auto;
   margin: 4px 0 -12px;
-  transition: transform 0.4s var(--ease-out);
-}
-
-.topbar__ai:hover img {
-  transform: rotate(-12deg) scale(1.05);
-}
-
-.topbar__ai::before {
-  /* unread dot */
-  content: "";
-  position: absolute;
-  top: 12px;
-  left: -2.5px;
-  width: 4.9px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--coral);
 }
 
 /* ---------- Side nav: off-canvas drawer on mobile ---------- */
@@ -367,6 +309,8 @@ button {
   padding: 20px 16px 24px;
   background: var(--white);
   box-shadow: 0 0 48px rgb(29 37 45 / 0.16);
+  overflow-y: auto; /* short phones / landscape: the drawer scrolls instead of clipping */
+  overscroll-behavior: contain;
   transform: translateX(-104%);
   visibility: hidden;
   transition: transform 0.35s var(--ease-out), visibility 0s linear 0.35s;
@@ -393,6 +337,7 @@ button {
 
 .sidenav__list {
   display: flex;
+  flex: none; /* never squash the list or the profile when space is short */
   flex-direction: column;
   gap: 6px;
 }
@@ -408,28 +353,38 @@ button {
   transition: background-color var(--dur), color var(--dur);
 }
 
-.sidenav__link img {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
+/* icons draw in currentColor: grey at rest */
+.sidenav__icon {
+  flex: none;
+  width: 22px; /* common box so drawer labels line up; the icon keeps its own scale */
+  color: var(--gray-dark);
+  transition: color var(--dur);
 }
 
+/* hover matches the active item: purple tint + purple icon */
 .sidenav__link:hover,
 .sidenav__link.is-active {
   background: var(--purple-10);
+  color: var(--purple);
+}
+
+.sidenav__link:hover .sidenav__icon,
+.sidenav__link.is-active .sidenav__icon {
+  color: var(--purple);
 }
 
 .sidenav__link.is-active {
-  color: var(--purple);
   font-weight: 500;
 }
 
+/* profile: a row with avatar + name in the drawer, a 67x67 avatar tile on desktop */
 .sidenav__profile {
-  display: grid;
-  place-items: center;
-  width: 67px;
-  height: 67px;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
   margin-top: auto;
+  padding: 12px;
   border: 1.457px solid var(--line);
   border-radius: 14.565px;
   background: var(--white);
@@ -437,9 +392,28 @@ button {
 }
 
 .sidenav__profile img {
+  flex: none;
   width: 40.78px;
   height: 40.78px;
   border-radius: 50%;
+}
+
+.sidenav__user {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sidenav__user-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--onyx);
+}
+
+.sidenav__user-meta {
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 .sidenav__profile:hover {
@@ -502,7 +476,7 @@ button {
   display: flex;
   flex-direction: column;
   font-size: 30.42px;
-  font-weight: 600; /* Outfit 600 matches STC Forward Bold's visual weight */
+  font-weight: 600;
   line-height: 43px;
   letter-spacing: -0.54px;
   text-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
@@ -812,13 +786,12 @@ button {
   padding: 20px 29px 48px;
   overflow: hidden;
   background: var(--bg);
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.3s var(--ease-out), transform 0.4s var(--ease-out);
+  /* slides in from the right edge */
+  transform: translateX(100%);
+  transition: transform 0.4s var(--ease-out);
 }
 
 .ai-panel.is-open {
-  opacity: 1;
   transform: none;
 }
 
@@ -979,7 +952,7 @@ button {
   background: var(--coral-dark);
 }
 
-/* greeting */
+/* greeting: a button, tapping it starts the conversation */
 .ai-greeting {
   display: flex;
   flex: 1;
@@ -987,9 +960,15 @@ button {
   align-items: center;
   justify-content: center;
   gap: 9px;
+  width: 100%;
   padding-block: 24px;
+  border-radius: 16px;
   text-align: center;
   color: #000;
+}
+
+.ai-greeting:hover .ai-greeting__orb {
+  animation-duration: 1.6s;
 }
 
 .ai-greeting__orb {
@@ -1053,6 +1032,9 @@ button {
 }
 
 .msg--user .msg__bubble {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 14px 24px;
   border: 0.856px solid var(--purple-20);
   border-radius: 13px 13px 0 13px;
@@ -1110,42 +1092,62 @@ button {
   font-weight: 500;
 }
 
+/* source numbers after the answer: "1 3 •••", expands to "1 3 3 1 ‹" */
+/* inline, so the numbers flow on the same line as the text instead of
+   dropping to a new line as one block */
+.cites {
+  display: inline;
+}
+
+.cite,
+.cite-more {
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 .cite {
   display: inline-grid;
   place-items: center;
   width: 25px;
   height: 25px;
-  margin-left: 4px;
   border-radius: 54px;
   background: var(--purple-10);
   font-size: 14px;
+  line-height: 1;
   color: var(--onyx);
-  vertical-align: middle;
 }
 
-.msg__tools {
-  display: flex;
-  gap: 4px;
-  margin: 10px 0 0 -6px;
+.cite:not([hidden]) {
+  animation: pop 0.25s var(--ease-out);
 }
 
-.msg__tool {
-  display: grid;
+.cite-more {
+  display: inline-grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+  width: 25px;
+  height: 25px;
+  border: 1px solid var(--purple-20);
+  border-radius: 54px;
+  background: var(--white);
   color: var(--onyx);
-  transition: background-color var(--dur), color var(--dur);
+  transition: background-color var(--dur);
 }
 
-.msg__tool:hover {
+.cite-more:hover {
   background: var(--purple-10);
 }
 
-.msg__tool[aria-pressed="true"] {
-  color: var(--purple);
-  background: var(--purple-10);
+/* "•••" collapsed, "‹" expanded */
+.cite-more::before {
+  content: "\2022\2022\2022";
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.cite-more[aria-expanded="true"]::before {
+  content: "\2039";
+  font-size: 16px;
+  letter-spacing: 0;
 }
 
 .msg__actions {
@@ -1191,33 +1193,176 @@ button {
   align-items: center;
 }
 
-/* context tray only exists in the desktop design */
+/*
+  Files in context: a bar tucked behind the top of the input. It reserves
+  only the bar's height; when opened, the box grows upwards over the chat.
+  50% opacity at rest, full on hover or while open.
+*/
 .ai-files {
-  display: none;
-  align-items: center;
-  gap: 19px;
+  position: relative;
+  z-index: 1; /* sits behind the input, which overlaps its bottom edge */
   width: calc(100% - 14px);
+  height: 36px;
   margin-bottom: -7px;
-  padding: 3px 4px 12px 14px;
+}
+
+.ai-files__box {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line);
   border-radius: 10px 10px 0 0;
   background: var(--white);
+  opacity: 0.5;
+  transition: opacity var(--dur), border-radius var(--dur), box-shadow var(--dur);
+}
+
+.ai-files:hover .ai-files__box,
+.ai-files:focus-within .ai-files__box,
+.ai-files.is-open .ai-files__box {
+  opacity: 1;
+}
+
+.ai-files__toggle {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  width: 100%;
+  min-height: 35px;
+  padding: 3px 8px 10px 14px;
   font-size: 12.85px;
-  animation: rise 0.35s var(--ease-out) both;
+  text-align: left;
+  color: var(--onyx);
 }
 
-.ai-files span {
+.ai-files__title {
   flex: 1;
-  opacity: 0.5;
 }
 
-.ai-files img {
-  opacity: 0.5;
-  transform: rotate(-90deg); /* exported pointing right, design shows it pointing up */
+.ai-files__chevron {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 22px;
+  border-radius: 6px;
+  transition: transform var(--dur) var(--ease-out), background-color var(--dur);
+}
+
+/* open: a card with a bold title and a scrolling list of files */
+.ai-files.is-open .ai-files__box {
+  padding: 8px 10px 14px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -8px 24px rgb(29 37 45 / 0.08);
+}
+
+.ai-files.is-open .ai-files__toggle {
+  padding: 4px 0 10px 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ai-files.is-open .ai-files__chevron {
+  border: 1px solid var(--line);
+  transform: rotate(180deg);
+}
+
+.ai-files__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: min(360px, 48vh);
+  padding-right: 4px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  animation: fade-in 0.25s var(--ease-out);
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--white);
+  cursor: pointer;
+}
+
+/* file type badge */
+.file__type {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.file__type--doc { background: var(--purple-10); color: var(--lilac); }
+.file__type--csv { background: #e6f9f3; color: var(--green); }
+.file__type--ppt { background: #fff0e8; color: #ff7a3d; }
+
+.file__info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.file__name {
+  font-size: 13px;
+  color: var(--onyx);
+}
+
+.file__time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* on / off switch (a real checkbox with role="switch") */
+.switch {
+  position: relative;
+  flex: none;
+  width: 30px;
+  height: 16px;
+  margin: 0;
+  border-radius: 16px;
+  background: #d5dbe1;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--dur);
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--white);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.switch:checked {
+  background: var(--coral);
+}
+
+.switch:checked::before {
+  transform: translateX(14px);
 }
 
 .composer {
   position: relative;
+  z-index: 2; /* above the files bar */
   display: flex;
   align-items: center;
   gap: 7.27px;
@@ -1227,12 +1372,12 @@ button {
   border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--white);
-  transition: border-color var(--dur), box-shadow var(--dur);
+  transition: border-color var(--dur);
 }
 
+/* focus: border colour only */
 .composer:focus-within {
-  border-color: var(--purple-20);
-  box-shadow: var(--focus);
+  border-color: var(--lilac-light);
 }
 
 .composer__input {
@@ -1304,23 +1449,50 @@ button {
    Desktop – 1024px and up
    ========================================================================== */
 @media (min-width: 1024px) {
+  /*
+    Layout: [ nav | main | aside ] with the top bar over nav + main.
+    The page itself scrolls; the top bar, nav and aside (rail / AI panel) are
+    sticky. Opening the AI panel widens the aside column, so the main content
+    is pushed narrower rather than covered.
+  */
+  :root {
+    --panel-w: clamp(380px, 32vw, 473px);
+    --sticky-top: 12px;
+    --topbar-h: 50px;
+  }
+
   .app {
     display: grid;
     grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--rail-w);
-    grid-template-rows: 50px minmax(0, 1fr);
-    gap: var(--gap);
-    height: 100vh;
-    height: 100dvh;
-    min-height: 720px;
-    padding: 12px 11px 5px;
+    grid-template-rows: auto auto;
+    align-items: start;
+    gap: 0 var(--gap); /* the row gap lives in the top bar's padding */
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0 12px 12px;
+    transition: grid-template-columns 0.5s var(--ease-out);
   }
 
-  /* top bar */
+  .app.is-ai-open {
+    grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--panel-w);
+  }
+
+  /*
+    Top bar: sticky at 0. Its own padding holds the 12px above and the gap
+    below it, so it never shifts when the page scrolls and content passing
+    underneath is always covered.
+  */
   .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     grid-column: 1 / 3;
     grid-row: 1;
+    align-self: stretch;
     justify-content: space-between;
-    padding: 0;
+    height: calc(var(--sticky-top) + var(--topbar-h) + var(--gap));
+    padding: var(--sticky-top) 0 var(--gap);
+    background: var(--bg);
   }
 
   .topbar__menu,
@@ -1335,23 +1507,18 @@ button {
     padding-bottom: 6.75px;
   }
 
-  .topbar .brand__mark {
-    display: block;
+  /* header actions stay at 50%, as designed */
+  .topbar__actions {
+    opacity: 0.5;
   }
 
-  .topbar .brand__name {
-    font-size: 25px;
-  }
-
-  .topbar__actions,
+  /* nav and rail are at 50% until used */
   .sidenav,
   .rail {
     opacity: 0.5;
     transition: opacity 0.3s var(--ease-out);
   }
 
-  .topbar__actions:hover,
-  .topbar__actions:focus-within,
   .sidenav:hover,
   .sidenav:focus-within,
   .rail:hover,
@@ -1360,6 +1527,11 @@ button {
   }
 
   .search {
+    display: block;
+  }
+
+  /* the only interaction: the field grows while hovered or in use */
+  .search__field {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1369,18 +1541,23 @@ button {
     border: 1px solid var(--line);
     border-radius: 12px;
     background: var(--white);
-    transition: border-color var(--dur), box-shadow var(--dur);
+    transition: width var(--dur) var(--ease-out);
   }
 
-  .search:focus-within {
-    border-color: var(--purple-20);
-    box-shadow: var(--focus);
+  .search__field:hover,
+  .search__field:focus-within {
+    width: 380px;
+  }
+
+  /* under 1200px with the AI panel open the top bar is too narrow to grow */
+  @media (max-width: 1199px) {
+    .app.is-ai-open .search__field {
+      width: 268px;
+    }
   }
 
   .search__icon {
     flex: none;
-    width: 15.64px;
-    height: 16px;
   }
 
   .search__input {
@@ -1405,11 +1582,14 @@ button {
     display: grid;
   }
 
-  /* side nav: static icon column */
+  /* side nav: sticky icon column under the top bar, one viewport tall */
   .sidenav {
-    position: static;
+    position: sticky;
+    top: calc(var(--sticky-top) + var(--topbar-h) + var(--gap)); /* right under the top bar */
+    z-index: auto;
     grid-column: 1;
     grid-row: 2;
+    height: calc(100dvh - var(--topbar-h) - var(--gap) - 24px);
     align-items: center;
     gap: 36px;
     width: auto;
@@ -1434,7 +1614,22 @@ button {
     gap: 17px;
   }
 
-  .sidenav__label {
+  /* laptops under ~820px tall: tighten the nav rhythm so the full column
+     (8 items + profile) fits without a hidden scroll */
+  @media (max-height: 820px) {
+    .sidenav {
+      gap: 16px;
+      padding-block: 16px;
+    }
+
+    .sidenav__list {
+      gap: 8px;
+    }
+  }
+
+  /* icons only on desktop: labels and the user's name stay for screen readers */
+  .sidenav__label,
+  .sidenav__user {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -1443,62 +1638,63 @@ button {
     white-space: nowrap;
   }
 
+  .sidenav__profile {
+    position: relative; /* contains the visually hidden name */
+    justify-content: center;
+    width: 67px;
+    height: 67px;
+    padding: 0;
+  }
+
+  /* semi-square tiles: the hover tint takes the same shape as the active item */
   .sidenav__link {
     justify-content: center;
     width: 54px;
     height: 54px;
     min-height: 0;
     padding: 0;
-    border-radius: 60px;
-  }
-
-  .sidenav__link img[width="52"] {
-    width: 52px;
-    height: 54px;
+    border-radius: 11px;
   }
 
   .sidenav__link.is-active {
     width: 66px;
     height: 66px;
-    border-radius: 11px;
-  }
-
-  .sidenav__link.is-active img {
-    width: 19px;
-    height: 19px;
   }
 
   .scrim {
     display: none;
   }
 
-  /* main card */
+  /* main card: natural height, the page scrolls */
   .main {
     grid-column: 2;
     grid-row: 2;
     gap: 78px;
+    min-height: calc(100dvh - var(--topbar-h) - var(--gap) - 24px);
     padding-bottom: 0; /* the card list's shadow gutter already spaces the bottom, as in Figma */
     border-radius: 20px;
-    overflow-y: auto;
-    scrollbar-width: thin;
   }
 
-  /* hero */
+  /*
+    Hero: the text sits on top; the art is a fixed 590 x 652 composition
+    pinned to the right edge. When the hero gets narrower (e.g. the AI panel
+    is open) the art keeps its size and slides under the text.
+  */
   .hero {
     container-type: inline-size;
     flex-direction: row;
     align-items: stretch;
-    justify-content: space-between;
     flex: none;
     min-height: 0;
-    gap: 32px;
     height: 652px;
-    padding: 0 clamp(24px, 5.4cqw, 80px) 0 clamp(32px, 6.8cqw, 100px);
+    padding: 0 0 0 100px;
     border-radius: 20px;
     text-align: left;
   }
 
   .hero__content {
+    position: relative;
+    z-index: 1;
     flex: 1 1 auto;
     min-width: 0;
     align-items: flex-start;
@@ -1509,7 +1705,7 @@ button {
 
   .hero__title {
     font-family: var(--font-display);
-    font-size: clamp(28px, 3.3cqw, 48.42px);
+    font-size: 48.42px; /* fixed: the text doesn't resize when the AI panel opens */
     font-weight: 600;
     line-height: 1.466;
     text-shadow: none;
@@ -1517,10 +1713,6 @@ button {
 
   .hero__lead {
     max-width: 427px;
-  }
-
-  .ai-files {
-    display: flex;
   }
 
   .ask {
@@ -1538,16 +1730,13 @@ button {
     display: block;
   }
 
-  /* art: a 590 x 652 box scaled with the hero */
+  /* art: fixed 590 x 652 box, 80px from the hero's right edge (Figma) */
   .hero__art {
-    position: relative;
-    inset: auto;
-    z-index: auto;
-    flex: none;
-    align-self: flex-end;
-    width: clamp(300px, 45.5cqw, 590px); /* 590 of the 1296px content box at 1:1 */
-    aspect-ratio: 590 / 652;
-    max-height: 100%;
+    position: absolute;
+    inset: auto 80px 0 auto;
+    z-index: 0;
+    width: 590px;
+    height: 652px;
   }
 
   .hero__asterisk {
@@ -1647,11 +1836,14 @@ button {
     padding-bottom: 23px;
   }
 
-  /* rail */
+  /* rail: the collapsed AI panel, sticky and one viewport tall */
   .rail {
-    position: relative;
+    position: sticky;
+    top: var(--sticky-top);
     grid-column: 3;
     grid-row: 1 / 3;
+    height: calc(100dvh - 24px);
+    margin-top: var(--sticky-top);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1745,7 +1937,11 @@ button {
     height: 61.46px;
     border-radius: 50%;
     background: var(--coral-10);
-    transition: transform var(--dur) var(--ease-out), background-color var(--dur);
+    transition: background-color var(--dur);
+  }
+
+  .rail__add img {
+    transition: transform var(--dur) var(--ease-out);
   }
 
   .rail__add::after {
@@ -1760,8 +1956,12 @@ button {
     background: rgb(0 0 0 / 0.1);
   }
 
+  /* only the "+" turns; the divider drawn by ::after stays put */
   .rail__add:hover {
     background: var(--coral-20);
+  }
+
+  .rail__add:hover img {
     transform: rotate(90deg);
   }
 
@@ -1797,41 +1997,49 @@ button {
     box-shadow: inset 0 0 0 2px var(--purple);
   }
 
-  /* ---------- Panel: expands out of the rail ---------- */
+  /*
+    Panel: sits in the aside column, on top of the rail. The column itself
+    animates (see .app.is-ai-open), so the panel only has to fill it.
+    Its content is laid out at the final width and fades in once there's room.
+  */
   .ai-panel {
-    position: relative;
-    inset: auto;
-    z-index: 20;
+    position: sticky;
+    inset: var(--sticky-top) auto auto; /* sticky top; clears the mobile sheet's inset: 0 */
+    z-index: 5;
     grid-column: 3;
     grid-row: 1 / 3;
-    justify-self: end;
-    width: var(--panel-w);
-    max-width: calc(100vw - var(--nav-w) - 32px);
+    width: auto;
+    min-width: 0;
+    height: calc(100dvh - 24px);
+    margin-top: var(--sticky-top);
     padding: 20.73px 26.73px 30.73px;
     border: 1.28px solid var(--line);
     border-radius: 25.61px;
     background: var(--white);
-    box-shadow: var(--shadow-panel);
-    opacity: 1;
+    filter: drop-shadow(0 9px 6.4px rgb(0 0 0 / 0.03));
     transform: none;
-    clip-path: inset(0 0 0 calc(100% - var(--rail-w)) round 25.61px);
-    transition: clip-path 0.5s var(--ease-out);
+    transition: none;
   }
 
-  .ai-panel.is-open {
-    clip-path: inset(0 round 25.61px);
-  }
-
-  .ai-panel>* {
-    transition: opacity 0.25s var(--ease-out);
-  }
-
-  .ai-panel:not(.is-open)>* {
+  .ai-panel > :not(.ai-panel__bg) {
+    min-width: calc(var(--panel-w) - 56px);
     opacity: 0;
+    transition: opacity 0.2s var(--ease-out);
   }
 
-  .ai-panel.is-open>* {
-    transition-delay: 0.15s;
+  .ai-panel.is-open > :not(.ai-panel__bg) {
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+
+  /* the rail it replaces is hidden while the panel is open */
+  .app.is-ai-open .rail {
+    visibility: hidden;
+  }
+
+  /* the header has the collapse arrow on desktop, so "back" isn't needed */
+  .ai-chat__back {
+    display: none;
   }
 
   .ai-panel__bg {
@@ -1951,41 +2159,6 @@ button {
   }
 }
 
-/* Desktop panel: the white surface fades as the clip collapses back into the
-   rail, so the rail never sits under an empty white strip */
-@media (min-width: 1024px) {
-  .ai-panel.is-open {
-    transition:
-      clip-path 0.5s var(--ease-out),
-      background-color 0.15s,
-      border-color 0.15s,
-      box-shadow 0.15s;
-  }
-
-  .ai-panel:not(.is-open) {
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    transition:
-      clip-path 0.5s var(--ease-out),
-      background-color 0.2s 0.3s,
-      border-color 0.2s 0.3s,
-      box-shadow 0.2s 0.3s;
-  }
-
-  /* laptops (1024-1180px): give the text column room for the ask input */
-  @container (max-width: 1100px) {
-    .hero__art {
-      width: clamp(220px, 36cqw, 590px);
-    }
-  }
-}
-
-/* copy-to-clipboard confirmation */
-.msg__tool.is-done {
-  color: var(--green);
-  background: rgb(0 196 140 / 0.1);
-}
 
 /* Small phones (320-400px) */
 @media (max-width: 400px) {

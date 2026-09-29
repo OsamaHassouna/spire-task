@@ -11,7 +11,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Poppins:wght@600&display=swap">
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap">
+
+
+  <link rel="icon" type="image/png" href="assets/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="assets/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="Spire" />
+  <link rel="manifest" href="assets/favicon/site.webmanifest" />
 
   <link rel="preload" as="image" href="assets/images/hero-man.webp">
   <link rel="stylesheet" href="css/styles.css">
@@ -26,32 +34,82 @@
     <header class="topbar">
       <button class="icon-btn topbar__menu" type="button" aria-controls="sidenav" aria-expanded="false"
         aria-label="Open navigation menu" data-nav-toggle>
-        <img src="assets/icons/menu.svg" alt="" width="15" height="15">
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none" aria-hidden="true" focusable="false">
+          <path d="M0 0.7H15M0 5.5H15M0 10.3H11.5" stroke="currentColor" stroke-width="1.4" />
+        </svg>
       </button>
 
+      <!-- full logo on desktop; the mobile design shows the wordmark only -->
       <a class="brand" href="#" aria-label="Spire home">
-        <img src="assets/spire-logo.svg" alt="Spire Logo" width="118" height="36">
+        <picture>
+          <source media="(max-width: 1023.98px)" srcset="assets/logo-text.svg" width="70" height="30">
+          <img class="brand__logo" src="assets/spire-logo.svg" alt="" width="118" height="37">
+        </picture>
       </a>
 
       <div class="topbar__actions">
         <form class="search" role="search" action="#">
           <label class="visually-hidden" for="site-search">Search</label>
-          <img class="search__icon" src="assets/icons/search.svg" alt="" width="16" height="16">
-          <input class="search__input" id="site-search" type="search" name="q" placeholder="Search..."
-            autocomplete="off">
+          <div class="search__field">
+            <svg class="search__icon" width="17" height="18" viewBox="0 0 17 18" fill="none" aria-hidden="true"
+              focusable="false">
+              <circle cx="7.49036" cy="7.49036" r="7.49036" transform="matrix(-1 0 0 1 16.2617 0.62499)"
+                stroke="currentColor" stroke-width="1.24998" stroke-linecap="round" stroke-linejoin="round" />
+              <path opacity="0.6" d="M3.56165 13.714L0.624999 16.6431" stroke="currentColor" stroke-width="1.24998"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <input class="search__input" id="site-search" type="search" name="q" placeholder="Search..."
+              autocomplete="off">
+          </div>
         </form>
+
+        <!-- mobile: search -->
         <button class="icon-btn topbar__search-btn" type="button" aria-label="Search">
-          <img src="assets/icons/search.svg" alt="" width="16" height="16">
+          <svg width="17" height="18" viewBox="0 0 17 18" fill="none" aria-hidden="true" focusable="false">
+            <circle cx="7.49036" cy="7.49036" r="7.49036" transform="matrix(-1 0 0 1 16.2617 0.62499)"
+              stroke="currentColor" stroke-width="1.24998" stroke-linecap="round" stroke-linejoin="round" />
+            <path opacity="0.6" d="M3.56165 13.714L0.624999 16.6431" stroke="currentColor" stroke-width="1.24998"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </button>
-        <button class="icon-btn icon-btn--bare topbar__notif" type="button" aria-label="Notifications, 1 unread">
-          <img src="assets/icons/btn-bell.svg" alt="" width="50" height="50">
+
+        <!-- Notification -->
+        <button class="icon-btn topbar__notif" type="button" aria-label="Notifications, 1 unread">
+          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" aria-hidden="true" focusable="false">
+            <path
+              d="M0 11.2143H14M1.61538 11.2143V5.85714C1.61538 2.89847 4.02616 0.5 7 0.5C9.97384 0.5 12.3846 2.89847 12.3846 5.85714V11.2143M4.84615 12.8214V13.3571C4.84615 14.5406 5.81046 15.5 7 15.5C8.18954 15.5 9.15385 14.5406 9.15385 13.3571V12.8214"
+              stroke="currentColor" />
+          </svg>
         </button>
-        <button class="icon-btn icon-btn--bare topbar__desktop-only" type="button" aria-label="Apps">
-          <img src="assets/icons/btn-apps.svg" alt="" width="50" height="50">
+
+        <!-- Apps -->
+        <button class="icon-btn topbar__desktop-only" type="button" aria-label="Apps">
+          <svg width="19" height="19" viewBox="0 0 19 19" fill="none" aria-hidden="true" focusable="false">
+            <path
+              d="M6.92857 0.5H1.78571C1.07563 0.5 0.5 1.07563 0.5 1.78571V6.92857C0.5 7.63865 1.07563 8.21429 1.78571 8.21429H6.92857C7.63865 8.21429 8.21429 7.63865 8.21429 6.92857V1.78571C8.21429 1.07563 7.63865 0.5 6.92857 0.5Z"
+              stroke="currentColor" />
+            <path
+              d="M17.2143 0.5H12.0714C11.3613 0.5 10.7857 1.07563 10.7857 1.78571V6.92857C10.7857 7.63865 11.3613 8.21429 12.0714 8.21429H17.2143C17.9244 8.21429 18.5 7.63865 18.5 6.92857V1.78571C18.5 1.07563 17.9244 0.5 17.2143 0.5Z"
+              stroke="currentColor" />
+            <path
+              d="M17.2143 10.7857H12.0714C11.3613 10.7857 10.7857 11.3613 10.7857 12.0714V17.2143C10.7857 17.9244 11.3613 18.5 12.0714 18.5H17.2143C17.9244 18.5 18.5 17.9244 18.5 17.2143V12.0714C18.5 11.3613 17.9244 10.7857 17.2143 10.7857Z"
+              stroke="currentColor" />
+            <path
+              d="M6.92857 10.7857H1.78571C1.07563 10.7857 0.5 11.3613 0.5 12.0714V17.2143C0.5 17.9244 1.07563 18.5 1.78571 18.5H6.92857C7.63865 18.5 8.21429 17.9244 8.21429 17.2143V12.0714C8.21429 11.3613 7.63865 10.7857 6.92857 10.7857Z"
+              stroke="currentColor" />
+          </svg>
         </button>
-        <button class="icon-btn icon-btn--bare topbar__desktop-only" type="button" aria-label="Support">
-          <img src="assets/icons/btn-support.svg" alt="" width="50" height="50">
+
+        <!-- Support -->
+        <button class="icon-btn topbar__desktop-only" type="button" aria-label="Support">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+            <path
+              d="M1.7 11.3H2.9C3.56274 11.3 4.1 11.8373 4.1 12.5V16.1C4.1 16.7627 3.56274 17.3 2.9 17.3H1.7C1.03726 17.3 0.5 16.7627 0.5 16.1V12.5C0.5 11.8373 1.03726 11.3 1.7 11.3ZM1.7 11.3V7.7C1.7 3.72355 4.92355 0.5 8.9 0.5C12.8764 0.5 16.1 3.72355 16.1 7.7V11.3M16.1 11.3H14.9C14.2373 11.3 13.7 11.8373 13.7 12.5V16.1C13.7 16.7627 14.2373 17.3 14.9 17.3H16.1C16.7627 17.3 17.3 16.7627 17.3 16.1V12.5C17.3 11.8373 16.7627 11.3 16.1 11.3Z"
+              stroke="currentColor" />
+          </svg>
         </button>
+
+        <!-- AI Chat -->
         <button class="icon-btn topbar__ai" type="button" aria-controls="ai-panel" aria-expanded="false"
           aria-label="Open Spire AI" data-ai-open>
           <img src="assets/images/ai-orb-lg.png" alt="" width="40" height="38">
@@ -68,27 +126,117 @@
         </button>
       </div>
 
+      <!-- Icons are inline SVGs in currentColor: grey at rest, purple on hover / active -->
       <ul class="sidenav__list">
-        <li><a class="sidenav__link is-active" href="#" aria-current="page"><img src="assets/icons/nav-home.svg" alt=""
-              width="19" height="19"><span class="sidenav__label">Home</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-grid.svg" alt="" width="20" height="20"><span
-              class="sidenav__label">Dashboard</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-briefcase.svg" alt="" width="20"
-              height="20"><span class="sidenav__label">Work</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-folder.svg" alt="" width="52" height="54"><span
-              class="sidenav__label">Files</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-calendar-tick.svg" alt="" width="20"
-              height="20"><span class="sidenav__label">Attendance</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-document.svg" alt="" width="20"
-              height="20"><span class="sidenav__label">Requests</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-calendar-star.svg" alt="" width="21"
-              height="21"><span class="sidenav__label">Events</span></a></li>
-        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-receipt.svg" alt="" width="19"
-              height="19"><span class="sidenav__label">Payslips</span></a></li>
+        <li>
+          <a class="sidenav__link is-active" href="#" aria-current="page">
+            <svg class="sidenav__icon" width="19" height="19" viewBox="0 0 19 19" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M9.47121 0.604546L9.86465 0.14554C9.63825 -0.0485134 9.30418 -0.0485134 9.07778 0.14554L9.47121 0.604546ZM0.604546 8.20455L0.211113 7.74554L1.19209e-07 7.92649V8.20455H0.604546ZM6.93788 18.3379V18.9424C7.27176 18.9424 7.54242 18.6718 7.54242 18.3379H6.93788ZM12.0045 18.3379H11.4C11.4 18.6718 11.6707 18.9424 12.0045 18.9424V18.3379ZM18.3379 8.20455H18.9424V7.92649L18.7313 7.74554L18.3379 8.20455ZM1.87121 18.3379V18.9424H6.93788V18.3379V17.7333H1.87121V18.3379ZM18.3379 8.20455L18.7313 7.74554L9.86465 0.14554L9.47121 0.604546L9.07778 1.06355L17.9444 8.66355L18.3379 8.20455ZM9.47121 0.604546L9.07778 0.14554L0.211113 7.74554L0.604546 8.20455L0.997979 8.66355L9.86465 1.06355L9.47121 0.604546ZM6.93788 18.3379H7.54242V14.5379H6.93788H6.33333V18.3379H6.93788ZM12.0045 14.5379H11.4V18.3379H12.0045H12.6091V14.5379H12.0045ZM12.0045 18.3379V18.9424H17.0712V18.3379V17.7333H12.0045V18.3379ZM18.3379 17.0712H18.9424V8.20455H18.3379H17.7333V17.0712H18.3379ZM0.604546 8.20455H1.19209e-07V17.0712H0.604546H1.20909V8.20455H0.604546ZM9.47121 12.0045V12.6091C10.5365 12.6091 11.4 13.4726 11.4 14.5379H12.0045H12.6091C12.6091 12.8049 11.2042 11.4 9.47121 11.4V12.0045ZM9.47121 12.0045V11.4C7.73821 11.4 6.33333 12.8049 6.33333 14.5379H6.93788H7.54242C7.54242 13.4726 8.40597 12.6091 9.47121 12.6091V12.0045ZM17.0712 18.3379V18.9424C18.1047 18.9424 18.9424 18.1047 18.9424 17.0712H18.3379H17.7333C17.7333 17.4369 17.4369 17.7333 17.0712 17.7333V18.3379ZM1.87121 18.3379V17.7333C1.50553 17.7333 1.20909 17.4369 1.20909 17.0712H0.604546H1.19209e-07C1.19209e-07 18.1047 0.83777 18.9424 1.87121 18.9424V18.3379Z"
+                fill="currentColor" />
+            </svg>
+            <span class="sidenav__label">Home</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="19" height="19" viewBox="0 0 19 19" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M6.92857 0.5H1.78571C1.07563 0.5 0.5 1.07563 0.5 1.78571V6.92857C0.5 7.63865 1.07563 8.21429 1.78571 8.21429H6.92857C7.63865 8.21429 8.21429 7.63865 8.21429 6.92857V1.78571C8.21429 1.07563 7.63865 0.5 6.92857 0.5Z"
+                stroke="currentColor" />
+              <path
+                d="M17.2143 0.5H12.0714C11.3613 0.5 10.7857 1.07563 10.7857 1.78571V6.92857C10.7857 7.63865 11.3613 8.21429 12.0714 8.21429H17.2143C17.9244 8.21429 18.5 7.63865 18.5 6.92857V1.78571C18.5 1.07563 17.9244 0.5 17.2143 0.5Z"
+                stroke="currentColor" />
+              <path
+                d="M17.2143 10.7857H12.0714C11.3613 10.7857 10.7857 11.3613 10.7857 12.0714V17.2143C10.7857 17.9244 11.3613 18.5 12.0714 18.5H17.2143C17.9244 18.5 18.5 17.9244 18.5 17.2143V12.0714C18.5 11.3613 17.9244 10.7857 17.2143 10.7857Z"
+                stroke="currentColor" />
+              <path
+                d="M6.92857 10.7857H1.78571C1.07563 10.7857 0.5 11.3613 0.5 12.0714V17.2143C0.5 17.9244 1.07563 18.5 1.78571 18.5H6.92857C7.63865 18.5 8.21429 17.9244 8.21429 17.2143V12.0714C8.21429 11.3613 7.63865 10.7857 6.92857 10.7857Z"
+                stroke="currentColor" />
+            </svg>
+            <span class="sidenav__label">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M7.20909 3.95908V3.30908C7.20909 1.87314 8.37315 0.709076 9.80909 0.709076C11.245 0.709076 12.4091 1.87314 12.4091 3.30908V3.95908M0.709091 15.0091H18.9091M2.00909 4.60908H17.6091C18.3271 4.60908 18.9091 5.19111 18.9091 5.90908V17.6091C18.9091 18.327 18.3271 18.9091 17.6091 18.9091H2.00909C1.29112 18.9091 0.709091 18.327 0.709091 17.6091V5.90908C0.709091 5.19111 1.29112 4.60908 2.00909 4.60908Z"
+                stroke="currentColor" stroke-width="1.41818" />
+            </svg>
+            <span class="sidenav__label">Work</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="22" height="20" viewBox="0 0 22 20" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M0.714996 17.215V2.215C0.714996 1.38657 1.35459 0.714996 2.14357 0.714996H7.85785L10.715 3.715H19.2864C20.0754 3.715 20.715 4.38657 20.715 5.215V17.215C20.715 18.0434 20.0754 18.715 19.2864 18.715H2.14357C1.35459 18.715 0.714996 18.0434 0.714996 17.215Z"
+                stroke="currentColor" stroke-width="1.43" />
+            </svg>
+            <span class="sidenav__label">Files</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="21" height="21" viewBox="0 0 21 21" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M4.715 0V6.66667M15.3817 0V6.66667M2.04833 3.33333H18.0483C18.7847 3.33333 19.3817 3.93029 19.3817 4.66667V18C19.3817 18.7364 18.7847 19.3333 18.0483 19.3333H2.04833C1.31195 19.3333 0.714996 18.7364 0.714996 18V4.66667C0.714996 3.93029 1.31195 3.33333 2.04833 3.33333Z"
+                stroke="currentColor" stroke-width="1.43" />
+            </svg>
+            <span class="sidenav__label">Attendance</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="18" height="21" viewBox="0 0 18 21" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M4.73333 10.0667H12.7333M10.0667 14.0667H12.7333M4.73333 6.06667H7.4M15.4 19.4H2.06666C1.33028 19.4 0.73333 18.803 0.73333 18.0667V2.06667C0.73333 1.33029 1.33028 0.733337 2.06666 0.733337H12.7333L16.7333 4.73334V18.0667C16.7333 18.803 16.1364 19.4 15.4 19.4Z"
+                stroke="currentColor" stroke-width="1.46667" stroke-linecap="square" />
+            </svg>
+            <span class="sidenav__label">Requests</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="22" height="23" viewBox="0 0 22 23" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M4.91 0V7M16.11 0V7M2.11 3.5H18.91C19.6832 3.5 20.31 4.1268 20.31 4.9V20.0053C20.31 20.7785 19.6832 21.4053 18.91 21.4053H2.11C1.3368 21.4053 0.709999 20.7785 0.709999 20.0053L0.709999 4.9C0.709999 4.1268 1.3368 3.5 2.11 3.5Z"
+                stroke="currentColor" stroke-width="1.42" />
+              <path
+                d="M10.5088 15.6208L6.80044 17.5L7.50883 13.5198L4.50883 10.7014L8.65463 10.1211L10.5088 6.5L12.363 10.1211L16.5088 10.7014L13.5088 13.5198L14.2172 17.5L10.5088 15.6208Z"
+                stroke="currentColor" stroke-width="1.01818" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="sidenav__label">Events</span>
+          </a>
+        </li>
+        <li>
+          <a class="sidenav__link" href="#">
+            <svg class="sidenav__icon" width="19" height="21" viewBox="0 0 19 21" fill="none" aria-hidden="true"
+              focusable="false">
+              <path
+                d="M3.88166 5.78169H7.415M9.94833 5.78169H14.7483M3.88166 9.58169H7.415M9.94833 9.58169H14.7483M9.94833 13.3817H14.7483M0.714996 0.715027H17.915V19.4484L14.3817 18.0822L11.8483 19.4484L9.315 18.0822L6.78166 19.4484L4.24833 18.0822L0.714996 19.4484L0.714996 0.715027Z"
+                stroke="currentColor" stroke-width="1.43" stroke-linejoin="round" />
+            </svg>
+            <span class="sidenav__label">Payslips</span>
+          </a>
+        </li>
       </ul>
 
-      <a class="sidenav__profile" href="#" aria-label="My profile">
+      <!-- desktop shows the avatar tile only; the drawer also shows the name -->
+      <a class="sidenav__profile" href="#">
         <img src="assets/images/avatar.png" alt="" width="41" height="41">
+        <span class="sidenav__user">
+          <span class="sidenav__user-name">Ahmed</span>
+          <span class="sidenav__user-meta">View profile</span>
+        </span>
       </a>
     </nav>
     <div class="scrim" data-nav-close hidden></div>
@@ -127,8 +275,7 @@
           </div>
 
           <div class="arch arch--woman">
-            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394"
-              loading="lazy">
+            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394" loading="lazy">
           </div>
 
           <div class="badge">
@@ -244,11 +391,12 @@
           </li>
         </ul>
 
-        <div class="ai-greeting">
+        <!-- tapping the greeting starts the conversation (mobile) -->
+        <button class="ai-greeting" type="button" data-ai-start>
           <img class="ai-greeting__orb" src="assets/images/ai-orb-lg.png" alt="" width="59" height="59">
-          <p class="ai-greeting__title">Welcome back, Ahmed.</p>
-          <p class="ai-greeting__text">How may I assist you?</p>
-        </div>
+          <span class="ai-greeting__title">Welcome back, Ahmed.</span>
+          <span class="ai-greeting__text">How may I assist you?</span>
+        </button>
       </div>
 
       <!-- Conversation state -->
@@ -263,9 +411,83 @@
       </div>
 
       <footer class="ai-panel__foot">
-        <div class="ai-files" data-files hidden>
-          <span>6 files loaded into context</span>
-          <img src="assets/icons/chevron-btn.svg" alt="" width="34" height="34">
+        <!-- Files in context: a collapsed bar above the input that opens upwards over the chat -->
+        <div class="ai-files" data-files>
+          <div class="ai-files__box">
+            <button class="ai-files__toggle" type="button" aria-expanded="false" aria-controls="ai-files-list"
+              data-files-toggle>
+              <span class="ai-files__title">6 files loaded into context</span>
+              <span class="ai-files__chevron" aria-hidden="true">
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" focusable="false">
+                  <path d="M1 5l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                </svg>
+              </span>
+            </button>
+
+            <ul class="ai-files__list" id="ai-files-list" aria-label="Files in context" hidden>
+              <li>
+                <label class="file">
+                  <span class="file__type file__type--doc">DOC</span>
+                  <span class="file__info">
+                    <span class="file__name">Data Governance Policy</span>
+                    <span class="file__time">3:30pm</span>
+                  </span>
+                  <input class="switch" type="checkbox" role="switch" checked>
+                </label>
+              </li>
+              <li>
+                <label class="file">
+                  <span class="file__type file__type--csv">CSV</span>
+                  <span class="file__info">
+                    <span class="file__name">Data Governance Policy</span>
+                    <span class="file__time">2:50pm</span>
+                  </span>
+                  <input class="switch" type="checkbox" role="switch" checked>
+                </label>
+              </li>
+              <li>
+                <label class="file">
+                  <span class="file__type file__type--doc">DOC</span>
+                  <span class="file__info">
+                    <span class="file__name">Data Governance Policy</span>
+                    <span class="file__time">3:30pm</span>
+                  </span>
+                  <input class="switch" type="checkbox" role="switch" checked>
+                </label>
+              </li>
+              <li>
+                <label class="file">
+                  <span class="file__type file__type--ppt">PPT</span>
+                  <span class="file__info">
+                    <span class="file__name">Data Governance Policy</span>
+                    <span class="file__time">3:30pm</span>
+                  </span>
+                  <input class="switch" type="checkbox" role="switch" checked>
+                </label>
+              </li>
+              <li>
+                <label class="file">
+                  <span class="file__type file__type--ppt">PPT</span>
+                  <span class="file__info">
+                    <span class="file__name">Data Governance Policy</span>
+                    <span class="file__time">3:30pm</span>
+                  </span>
+                  <input class="switch" type="checkbox" role="switch" checked>
+                </label>
+              </li>
+              <li>
+                <label class="file">
+                  <span class="file__type file__type--doc">DOC</span>
+                  <span class="file__info">
+                    <span class="file__name">Data Governance Policy</span>
+                    <span class="file__time">1:15pm</span>
+                  </span>
+                  <input class="switch" type="checkbox" role="switch" checked>
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
         <form class="composer" action="#" data-composer>
           <label class="visually-hidden" for="ai-input">Message Spire AI</label>
@@ -283,9 +505,13 @@
   </div>
 
   <!-- Templates used by js/main.js to render chat messages -->
+  <!-- your message; the doc icon shows when it came from a suggestion chip -->
   <template id="tpl-user-msg">
     <li class="msg msg--user">
-      <p class="msg__bubble"></p>
+      <p class="msg__bubble">
+        <img class="msg__icon" src="assets/icons/doc.svg" alt="" width="15" height="15" hidden>
+        <span class="msg__text"></span>
+      </p>
     </li>
   </template>
 
@@ -296,42 +522,23 @@
     </li>
   </template>
 
+  <!-- Spire AI's answer; JS fills the source numbers and the suggestion chips -->
   <template id="tpl-ai-msg">
     <li class="msg msg--ai">
       <div class="msg__bubble">
         <p>Based on <strong>HR policy</strong> you are eligible for submitting a compensation request through Fusion
-          platform, in accordance with the following <sup class="cite"><span class="visually-hidden">source
-            </span>1</sup></p>
-        <div class="msg__tools">
-          <button class="msg__tool" type="button" aria-label="Helpful" aria-pressed="false" data-feedback>
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path
-                d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3Zm0 0 4-8a3 3 0 0 1 3 3v4h5.5a2 2 0 0 1 2 2.3l-1.4 8A2 2 0 0 1 18.1 21H7"
-                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <button class="msg__tool" type="button" aria-label="Not helpful" aria-pressed="false" data-feedback>
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path
-                d="M17 14V3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-3Zm0 0-4 8a3 3 0 0 1-3-3v-4H4.5a2 2 0 0 1-2-2.3l1.4-8A2 2 0 0 1 5.9 3H17"
-                fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <button class="msg__tool" type="button" aria-label="Copy answer" data-copy>
-            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <rect x="8" y="3" width="11" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5" />
-              <path d="M5 7v12a2 2 0 0 0 2 2h9" fill="none" stroke="currentColor" stroke-width="1.5"
-                stroke-linecap="round" />
-            </svg>
-          </button>
-        </div>
+          platform, in accordance with the following <span class="cites" data-cites></span></p>
       </div>
-      <ul class="msg__actions">
-        <li><button class="chip" type="button" data-suggest><img src="assets/icons/doc.svg" alt="" width="15"
-              height="15">Open Compensation Request in Fusion</button></li>
-        <li><button class="chip" type="button" data-suggest><img src="assets/icons/doc.svg" alt="" width="15"
-              height="15">View Detailed Weekly Breakdown</button></li>
-      </ul>
+      <ul class="msg__actions" data-actions></ul>
+    </li>
+  </template>
+
+  <template id="tpl-chip">
+    <li>
+      <button class="chip" type="button" data-suggest>
+        <img src="assets/icons/doc.svg" alt="" width="15" height="15">
+        <span class="chip__text"></span>
+      </button>
     </li>
   </template>
 </body>
