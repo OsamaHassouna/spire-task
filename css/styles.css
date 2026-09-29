@@ -63,6 +63,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* purple scrollbars everywhere (inherited by every scroll area) */
+  scrollbar-color: var(--lilac-light) transparent;
 }
 
 body {
@@ -137,8 +139,8 @@ button {
 
 .skip-link {
   position: fixed;
-  top: 12px;
-  left: 12px;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
   z-index: 100;
   padding: 10px 16px;
   border-radius: 10px;
@@ -192,8 +194,8 @@ button {
 .battery::after {
   content: "";
   position: absolute;
-  top: 5.9px;
-  right: -5.2px;
+  inset-block-start: 5.9px;
+  inset-inline-end: -5.2px;
   width: 1.7px;
   height: 10px;
   background: #000;
@@ -201,7 +203,8 @@ button {
 
 .battery__fill {
   position: absolute;
-  inset: 0 auto 0 0;
+  inset-block: 0;
+  inset-inline: 0 auto;
   width: 30px;
   border-radius: 1.5px;
   background: var(--teal);
@@ -211,7 +214,7 @@ button {
 
 .battery__value {
   position: relative;
-  padding-left: 6px;
+  padding-inline-start: 6px;
   font-size: 15.58px;
   font-weight: 500;
   line-height: 1;
@@ -226,8 +229,8 @@ button {
 }
 
 .battery--sm::after {
-  top: 5.1px;
-  right: -4.4px;
+  inset-block-start: 5.1px;
+  inset-inline-end: -4.4px;
   width: 1.2px;
   height: 8.4px;
 }
@@ -237,7 +240,7 @@ button {
 }
 
 .battery--sm .battery__value {
-  padding-left: 4px;
+  padding-inline-start: 4px;
   font-size: 13.09px;
 }
 
@@ -300,7 +303,8 @@ button {
 /* ---------- Side nav: off-canvas drawer on mobile ---------- */
 .sidenav {
   position: fixed;
-  inset: 0 auto 0 0;
+  inset-block: 0;
+  inset-inline: 0 auto;
   z-index: 40;
   display: flex;
   flex-direction: column;
@@ -326,7 +330,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 8px;
+  padding-inline-start: 8px;
 }
 
 .sidenav__close {
@@ -383,7 +387,7 @@ button {
   flex: none;
   align-items: center;
   gap: 12px;
-  margin-top: auto;
+  margin-block-start: auto;
   padding: 12px;
   border: 1.457px solid var(--line);
   border-radius: 14.565px;
@@ -468,7 +472,7 @@ button {
   align-items: center;
   width: 100%;
   max-width: 357px;
-  padding-top: 127px;
+  padding-block-start: 127px;
   /* room for the asterisk: 38 + 86 + gap */
 }
 
@@ -483,7 +487,7 @@ button {
 }
 
 .hero__lead {
-  margin-top: 47px;
+  margin-block-start: 47px;
   font-size: 20px;
   line-height: 34px;
 }
@@ -515,8 +519,9 @@ button {
   width: 100%;
   max-width: 537px;
   height: 72px;
-  margin-top: 12px;
-  padding: 0 11px 0 15px;
+  margin-block-start: 12px;
+  padding-block: 0;
+  padding-inline: 15px 11px;
   border: 1px solid var(--line);
   border-radius: 120px;
   background: var(--white);
@@ -614,11 +619,11 @@ button {
 
 .hero__asterisk {
   position: absolute;
-  top: 38px;
-  left: 50%;
+  inset-block-start: 38px;
+  inset-inline-start: 50%;
   width: 86px;
   height: 86px;
-  margin-left: -43px;
+  margin-inline-start: -43px;
   animation: spin-in 1s var(--ease-out) 0.2s both, spin 24s linear 1.2s infinite;
 }
 
@@ -633,19 +638,19 @@ button {
 }
 
 .arch--man {
-  left: 50%;
-  bottom: 0;
+  inset-inline-start: 50%;
+  inset-block-end: 0;
   width: 247.1px;
   height: 353px;
-  margin-left: -123.55px;
+  margin-inline-start: -123.55px;
   border-radius: 115px 115px 0 0;
   background: rgb(97 10 164 / 0.5);
   animation: arch-up 1s var(--ease-out) 0.1s both;
 }
 
 .arch--man .arch__photo {
-  left: -28.9%;
-  top: -12.5%;
+  inset-inline-start: -28.9%;
+  inset-block-start: -12.5%;
   width: 157.1%;
   height: 146.7%;
   opacity: 0.6;
@@ -696,7 +701,7 @@ button {
 .services__list {
   display: flex;
   gap: 16px;
-  margin-top: 24px;
+  margin-block-start: 24px;
   padding: 4px 4px 23px;
   /* room for hover lift + shadow */
   margin-inline: -4px;
@@ -742,7 +747,8 @@ button {
   align-items: center;
   gap: 11.25px;
   height: 88px;
-  padding: 24px 56px 24px 16px;
+  padding-block: 24px;
+  padding-inline: 16px 56px;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--white);
@@ -879,7 +885,7 @@ button {
 .ai-widgets {
   display: flex;
   gap: 12px;
-  margin-top: 26px;
+  margin-block-start: 26px;
 }
 
 .ai-widget {
@@ -901,7 +907,7 @@ button {
 }
 
 .ai-widgets__add-item {
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 .ai-widgets__add {
@@ -936,7 +942,8 @@ button {
 .bars__bar::after {
   content: "";
   position: absolute;
-  inset: auto 0 0;
+  inset-block: auto 0;
+  inset-inline: 0;
   border-radius: 3px;
   transform-origin: bottom;
   animation: grow 0.9s var(--ease-out) 0.3s both;
@@ -974,7 +981,7 @@ button {
 .ai-greeting__orb {
   width: 59px;
   height: 59px;
-  margin-bottom: 10px;
+  margin-block-end: 10px;
   animation: float 4s var(--ease-in-out) infinite;
 }
 
@@ -991,7 +998,7 @@ button {
 
 /* chat */
 .ai-chat {
-  padding-top: 24px;
+  padding-block-start: 24px;
 }
 
 .ai-chat__back {
@@ -1037,7 +1044,8 @@ button {
   gap: 12px;
   padding: 14px 24px;
   border: 0.856px solid var(--purple-20);
-  border-radius: 13px 13px 0 13px;
+  border-radius: 13px;
+  border-end-end-radius: 0; /* tail: bottom corner on the inline-end side */
   background: var(--purple-10);
   font-size: 13px;
   line-height: 24px;
@@ -1080,7 +1088,8 @@ button {
   max-width: 395px;
   padding: 14px 20px 16px;
   border: 1px solid var(--line-soft);
-  border-radius: 13px 13px 13px 0;
+  border-radius: 13px;
+  border-end-start-radius: 0; /* tail: bottom corner on the inline-start side */
   background: var(--white);
   box-shadow: var(--shadow-card);
   font-size: 13px;
@@ -1101,7 +1110,7 @@ button {
 
 .cite,
 .cite-more {
-  margin-left: 4px;
+  margin-inline-start: 4px;
   vertical-align: middle;
 }
 
@@ -1166,13 +1175,14 @@ button {
   min-height: 54px;
   padding: 12px 26px;
   border: 1px solid var(--line-soft);
-  border-radius: 10px 10px 10px 0;
+  border-radius: 10px;
+  border-end-start-radius: 0;
   background: var(--white);
   box-shadow: var(--shadow-card);
   font-size: 13px;
   line-height: 24px;
   color: #000;
-  text-align: left;
+  text-align: start;
   transition: background-color var(--dur), border-color var(--dur), transform var(--dur) var(--ease-out);
 }
 
@@ -1205,12 +1215,13 @@ button {
   z-index: 1; /* sits behind the input, which overlaps its bottom edge */
   width: calc(100% - 14px);
   height: 36px;
-  margin-bottom: -7px;
+  margin-block-end: -7px;
 }
 
 .ai-files__box {
   position: absolute;
-  inset: auto 0 0;
+  inset-block: auto 0;
+  inset-inline: 0;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--line);
@@ -1232,9 +1243,10 @@ button {
   gap: 19px;
   width: 100%;
   min-height: 35px;
-  padding: 3px 8px 10px 14px;
+  padding-block: 3px 10px;
+  padding-inline: 14px 8px;
   font-size: 12.85px;
-  text-align: left;
+  text-align: start;
   color: var(--onyx);
 }
 
@@ -1252,24 +1264,30 @@ button {
   transition: transform var(--dur) var(--ease-out), background-color var(--dur);
 }
 
-/* open: a card with a bold title and a scrolling list of files */
-/* open: grey card (same as the answer bubbles) holding white file cards */
+/* open: grey card (same as the answer bubbles) with a roomy bold header
+   and a scrolling list of white file cards */
 .ai-files.is-open .ai-files__box {
-  padding: 8px 10px 14px;
+  padding-block: 12px 16px;
+  padding-inline: 12px;
   border-radius: 12px 12px 0 0;
   background: var(--bg);
   box-shadow: 0 -8px 24px rgb(29 37 45 / 0.08);
 }
 
 .ai-files.is-open .ai-files__toggle {
-  padding: 4px 0 10px 4px;
-  font-size: 14px;
-  font-weight: 500;
+  min-height: 40px;
+  padding-block: 4px 16px;
+  padding-inline: 6px 0;
+  font-weight: 500; /* same size as the collapsed bar, just bolder */
 }
 
+/* open: the chevron sits in a white square button (still pointing up, as designed) */
 .ai-files.is-open .ai-files__chevron {
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--line);
-  transform: rotate(180deg);
+  border-radius: 8px;
+  background: var(--white);
 }
 
 .ai-files__list {
@@ -1277,7 +1295,7 @@ button {
   flex-direction: column;
   gap: 8px;
   max-height: min(360px, 48vh);
-  padding-right: 4px;
+  padding-inline-end: 4px;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
@@ -1349,28 +1367,30 @@ button {
 
 /* on / off switch (a real checkbox with role="switch") */
 .switch {
+  --knob-w: 14px;
+  --knob-gap: 3px;
   position: relative;
   flex: none;
-  width: 30px;
-  height: 16px;
+  width: 32px;
+  height: 14px;
   margin: 0;
-  border-radius: 16px;
+  border-radius: 14px;
   background: #d5dbe1;
   appearance: none;
   cursor: pointer;
   transition: background-color var(--dur);
 }
 
+/* the knob: a wide pill that travels along the inline axis (works in RTL too) */
 .switch::before {
   content: "";
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  inset-block: var(--knob-gap);
+  inset-inline-start: var(--knob-gap);
+  width: var(--knob-w);
+  border-radius: 8px;
   background: var(--white);
-  transition: transform var(--dur) var(--ease-out);
+  transition: inset-inline-start var(--dur) var(--ease-out);
 }
 
 .switch:checked {
@@ -1378,7 +1398,7 @@ button {
 }
 
 .switch:checked::before {
-  transform: translateX(14px);
+  inset-inline-start: calc(100% - var(--knob-w) - var(--knob-gap));
 }
 
 .composer {
@@ -1389,7 +1409,8 @@ button {
   gap: 7.27px;
   width: 100%;
   height: 71px;
-  padding: 10px 14px 10px 16px;
+  padding-block: 10px;
+  padding-inline: 16px 14px;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: var(--white);
@@ -1505,7 +1526,7 @@ button {
   */
   .topbar {
     position: sticky;
-    top: 0;
+    inset-block-start: 0;
     z-index: 10;
     grid-column: 1 / 3;
     grid-row: 1;
@@ -1525,7 +1546,7 @@ button {
   .topbar .brand {
     flex: none;
     align-self: flex-end;
-    padding-bottom: 6.75px;
+    padding-block-end: 6.75px;
   }
 
   /* header actions stay at 50%, as designed */
@@ -1606,7 +1627,7 @@ button {
   /* side nav: sticky icon column under the top bar, one viewport tall */
   .sidenav {
     position: sticky;
-    top: calc(var(--sticky-top) + var(--topbar-h) + var(--gap)); /* right under the top bar */
+    inset-block-start: calc(var(--sticky-top) + var(--topbar-h) + var(--gap)); /* right under the top bar */
     z-index: auto;
     grid-column: 1;
     grid-row: 2;
@@ -1692,7 +1713,7 @@ button {
     grid-row: 2;
     gap: 78px;
     min-height: calc(100dvh - var(--topbar-h) - var(--gap) - 24px);
-    padding-bottom: 0; /* the card list's shadow gutter already spaces the bottom, as in Figma */
+    padding-block-end: 0; /* the card list's shadow gutter already spaces the bottom, as in Figma */
     border-radius: 20px;
   }
 
@@ -1708,9 +1729,10 @@ button {
     flex: none;
     min-height: 0;
     height: 652px;
-    padding: 0 0 0 100px;
+    padding-block: 0;
+    padding-inline: 100px 0;
     border-radius: 20px;
-    text-align: left;
+    text-align: start;
   }
 
   .hero__content {
@@ -1721,7 +1743,7 @@ button {
     align-items: flex-start;
     justify-content: center;
     max-width: 563px;
-    padding-top: 0;
+    padding-block-start: 0;
   }
 
   .hero__title {
@@ -1737,7 +1759,7 @@ button {
   }
 
   .ask {
-    margin-top: 70px;
+    margin-block-start: 70px;
     padding: 0 16px;
     border-radius: 80px;
   }
@@ -1754,24 +1776,25 @@ button {
   /* art: fixed 590 x 652 box, 80px from the hero's right edge (Figma) */
   .hero__art {
     position: absolute;
-    inset: auto 80px 0 auto;
+    inset-block: auto 0;
+    inset-inline: auto 80px;
     z-index: 0;
     width: 590px;
     height: 652px;
   }
 
   .hero__asterisk {
-    top: 11.2%;
-    left: 40%;
+    inset-block-start: 11.2%;
+    inset-inline-start: 40%;
     width: 14.57%;
     height: auto;
     margin: 0;
   }
 
   .arch--man {
-    top: 29.45%;
-    bottom: auto;
-    left: 0;
+    inset-block-start: 29.45%;
+    inset-block-end: auto;
+    inset-inline-start: 0;
     width: 54.58%;
     height: 70.55%;
     margin: 0;
@@ -1785,8 +1808,8 @@ button {
 
   .arch--woman {
     display: block;
-    top: 0;
-    left: 65.42%;
+    inset-block-start: 0;
+    inset-inline-start: 65.42%;
     width: 34.58%;
     height: 57.67%;
     border-radius: 0 0 50% 50% / 0 0 27.1% 27.1%;
@@ -1795,8 +1818,8 @@ button {
   }
 
   .arch--woman .arch__photo {
-    top: 2.66%;
-    left: -74.5%;
+    inset-block-start: 2.66%;
+    inset-inline-start: -74.5%;
     width: 257.4%;
     height: 104.8%;
     object-fit: cover;
@@ -1804,8 +1827,8 @@ button {
 
   .badge {
     position: absolute;
-    top: 63.65%;
-    left: 65.42%;
+    inset-block-start: 63.65%;
+    inset-inline-start: 65.42%;
     display: block;
     width: 34.58%;
     aspect-ratio: 204 / 207;
@@ -1816,8 +1839,8 @@ button {
 
   .badge__ring {
     position: absolute;
-    top: 10.14%;
-    left: 11.27%;
+    inset-block-start: 10.14%;
+    inset-inline-start: 11.27%;
     width: 78.4%;
     height: auto;
     overflow: visible;
@@ -1832,8 +1855,8 @@ button {
 
   .badge__logo {
     position: absolute;
-    top: 30.9%;
-    left: 31.4%;
+    inset-block-start: 30.9%;
+    inset-inline-start: 31.4%;
     display: grid;
     gap: 0.4px;
     width: 34.5%;
@@ -1854,17 +1877,17 @@ button {
   }
 
   .services__list {
-    padding-bottom: 23px;
+    padding-block-end: 23px;
   }
 
   /* rail: the collapsed AI panel, sticky and one viewport tall */
   .rail {
     position: sticky;
-    top: var(--sticky-top);
+    inset-block-start: var(--sticky-top);
     grid-column: 3;
     grid-row: 1 / 3;
     height: calc(100dvh - 24px);
-    margin-top: var(--sticky-top);
+    margin-block-start: var(--sticky-top);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1883,8 +1906,8 @@ button {
     align-items: center;
     gap: 37px;
     width: 83px;
-    padding-bottom: 39px;
-    border-bottom: 1px solid rgb(0 0 0 / 0.1);
+    padding-block-end: 39px;
+    border-block-end: 1px solid rgb(0 0 0 / 0.1);
   }
 
   .rail__widget {
@@ -1904,9 +1927,11 @@ button {
     width: 49.77px;
     height: 26px;
     border: 1.5px solid var(--coral-dark);
-    border-left-width: 1.7px;
-    border-right-width: 1.7px;
-    border-radius: 2px 5px 5px 2px;
+    border-inline-start-width: 1.7px;
+    border-inline-end-width: 1.7px;
+    border-radius: 2px;
+    border-start-end-radius: 5px;
+    border-end-end-radius: 5px;
     background: rgb(255 153 173 / 0.5);
   }
 
@@ -1930,7 +1955,7 @@ button {
   }
 
   .ticker__track>span:first-child {
-    margin-left: 1px;
+    margin-inline-start: 1px;
   }
 
   .ticker__alert {
@@ -1969,11 +1994,11 @@ button {
     /* divider under the add button */
     content: "";
     position: absolute;
-    left: 50%;
-    bottom: -39px;
+    inset-inline-start: 50%;
+    inset-block-end: -39px;
     width: 83px;
     height: 1px;
-    margin-left: -41.5px;
+    margin-inline-start: -41.5px;
     background: rgb(0 0 0 / 0.1);
   }
 
@@ -1988,7 +2013,7 @@ button {
 
   /* whole rail opens the panel; the sparkle button owns the hit area */
   .rail__open {
-    margin-top: auto;
+    margin-block-start: auto;
     flex: none;
   }
 
@@ -2025,14 +2050,16 @@ button {
   */
   .ai-panel {
     position: sticky;
-    inset: var(--sticky-top) auto auto; /* sticky top; clears the mobile sheet's inset: 0 */
+    /* sticky offset; also clears the mobile sheet's inset: 0 */
+    inset-block: var(--sticky-top) auto;
+    inset-inline: auto;
     z-index: 5;
     grid-column: 3;
     grid-row: 1 / 3;
     width: auto;
     min-width: 0;
     height: calc(100dvh - 24px);
-    margin-top: var(--sticky-top);
+    margin-block-start: var(--sticky-top);
     padding: 20.73px 26.73px 30.73px;
     border: 1.28px solid var(--line);
     border-radius: 25.61px;
@@ -2069,8 +2096,8 @@ button {
 
   .ai-panel__head {
     gap: 6px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--line);
+    padding-block-end: 16px;
+    border-block-end: 1px solid var(--line);
   }
 
   .ai-panel__orb,
@@ -2090,7 +2117,7 @@ button {
 
   .ai-panel__subtitle {
     display: block;
-    margin-top: 3px;
+    margin-block-start: 3px;
     font-size: 11px;
     line-height: 24px;
     color: var(--text-muted);
@@ -2135,7 +2162,7 @@ button {
   }
 
   .ai-chat {
-    padding-top: 15px;
+    padding-block-start: 15px;
   }
 
   .ai-chat__back {
@@ -2154,12 +2181,13 @@ button {
   }
 
   .msg--ai .msg__bubble {
-    padding-bottom: 20px;
+    padding-block-end: 20px;
   }
 
   .composer {
     height: 71.25px;
-    padding: 0 13.73px 0 19.75px;
+    padding-block: 0;
+    padding-inline: 19.75px 13.73px;
     border-color: rgb(162 179 195 / 0.8);
   }
 
@@ -2189,7 +2217,8 @@ button {
 
   .ask {
     gap: 6px;
-    padding: 0 6px 0 8px;
+    padding-block: 0;
+    padding-inline: 8px 6px;
   }
 
   .ask__cta {

@@ -369,12 +369,23 @@
       return;
     }
     files.classList.add('is-closing');
-    filesList.addEventListener('animationend', finish, { once: true });
+    const onEnd = (event) => {
+      if (event.target !== filesList) return;
+      filesList.removeEventListener('animationend', onEnd);
+      finish();
+    };
+    filesList.addEventListener('animationend', onEnd);
+    // fallback: if the animation is cancelled (e.g. the chat view is hidden
+    // mid-slide) animationend never fires
+    window.setTimeout(finish, 400);
   }
 
   function closeFiles() {
-    // closing with the panel or on reset: no animation needed
-    if (isFilesOpen()) setFilesOpen(false, { animate: false });
+    // closing with the panel or on reset: no animation, and also finishes
+    // a close that was still sliding
+    if (isFilesOpen() || files.classList.contains('is-closing')) {
+      setFilesOpen(false, { animate: false });
+    }
   }
 
   filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
