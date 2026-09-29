@@ -1137,17 +1137,19 @@ button {
   background: var(--purple-10);
 }
 
-/* "•••" collapsed, "‹" expanded */
-.cite-more::before {
-  content: "\2022\2022\2022";
+/* "•••" while collapsed, chevron-left once expanded */
+.cite-more__dots {
   font-size: 8px;
   letter-spacing: 1px;
 }
 
-.cite-more[aria-expanded="true"]::before {
-  content: "\2039";
-  font-size: 16px;
-  letter-spacing: 0;
+.cite-more__chev,
+.cite-more[aria-expanded="true"] .cite-more__dots {
+  display: none;
+}
+
+.cite-more[aria-expanded="true"] .cite-more__chev {
+  display: block;
 }
 
 .msg__actions {
@@ -1251,9 +1253,11 @@ button {
 }
 
 /* open: a card with a bold title and a scrolling list of files */
+/* open: grey card (same as the answer bubbles) holding white file cards */
 .ai-files.is-open .ai-files__box {
   padding: 8px 10px 14px;
   border-radius: 12px 12px 0 0;
+  background: var(--bg);
   box-shadow: 0 -8px 24px rgb(29 37 45 / 0.08);
 }
 
@@ -1277,7 +1281,24 @@ button {
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  animation: fade-in 0.25s var(--ease-out);
+  /* the box is pinned to the bar, so growing the list slides it upwards */
+  animation: files-slide-open 0.35s var(--ease-out);
+}
+
+.ai-files.is-closing .ai-files__list {
+  animation: files-slide-close 0.25s var(--ease-in-out) forwards;
+}
+
+@keyframes files-slide-open {
+  from {
+    max-height: 0;
+  }
+}
+
+@keyframes files-slide-close {
+  to {
+    max-height: 0;
+  }
 }
 
 .file {
@@ -2096,9 +2117,9 @@ button {
     box-shadow: none;
   }
 
+  /* hover: no background, only the arrow nudges */
   .ai-panel__close:hover {
     transform: none;
-    background: var(--purple-10);
   }
 
   .ai-panel__close img {

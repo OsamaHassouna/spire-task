@@ -156,7 +156,7 @@
     { sources: [1], suggestions: DOC_SUGGESTIONS },
     { sources: [1, 3, 3, 1], suggestions: [] },
   ];
-  const THINKING_MS = 4000;
+  const THINKING_MS = 2500;
   const SOURCES_SHOWN = 2; // the rest hide behind a "more" button
 
   const chatLog = $('[data-chat-log]');
@@ -164,6 +164,7 @@
   const tplThinking = $('#tpl-thinking');
   const tplAi = $('#tpl-ai-msg');
   const tplChip = $('#tpl-chip');
+  const tplSourcesToggle = $('#tpl-sources-toggle');
 
   let turn = 0;
   let replyTimer = 0;
@@ -222,11 +223,7 @@
     });
 
     if (sources.length > SOURCES_SHOWN) {
-      const more = document.createElement('button');
-      more.type = 'button';
-      more.className = 'cite-more';
-      more.dataset.sourcesToggle = '';
-      more.setAttribute('aria-expanded', 'false');
+      const more = clone(tplSourcesToggle);
       more.setAttribute('aria-label', `Show all ${sources.length} sources`);
       container.append(more);
     }
@@ -347,14 +344,37 @@
 
   const isFilesOpen = () => filesToggle.getAttribute('aria-expanded') === 'true';
 
-  function setFilesOpen(open) {
+  /**
+   * The list slides up out of the bar when opening and back down when
+   * closing; [hidden] is only set once the closing slide has finished.
+   */
+  function setFilesOpen(open, { animate = true } = {}) {
     filesToggle.setAttribute('aria-expanded', String(open));
-    filesList.hidden = !open;
-    files.classList.toggle('is-open', open);
+    files.classList.remove('is-closing');
+
+    if (open) {
+      filesList.hidden = false;
+      files.classList.add('is-open');
+      return;
+    }
+
+    const finish = () => {
+      if (isFilesOpen()) return; // reopened meanwhile
+      files.classList.remove('is-open', 'is-closing');
+      filesList.hidden = true;
+    };
+
+    if (!animate || reducedMotionMq.matches) {
+      finish();
+      return;
+    }
+    files.classList.add('is-closing');
+    filesList.addEventListener('animationend', finish, { once: true });
   }
 
   function closeFiles() {
-    if (isFilesOpen()) setFilesOpen(false);
+    // closing with the panel or on reset: no animation needed
+    if (isFilesOpen()) setFilesOpen(false, { animate: false });
   }
 
   filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
