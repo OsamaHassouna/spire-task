@@ -581,7 +581,6 @@ button {
   outline: none;
 }
 
-.mic-btn,
 .ask__mic {
   position: relative;
   display: grid;
@@ -2164,11 +2163,6 @@ button {
 
   .ai-chat {
     padding-block-start: 15px;
-  }
-
-  .ai-chat__back {
-    width: 30px;
-    height: 30px;
   }
 
   .msg--ai .msg__bubble,

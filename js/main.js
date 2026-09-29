@@ -419,8 +419,12 @@
     if (!drag || event.pointerId !== drag.id) return;
     if (drag.moved) {
       slider.classList.remove('is-dragging'); // snapping resumes and settles on a card
-      // swallow the click that follows the drag so the card link doesn't open
-      slider.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true });
+      // swallow the click that follows the drag so the card link doesn't open;
+      // removed on the next tick in case no click fires (released elsewhere),
+      // so it can never eat a later, real click
+      const swallow = (e) => { e.preventDefault(); e.stopPropagation(); };
+      slider.addEventListener('click', swallow, { capture: true, once: true });
+      window.setTimeout(() => slider.removeEventListener('click', swallow, { capture: true }), 0);
     }
     drag = null;
   };
