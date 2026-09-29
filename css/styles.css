@@ -1,7 +1,6 @@
 /* ==========================================================================
    Spire – home + Spire AI side panel
-   Plain CSS, no build step. Mobile-first where it is cheap, desktop layout
-   from 1024px. Values come from the Figma file (px at 1:1).
+   Mobile-firstو desktop layout from 1024px.
    ========================================================================== */
 
 /* ---------- Tokens ---------- */
@@ -28,11 +27,11 @@
   --line: #e0e6eb;
   --line-soft: #f3f3f1;
   --text-muted: #8e9aa0;
-  --gray-dark: #a2b3c3; /* Figma "Grays/Dark": idle nav icons */
+  --gray-dark: #a2b3c3;
   --text-placeholder: #8e9296;
   --text-thinking: #8898a8;
 
-  /* type – Poppins (all weights loaded) is the site font */
+  /* type */
   --font: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-display: var(--font);
 
@@ -52,6 +51,12 @@
   --rail-w: 120px;
   --panel-w: 473px;
   --gap: 10px;
+
+  --dir: 1;
+}
+
+:root:dir(rtl) {
+  --dir: -1;
 }
 
 /* ---------- Reset ---------- */
@@ -152,7 +157,7 @@ button {
   transform: none;
 }
 
-/* ---------- Shared bits ---------- */
+/* ---------- Shared ---------- */
 .icon-btn {
   display: grid;
   place-items: center;
@@ -162,7 +167,7 @@ button {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--white);
-  color: var(--onyx); /* inline svg icons draw with currentColor */
+  color: var(--onyx);
 }
 
 .brand {
@@ -170,14 +175,12 @@ button {
   align-items: center;
 }
 
-/* the wordmark as text, used in the mobile drawer header */
 .brand__name {
   font-size: 25px;
   font-weight: 500;
   color: var(--purple);
 }
 
-/* battery gauge (rail + panel widget) */
 .battery {
   position: relative;
   display: flex;
@@ -188,7 +191,6 @@ button {
   border-radius: 4px;
 }
 
-/* terminal */
 .battery::after {
   content: "";
   position: absolute;
@@ -206,7 +208,7 @@ button {
   width: 30px;
   border-radius: 1.5px;
   background: var(--teal);
-  transform-origin: left;
+  transform-origin: calc(50% - 50% * var(--dir)) 50%;
   animation: battery-fill 1.2s var(--ease-out) 0.4s both;
 }
 
@@ -286,7 +288,6 @@ button {
   display: none;
 }
 
-/* the orb is exported larger than the button; the box crops it */
 .topbar__ai {
   overflow: hidden;
 }
@@ -295,10 +296,10 @@ button {
   width: 56px;
   max-width: none;
   height: auto;
-  margin: 4px 0 -12px;
+  margin: 3px -10px;
 }
 
-/* ---------- Side nav: off-canvas drawer on mobile ---------- */
+/* ---------- Side nav ---------- */
 .sidenav {
   position: fixed;
   inset-block: 0;
@@ -311,9 +312,9 @@ button {
   padding: 20px 16px 24px;
   background: var(--white);
   box-shadow: 0 0 48px rgb(29 37 45 / 0.16);
-  overflow-y: auto; /* short phones / landscape: the drawer scrolls instead of clipping */
+  overflow-y: auto;
   overscroll-behavior: contain;
-  transform: translateX(-104%);
+  transform: translateX(calc(-104% * var(--dir)));
   visibility: hidden;
   transition: transform 0.35s var(--ease-out), visibility 0s linear 0.35s;
 }
@@ -339,7 +340,7 @@ button {
 
 .sidenav__list {
   display: flex;
-  flex: none; /* never squash the list or the profile when space is short */
+  flex: none;
   flex-direction: column;
   gap: 6px;
 }
@@ -355,15 +356,13 @@ button {
   transition: background-color var(--dur), color var(--dur);
 }
 
-/* icons draw in currentColor: grey at rest */
 .sidenav__icon {
   flex: none;
-  width: 22px; /* common box so drawer labels line up; the icon keeps its own scale */
+  width: 22px;
   color: var(--gray-dark);
   transition: color var(--dur);
 }
 
-/* hover matches the active item: purple tint + purple icon */
 .sidenav__link:hover,
 .sidenav__link.is-active {
   background: var(--purple-10);
@@ -379,7 +378,7 @@ button {
   font-weight: 500;
 }
 
-/* profile: a row with avatar + name in the drawer, a 67x67 avatar tile on desktop */
+/* profile */
 .sidenav__profile {
   display: flex;
   flex: none;
@@ -432,7 +431,7 @@ button {
 
 /* ---------- Main card ---------- */
 .main {
-  position: relative; /* containing block for .visually-hidden inside the scroller */
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 58px;
@@ -471,13 +470,12 @@ button {
   width: 100%;
   max-width: 357px;
   padding-block-start: 127px;
-  /* room for the asterisk: 38 + 86 + gap */
 }
 
 .hero__title {
   display: flex;
   flex-direction: column;
-  font-size: 28px; /* Poppins runs wider than the Figma font: keeps each line on one row */
+  font-size: 28px;
   font-weight: 600;
   line-height: 43px;
   letter-spacing: -0.54px;
@@ -687,7 +685,7 @@ button {
   font-size: 14px;
   font-weight: 500;
   color: var(--coral);
-  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+  background: linear-gradient(currentColor, currentColor) calc(50% - 50% * var(--dir)) 100% / 0 1px no-repeat;
   transition: background-size var(--dur) var(--ease-out);
 }
 
@@ -700,7 +698,6 @@ button {
   gap: 16px;
   margin-block-start: 24px;
   padding: 4px 4px 23px;
-  /* room for hover lift + shadow */
   margin-inline: -4px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
@@ -713,7 +710,6 @@ button {
   display: none;
 }
 
-/* while dragging with the mouse (js): follow the pointer freely */
 .services__list.is-dragging {
   scroll-snap-type: none;
   cursor: grabbing;
@@ -781,7 +777,7 @@ button {
 }
 
 /* ==========================================================================
-   Spire AI panel – mobile: full-screen sheet
+   Spire AI panel
    ========================================================================== */
 .ai-panel {
   position: fixed;
@@ -792,8 +788,7 @@ button {
   padding: 20px 29px 48px;
   overflow: hidden;
   background: var(--bg);
-  /* slides in from the right edge */
-  transform: translateX(100%);
+  transform: translateX(calc(100% * var(--dir)));
   transition: transform 0.4s var(--ease-out);
 }
 
@@ -959,7 +954,7 @@ button {
   background: var(--coral-dark);
 }
 
-/* greeting: a button, tapping it starts the conversation */
+/* greeting */
 .ai-greeting {
   display: flex;
   flex: 1;
@@ -1045,7 +1040,7 @@ button {
   padding: 14px 24px;
   border: 0.856px solid var(--purple-20);
   border-radius: 13px;
-  border-end-end-radius: 0; /* tail: bottom corner on the inline-end side */
+  border-end-end-radius: 0;
   background: var(--purple-10);
   font-size: 13px;
   line-height: 24px;
@@ -1089,7 +1084,7 @@ button {
   padding: 14px 20px 16px;
   border: 1px solid var(--line-soft);
   border-radius: 13px;
-  border-end-start-radius: 0; /* tail: bottom corner on the inline-start side */
+  border-end-start-radius: 0;
   background: var(--white);
   box-shadow: var(--shadow-card);
   font-size: 13px;
@@ -1101,9 +1096,7 @@ button {
   font-weight: 500;
 }
 
-/* source numbers after the answer: "1 3 •••", expands to "1 3 3 1 ‹" */
-/* inline, so the numbers flow on the same line as the text instead of
-   dropping to a new line as one block */
+/* source numbers */
 .cites {
   display: inline;
 }
@@ -1146,7 +1139,6 @@ button {
   background: var(--purple-10);
 }
 
-/* "•••" while collapsed, chevron-left once expanded */
 .cite-more__dots {
   font-size: 8px;
   letter-spacing: 1px;
@@ -1195,7 +1187,7 @@ button {
 .chip:hover {
   border-color: var(--purple-20);
   background: var(--purple-10);
-  transform: translateX(2px);
+  transform: translateX(calc(2px * var(--dir)));
 }
 
 /* footer / composer */
@@ -1205,14 +1197,9 @@ button {
   align-items: center;
 }
 
-/*
-  Files in context: a bar tucked behind the top of the input. It reserves
-  only the bar's height; when opened, the box grows upwards over the chat.
-  50% opacity at rest, full on hover or while open.
-*/
 .ai-files {
   position: relative;
-  z-index: 1; /* sits behind the input, which overlaps its bottom edge */
+  z-index: 1;
   width: calc(100% - 14px);
   height: 36px;
   margin-block-end: -7px;
@@ -1264,8 +1251,6 @@ button {
   transition: transform var(--dur) var(--ease-out), background-color var(--dur);
 }
 
-/* open: grey card (same as the answer bubbles) with a roomy bold header
-   and a scrolling list of white file cards */
 .ai-files.is-open .ai-files__box {
   padding-block: 12px 16px;
   padding-inline: 12px;
@@ -1278,10 +1263,9 @@ button {
   min-height: 40px;
   padding-block: 4px 16px;
   padding-inline: 6px 0;
-  font-weight: 500; /* same size as the collapsed bar, just bolder */
+  font-weight: 500;
 }
 
-/* open: the chevron sits in a white square button (still pointing up, as designed) */
 .ai-files.is-open .ai-files__chevron {
   width: 32px;
   height: 32px;
@@ -1299,7 +1283,6 @@ button {
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  /* the box is pinned to the bar, so growing the list slides it upwards */
   animation: files-slide-open 0.35s var(--ease-out);
 }
 
@@ -1338,14 +1321,24 @@ button {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.4px;
 }
 
-.file__type--doc { background: var(--purple-10); color: var(--lilac); }
-.file__type--csv { background: #e6f9f3; color: var(--green); }
-.file__type--ppt { background: #fff0e8; color: #ff7a3d; }
+.file__type img {
+  width: 22px;
+  height: 22px;
+}
+
+.file__type--doc {
+  background: var(--purple-10);
+}
+
+.file__type--csv {
+  background: #e6f9f3;
+}
+
+.file__type--ppt {
+  background: #fff0e8;
+}
 
 .file__info {
   display: flex;
@@ -1365,7 +1358,7 @@ button {
   color: var(--text-muted);
 }
 
-/* on / off switch (a real checkbox with role="switch") */
+/* on / off switch */
 .switch {
   --knob-w: 14px;
   --knob-gap: 3px;
@@ -1381,7 +1374,6 @@ button {
   transition: background-color var(--dur);
 }
 
-/* the knob: a wide pill that travels along the inline axis (works in RTL too) */
 .switch::before {
   content: "";
   position: absolute;
@@ -1403,7 +1395,7 @@ button {
 
 .composer {
   position: relative;
-  z-index: 2; /* above the files bar */
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 7.27px;
@@ -1417,7 +1409,7 @@ button {
   transition: border-color var(--dur);
 }
 
-/* focus: border colour only */
+/* focus */
 .composer:focus-within {
   border-color: var(--lilac-light);
 }
@@ -1469,13 +1461,19 @@ button {
   transform: scale(0.95);
 }
 
-/* body lock while the mobile sheet / drawer is open */
+/* body lock while drawer is open */
 .is-locked {
   overflow: hidden;
 }
 
+.ai-panel__close-collapse,
+.cite-more__chev,
+.ai-chat__back svg {
+  scale: var(--dir) 1;
+}
+
 /* ==========================================================================
-   Tablet tweaks
+   Tablet 
    ========================================================================== */
 @media (min-width: 600px) {
   .app {
@@ -1491,11 +1489,9 @@ button {
    Desktop – 1024px and up
    ========================================================================== */
 @media (min-width: 1024px) {
+
   /*
     Layout: [ nav | main | aside ] with the top bar over nav + main.
-    The page itself scrolls; the top bar, nav and aside (rail / AI panel) are
-    sticky. Opening the AI panel widens the aside column, so the main content
-    is pushed narrower rather than covered.
   */
   :root {
     --panel-w: clamp(380px, 32vw, 473px);
@@ -1508,7 +1504,8 @@ button {
     grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--rail-w);
     grid-template-rows: auto auto;
     align-items: start;
-    gap: 0 var(--gap); /* the row gap lives in the top bar's padding */
+    gap: 0 var(--gap);
+    /* the row gap lives in the top bar's padding */
     min-height: 100vh;
     min-height: 100dvh;
     padding: 0 12px 12px;
@@ -1519,11 +1516,7 @@ button {
     grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--panel-w);
   }
 
-  /*
-    Top bar: sticky at 0. Its own padding holds the 12px above and the gap
-    below it, so it never shifts when the page scrolls and content passing
-    underneath is always covered.
-  */
+  /* Top bar */
   .topbar {
     position: sticky;
     inset-block-start: 0;
@@ -1549,12 +1542,12 @@ button {
     padding-block-end: 6.75px;
   }
 
-  /* header actions stay at 50%, as designed */
+  /* header actions */
   .topbar__actions {
     opacity: 0.5;
   }
 
-  /* nav and rail are at 50% until used */
+  /* nav and rail */
   .sidenav,
   .rail {
     opacity: 0.5;
@@ -1572,7 +1565,6 @@ button {
     display: block;
   }
 
-  /* the only interaction: the field grows while hovered or in use */
   .search__field {
     display: flex;
     align-items: center;
@@ -1591,7 +1583,6 @@ button {
     width: 380px;
   }
 
-  /* under 1200px with the AI panel open the top bar is too narrow to grow */
   @media (max-width: 1199px) {
     .app.is-ai-open .search__field {
       width: 268px;
@@ -1624,10 +1615,10 @@ button {
     display: grid;
   }
 
-  /* side nav: sticky icon column under the top bar, one viewport tall */
+  /* side nav */
   .sidenav {
     position: sticky;
-    inset-block-start: calc(var(--sticky-top) + var(--topbar-h) + var(--gap)); /* right under the top bar */
+    inset-block-start: calc(var(--sticky-top) + var(--topbar-h) + var(--gap));
     z-index: auto;
     grid-column: 1;
     grid-row: 2;
@@ -1656,8 +1647,6 @@ button {
     gap: 17px;
   }
 
-  /* laptops under ~820px tall: tighten the nav rhythm so the full column
-     (8 items + profile) fits without a hidden scroll */
   @media (max-height: 820px) {
     .sidenav {
       gap: 16px;
@@ -1669,7 +1658,6 @@ button {
     }
   }
 
-  /* icons only on desktop: labels and the user's name stay for screen readers */
   .sidenav__label,
   .sidenav__user {
     position: absolute;
@@ -1681,14 +1669,13 @@ button {
   }
 
   .sidenav__profile {
-    position: relative; /* contains the visually hidden name */
+    position: relative;
     justify-content: center;
     width: 67px;
     height: 67px;
     padding: 0;
   }
 
-  /* semi-square tiles: the hover tint takes the same shape as the active item */
   .sidenav__link {
     justify-content: center;
     width: 54px;
@@ -1707,21 +1694,16 @@ button {
     display: none;
   }
 
-  /* main card: natural height, the page scrolls */
   .main {
     grid-column: 2;
     grid-row: 2;
     gap: 78px;
     min-height: calc(100dvh - var(--topbar-h) - var(--gap) - 24px);
-    padding-block-end: 0; /* the card list's shadow gutter already spaces the bottom, as in Figma */
+    padding-block-end: 0;
     border-radius: 20px;
   }
 
-  /*
-    Hero: the text sits on top; the art is a fixed 590 x 652 composition
-    pinned to the right edge. When the hero gets narrower (e.g. the AI panel
-    is open) the art keeps its size and slides under the text.
-  */
+  /* Hero  */
   .hero {
     container-type: inline-size;
     flex-direction: row;
@@ -1748,7 +1730,7 @@ button {
 
   .hero__title {
     font-family: var(--font-display);
-    font-size: 48.42px; /* fixed: the text doesn't resize when the AI panel opens */
+    font-size: 48.42px;
     font-weight: 600;
     line-height: 1.466;
     text-shadow: none;
@@ -1773,7 +1755,7 @@ button {
     display: block;
   }
 
-  /* art: fixed 590 x 652 box, 80px from the hero's right edge (Figma) */
+  /* art */
   .hero__art {
     position: absolute;
     inset-block: auto 0;
@@ -1844,6 +1826,8 @@ button {
     width: 78.4%;
     height: auto;
     overflow: visible;
+    direction: ltr;
+    /* brand artwork */
     animation: spin 24s linear infinite;
   }
 
@@ -1880,7 +1864,7 @@ button {
     padding-block-end: 23px;
   }
 
-  /* rail: the collapsed AI panel, sticky and one viewport tall */
+  /* rail */
   .rail {
     position: sticky;
     inset-block-start: var(--sticky-top);
@@ -1991,7 +1975,6 @@ button {
   }
 
   .rail__add::after {
-    /* divider under the add button */
     content: "";
     position: absolute;
     inset-inline-start: 50%;
@@ -2002,7 +1985,6 @@ button {
     background: rgb(0 0 0 / 0.1);
   }
 
-  /* only the "+" turns; the divider drawn by ::after stays put */
   .rail__add:hover {
     background: var(--coral-20);
   }
@@ -2011,7 +1993,6 @@ button {
     transform: rotate(90deg);
   }
 
-  /* whole rail opens the panel; the sparkle button owns the hit area */
   .rail__open {
     margin-block-start: auto;
     flex: none;
@@ -2043,14 +2024,9 @@ button {
     box-shadow: inset 0 0 0 2px var(--purple);
   }
 
-  /*
-    Panel: sits in the aside column, on top of the rail. The column itself
-    animates (see .app.is-ai-open), so the panel only has to fill it.
-    Its content is laid out at the final width and fades in once there's room.
-  */
+  /* Panel */
   .ai-panel {
     position: sticky;
-    /* sticky offset; also clears the mobile sheet's inset: 0 */
     inset-block: var(--sticky-top) auto;
     inset-inline: auto;
     z-index: 5;
@@ -2069,23 +2045,21 @@ button {
     transition: none;
   }
 
-  .ai-panel > :not(.ai-panel__bg) {
+  .ai-panel> :not(.ai-panel__bg) {
     min-width: calc(var(--panel-w) - 56px);
     opacity: 0;
     transition: opacity 0.2s var(--ease-out);
   }
 
-  .ai-panel.is-open > :not(.ai-panel__bg) {
+  .ai-panel.is-open> :not(.ai-panel__bg) {
     opacity: 1;
     transition-delay: 0.3s;
   }
 
-  /* the rail it replaces is hidden while the panel is open */
   .app.is-ai-open .rail {
     visibility: hidden;
   }
 
-  /* the header has the collapse arrow on desktop, so "back" isn't needed */
   .ai-chat__back {
     display: none;
   }
@@ -2144,7 +2118,7 @@ button {
     box-shadow: none;
   }
 
-  /* hover: no background, only the arrow nudges */
+  /* hover */
   .ai-panel__close:hover {
     transform: none;
   }
@@ -2154,7 +2128,7 @@ button {
   }
 
   .ai-panel__close:hover img {
-    transform: translateX(3px);
+    transform: translateX(calc(3px * var(--dir)));
   }
 
   .ai-widget {
@@ -2243,7 +2217,7 @@ button {
   }
 }
 
-/* Wide screens: keep the design's 1:1 proportions, don't stretch forever */
+/* Wide screens */
 @media (min-width: 1800px) {
   .app {
     max-width: 1800px;
@@ -2352,7 +2326,7 @@ button {
   }
 
   100% {
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% * var(--dir)));
   }
 }
 
