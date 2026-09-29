@@ -391,6 +391,46 @@
   filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
 
   /* ======================================================================
+     Service cards: drag to scroll with a mouse
+     Touch, trackpads and keyboard already scroll the row natively; this
+     only adds mouse dragging. A drag doesn't count as a click on a card.
+     ====================================================================== */
+  const slider = $('.services__list');
+  const DRAG_THRESHOLD = 5; // px of movement before a press becomes a drag
+  let drag = null;
+
+  slider.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+    drag = { id: event.pointerId, startX: event.clientX, startScroll: slider.scrollLeft, moved: false };
+  });
+
+  slider.addEventListener('pointermove', (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
+    const dx = event.clientX - drag.startX;
+    if (!drag.moved && Math.abs(dx) > DRAG_THRESHOLD) {
+      drag.moved = true;
+      slider.setPointerCapture(drag.id);
+      slider.classList.add('is-dragging');
+    }
+    if (drag.moved) slider.scrollLeft = drag.startScroll - dx;
+  });
+
+  const endDrag = (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
+    if (drag.moved) {
+      slider.classList.remove('is-dragging'); // snapping resumes and settles on a card
+      // swallow the click that follows the drag so the card link doesn't open
+      slider.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); }, { capture: true, once: true });
+    }
+    drag = null;
+  };
+
+  slider.addEventListener('pointerup', endDrag);
+  slider.addEventListener('pointercancel', endDrag);
+  // stop the browser's native link / image dragging from taking over
+  slider.addEventListener('dragstart', (event) => event.preventDefault());
+
+  /* ======================================================================
      4. Mobile navigation drawer
      ====================================================================== */
   const nav = $('#sidenav');

@@ -63,8 +63,6 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* purple scrollbars everywhere (inherited by every scroll area) */
-  scrollbar-color: var(--lilac-light) transparent;
 }
 
 body {
@@ -479,7 +477,7 @@ button {
 .hero__title {
   display: flex;
   flex-direction: column;
-  font-size: 30.42px;
+  font-size: 28px; /* Poppins runs wider than the Figma font: keeps each line on one row */
   font-weight: 600;
   line-height: 43px;
   letter-spacing: -0.54px;
@@ -714,6 +712,13 @@ button {
 
 .services__list::-webkit-scrollbar {
   display: none;
+}
+
+/* while dragging with the mouse (js): follow the pointer freely */
+.services__list.is-dragging {
+  scroll-snap-type: none;
+  cursor: grabbing;
+  user-select: none;
 }
 
 .services__list>li {
