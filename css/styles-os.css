@@ -1,0 +1,2286 @@
+/* ==========================================================================
+   Spire – home page + Spire AI side panel
+   Plain CSS, no build step.
+
+   How this file is organised
+   - Desktop-first: every component's base rules are the desktop design
+     (Figma frame "Task", values at 1:1).
+   - Each component's mobile rules sit directly below it, in
+     @media (max-width: 1023.98px). Small-phone tweaks use (max-width: 400px).
+   - Sections follow the page from top to bottom.
+
+   Contents
+    1. Tokens
+    2. Reset & utilities
+    3. Shared pieces (icon button, brand, battery gauge)
+    4. App layout
+    5. Top bar
+    6. Side navigation
+    7. Main card
+    8. Hero
+    9. Services
+   10. Rail (collapsed side panel)
+   11. Spire AI panel
+   12. Chat
+   13. Keyframes
+   14. Reduced motion
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. Tokens
+   ========================================================================== */
+:root {
+  /* brand */
+  --purple: #4f008c;
+  --purple-10: #f6edfc;
+  --purple-20: #e9ccff;
+  --hero-bg: #3d0867;
+  --lilac: #a54ee1;
+  --lilac-light: #d399ff;
+  --coral: #ff375e;
+  --coral-10: #ffe5eb;
+  --coral-20: #ffccd6;
+  --coral-dark: #cd3a57;
+  --teal: #1bced8;
+  --green: #00c48c;
+
+  /* neutrals */
+  --onyx: #1d252d;
+  --onyx-50: rgb(29 37 45 / 0.5);
+  --white: #fff;
+  --bg: #f8f8f8;
+  --line: #e0e6eb;
+  --line-soft: #f3f3f1;
+  --text-muted: #8e9aa0;
+  --text-placeholder: #8e9296;
+  --text-thinking: #8898a8;
+
+  /* type – STC Forward is proprietary, Outfit is the closest free match */
+  --font: "STC Forward", "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Poppins", var(--font);
+
+  /* effects */
+  --shadow-sm: 0 7px 5px rgb(0 0 0 / 0.03);
+  --shadow-card: 0 7.6px 5.4px rgb(0 0 0 / 0.03);
+  --shadow-panel: 0 9px 6.4px rgb(0 0 0 / 0.03), 0 24px 64px rgb(29 37 45 / 0.12);
+  --focus: 0 0 0 3px rgb(79 0 140 / 0.35);
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur: 0.25s;
+
+  /* layout */
+  --nav-w: 115px;
+  --rail-w: 120px;
+  --panel-w: 473px;
+  --gap: 10px;
+}
+
+
+/* ==========================================================================
+   2. Reset & utilities
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: normal;
+  color: var(--onyx);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--purple);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--purple);
+  color: var(--white);
+  transform: translateY(-160%);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* body lock while the mobile sheet / drawer is open (set from JS) */
+.is-locked {
+  overflow: hidden;
+}
+
+
+/* ==========================================================================
+   3. Shared pieces
+   ========================================================================== */
+
+/* ---------- Icon button ---------- */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur);
+}
+
+.icon-btn:hover {
+  border-color: var(--purple-20);
+  box-shadow: var(--shadow-sm);
+
+  svg {
+    color: var(--purple)
+  }
+}
+
+.icon-btn:active {
+  transform: scale(0.96);
+}
+
+/* the exported svg already draws its own box */
+
+.icon-btn--bare:hover {
+  box-shadow: none;
+  border-color: var(--line);
+  color: var(--onyx);
+
+  svg {
+    color: var(--onyx)
+  }
+}
+
+/* .icon-btn--bare img {
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.icon-btn--bare:hover img {
+  transform: translateY(-1px);
+} */
+
+/* ---------- Brand ---------- */
+.brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand__mark {
+  width: 36.5px;
+  height: 36.5px;
+  margin-inline: 18.25px 11.25px;
+  /* mark sits centred in a 73px slot, name starts 7px into it */
+}
+
+.brand__name {
+  font-size: 25px;
+  font-weight: 500;
+  color: var(--purple);
+}
+
+/* ---------- Battery gauge (rail + panel widget) ---------- */
+.battery {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 46px;
+  height: 25px;
+  border: 1.7px solid #000;
+  border-radius: 4px;
+}
+
+/* terminal */
+.battery::after {
+  content: "";
+  position: absolute;
+  top: 5.9px;
+  right: -5.2px;
+  width: 1.7px;
+  height: 10px;
+  background: #000;
+}
+
+.battery__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 30px;
+  border-radius: 1.5px;
+  background: var(--teal);
+  transform-origin: left;
+  animation: battery-fill 1.2s var(--ease-out) 0.4s both;
+}
+
+.battery__value {
+  position: relative;
+  padding-left: 6px;
+  font-size: 15.58px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--white);
+}
+
+.battery--sm {
+  width: 38.64px;
+  height: 21px;
+  border-width: 1.2px;
+  border-radius: 3.36px;
+}
+
+.battery--sm::after {
+  top: 5.1px;
+  right: -4.4px;
+  width: 1.2px;
+  height: 8.4px;
+}
+
+.battery--sm .battery__fill {
+  width: 25.2px;
+}
+
+.battery--sm .battery__value {
+  padding-left: 4px;
+  font-size: 13.09px;
+}
+
+/* ---------- Voice button "listening" state ---------- */
+[data-mic][aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgb(255 55 94 / 0.5);
+  animation: pulse 1.4s var(--ease-out) infinite;
+}
+
+
+/* ==========================================================================
+   4. App layout
+   Desktop: 3-column grid  [ nav | main | rail ], top bar over nav + main.
+   ========================================================================== */
+.app {
+  display: grid;
+  grid-template-columns: var(--nav-w) minmax(0, 1fr) var(--rail-w);
+  grid-template-rows: 50px minmax(0, 1fr);
+  gap: var(--gap);
+  height: 100vh;
+  height: 100dvh;
+  min-height: 720px;
+  padding: 12px;
+}
+
+/* wide screens: keep the design's 1:1 proportions, don't stretch forever */
+@media (min-width: 1800px) {
+  .app {
+    max-width: 1800px;
+    margin-inline: auto;
+  }
+}
+
+/* Mobile: a single column that scrolls with the page */
+@media (max-width: 1023.98px) {
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    /* min-height: 100vh; */
+    min-height: 100dvh;
+    padding: 14px 7px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .app {
+    padding-inline: 16px;
+  }
+}
+
+
+/* ==========================================================================
+   5. Top bar
+   ========================================================================== */
+.topbar {
+  grid-column: 1 / 3;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 7px;
+}
+
+.topbar .brand {
+  flex: none;
+  align-self: flex-end;
+  padding-bottom: 6.75px;
+}
+
+/* mobile-only buttons */
+.topbar__menu,
+.topbar__search-btn,
+.topbar__ai {
+  display: none;
+}
+
+/* the design shows the header actions at 50% until they're used */
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0.5;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 268px;
+  height: 50px;
+  padding: 12px 19px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--white);
+  transition: width var(--dur) var(--ease-out), border-color var(--dur), box-shadow var(--dur);
+}
+
+.search-input:hover,
+.search-input:focus-within {
+  width: 380px;
+}
+
+.search__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.search__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+}
+
+.search__input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.search__input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+/* Mobile: menu button + name on the left, search / bell / AI orb on the right */
+@media (max-width: 1023.98px) {
+  .topbar {
+    padding-inline: 6px;
+  }
+
+  .topbar .brand {
+    flex: 1;
+    align-self: auto;
+    padding-bottom: 0;
+  }
+
+  .topbar .brand__mark {
+    display: none;
+  }
+
+  .topbar .brand__name {
+    font-size: 19.2px;
+  }
+
+  .topbar__menu,
+  .topbar__search-btn {
+    display: grid;
+  }
+
+  .topbar__actions {
+    opacity: 1;
+  }
+
+  .search,
+  .topbar__desktop-only {
+    display: none;
+  }
+
+  .topbar__ai {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+  }
+
+  .topbar__ai img {
+    width: 56px;
+    max-width: none;
+    height: auto;
+    margin: 4px 0 -12px;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .topbar__ai:hover img {
+    transform: rotate(-12deg) scale(1.05);
+  }
+
+  /* unread dot */
+  .topbar__ai::before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: -2.5px;
+    width: 4.9px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--coral);
+  }
+}
+
+
+/* ==========================================================================
+   6. Side navigation
+   Desktop: icon column. Mobile: off-canvas drawer with labels.
+   ========================================================================== */
+.sidenav {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--white);
+  filter: drop-shadow(var(--shadow-sm));
+  overflow-y: auto;
+  scrollbar-width: none;
+  opacity: 0.5;
+  /* as designed; full strength on use */
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.sidenav:hover,
+.sidenav:focus-within {
+  opacity: 1;
+}
+
+.sidenav__head {
+  display: none;
+}
+
+.sidenav__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 17px;
+}
+
+.sidenav__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 60px;
+  color: var(--onyx);
+  transition: background-color var(--dur), color var(--dur);
+}
+
+.sidenav__link img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* the folder icon is exported with its own 52x54 frame */
+.sidenav__link img[width="52"] {
+  width: 52px;
+  height: 54px;
+}
+
+.sidenav__link:hover,
+.sidenav__link.is-active {
+  background: var(--purple-10);
+}
+
+.sidenav__link.is-active {
+  width: 66px;
+  height: 66px;
+  border-radius: 11px;
+  color: var(--purple);
+  font-weight: 500;
+}
+
+.sidenav__link.is-active img {
+  width: 19px;
+  height: 19px;
+}
+
+/* icons only on desktop: labels stay available to screen readers */
+.sidenav__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.sidenav__profile {
+  display: grid;
+  place-items: center;
+  width: 67px;
+  height: 67px;
+  margin-top: auto;
+  border: 1.457px solid var(--line);
+  border-radius: 14.565px;
+  background: var(--white);
+  transition: border-color var(--dur);
+}
+
+.sidenav__profile img {
+  width: 40.78px;
+  height: 40.78px;
+  border-radius: 50%;
+}
+
+.sidenav__profile:hover {
+  border-color: var(--purple-20);
+}
+
+/* backdrop behind the mobile drawer */
+.scrim {
+  display: none;
+}
+
+/* Mobile: the same nav becomes a drawer opened from the menu button */
+@media (max-width: 1023.98px) {
+  .sidenav {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    align-items: stretch;
+    gap: 24px;
+    width: min(300px, 84vw);
+    padding: 20px 16px 24px;
+    border: 0;
+    border-radius: 0;
+    filter: none;
+    box-shadow: 0 0 48px rgb(29 37 45 / 0.16);
+    opacity: 1;
+    transform: translateX(-104%);
+    visibility: hidden;
+    transition: transform 0.35s var(--ease-out), visibility 0s linear 0.35s;
+  }
+
+  .sidenav.is-open {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.35s var(--ease-out), visibility 0s;
+  }
+
+  .sidenav__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 8px;
+  }
+
+  .sidenav__close {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .sidenav__list {
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .sidenav__link,
+  .sidenav__link.is-active {
+    justify-content: flex-start;
+    gap: 14px;
+    width: auto;
+    height: auto;
+    min-height: 54px;
+    padding: 12px 16px;
+    border-radius: 12px;
+  }
+
+  .sidenav__link img,
+  .sidenav__link img[width="52"],
+  .sidenav__link.is-active img {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* labels are visible in the drawer */
+  .sidenav__label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  .scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: block;
+    background: rgb(29 37 45 / 0.4);
+    animation: fade-in 0.3s var(--ease-out);
+  }
+}
+
+
+/* ==========================================================================
+   7. Main card
+   ========================================================================== */
+.main {
+  position: relative;
+  /* containing block for .visually-hidden inside the scroller */
+  container-type: inline-size;
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 78px;
+  min-width: 0;
+  padding: 20px 20px 0;
+  /* the card list's shadow gutter spaces the bottom, as in Figma */
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--white);
+  box-shadow: 0 7px 10px rgb(0 0 0 / 0.03);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.main:focus {
+  outline: none;
+}
+
+@media (max-width: 1023.98px) {
+  .main {
+    container-type: normal;
+    /* size queries are a desktop concern */
+    gap: 58px;
+    padding: 20px;
+    border-radius: 18px;
+    overflow: visible;
+  }
+}
+
+
+/* ==========================================================================
+   8. Hero
+   Desktop: text left, art right. The art is a 590 x 652 box whose pieces are
+   placed in % so the whole composition scales with the hero width.
+   ========================================================================== */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  container-type: inline-size;
+  display: flex;
+  flex: none;
+  justify-content: space-between;
+  gap: 32px;
+  height: 652px;
+  padding: 0 clamp(24px, 5.4cqw, 80px) 0 clamp(32px, 6.8cqw, 100px);
+  border-radius: 20px;
+  background: var(--hero-bg);
+  color: var(--white);
+}
+
+/* ---------- Text column ---------- */
+.hero__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  max-width: 563px;
+}
+
+.hero__title {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.3cqw, 48.42px);
+  font-weight: 600;
+  line-height: 1.466;
+  letter-spacing: -0.54px;
+}
+
+.hero__lead {
+  max-width: 427px;
+  margin-top: 47px;
+  font-size: 20px;
+  line-height: 34px;
+}
+
+/* entrance: lines rise in one after another */
+.hero__title>span,
+.hero__lead,
+.ask {
+  animation: rise 0.8s var(--ease-out) both;
+}
+
+.hero__title>span:nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.hero__lead {
+  animation-delay: 0.16s;
+}
+
+.ask {
+  animation-delay: 0.24s;
+}
+
+/* ---------- "ask spire ai" pill ---------- */
+.ask {
+  display: flex;
+  align-items: center;
+  gap: 11.25px;
+  width: 100%;
+  max-width: 537px;
+  height: 72px;
+  margin-top: 70px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 80px;
+  background: var(--white);
+  color: var(--onyx);
+  transition: box-shadow var(--dur) var(--ease-out);
+}
+
+.ask:focus-within {
+  box-shadow: 0 0 0 4px rgb(255 55 94 / 0.25);
+}
+
+.ask__cta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 152px;
+  height: 48px;
+  padding: 10px;
+  border-radius: 130px;
+  background: var(--coral);
+  color: var(--white);
+  font-size: 16px;
+  white-space: nowrap;
+  filter: drop-shadow(0 4px 7.1px rgb(255 55 94 / 0.3));
+  transition: transform var(--dur) var(--ease-out), filter var(--dur) var(--ease-out);
+}
+
+.ask__cta:hover {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 8px 14px rgb(255 55 94 / 0.4));
+}
+
+.ask__cta:active {
+  transform: scale(0.97);
+}
+
+.ask__orb {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: bottom;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.ask__cta:hover .ask__orb {
+  transform: rotate(-20deg);
+}
+
+.ask__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+}
+
+.ask__mic {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48.28px;
+  height: 48px;
+  border-radius: 69px;
+  background: var(--coral-10);
+  transition: background-color var(--dur);
+}
+
+.ask__mic:hover {
+  background: var(--coral-20);
+}
+
+/* ---------- Art ---------- */
+.hero__art {
+  position: relative;
+  flex: none;
+  align-self: flex-end;
+  width: clamp(300px, 45.5cqw, 590px);
+  /* 590 of the 1296px content box at 1:1 */
+  max-height: 100%;
+  aspect-ratio: 590 / 652;
+  pointer-events: none;
+}
+
+/* laptops (1024-1180px): give the text column room for the ask input */
+@container (max-width: 1100px) {
+  .hero__art {
+    width: clamp(220px, 36cqw, 590px);
+  }
+}
+
+.hero__asterisk {
+  position: absolute;
+  top: 11.2%;
+  left: 40%;
+  width: 14.57%;
+  height: auto;
+  animation: spin-in 1s var(--ease-out) 0.2s both, spin 24s linear 1.2s infinite;
+}
+
+.arch {
+  position: absolute;
+  overflow: hidden;
+}
+
+.arch__photo {
+  position: absolute;
+  max-width: none;
+}
+
+.arch--man {
+  top: 29.45%;
+  left: 0;
+  width: 54.58%;
+  height: 70.55%;
+  border-radius: 46.6% 46.6% 0 0 / 32.6% 32.6% 0 0;
+  background: var(--lilac);
+  animation: arch-up 1s var(--ease-out) 0.1s both;
+}
+
+.arch--man .arch__photo {
+  top: -12.5%;
+  left: -28.9%;
+  width: 157.1%;
+  height: 146.7%;
+}
+
+.arch--woman {
+  top: 0;
+  left: 65.42%;
+  width: 34.58%;
+  height: 57.67%;
+  border-radius: 0 0 50% 50% / 0 0 27.1% 27.1%;
+  background: var(--lilac-light);
+  animation: arch-down 1s var(--ease-out) 0.2s both;
+}
+
+.arch--woman .arch__photo {
+  top: 2.66%;
+  left: -74.5%;
+  width: 257.4%;
+  height: 104.8%;
+  object-fit: cover;
+}
+
+/* "EMPOWERED BY SPIRE AI" badge – text runs on an SVG circle path */
+.badge {
+  position: absolute;
+  top: 63.65%;
+  left: 65.42%;
+  width: 34.58%;
+  aspect-ratio: 204 / 207;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pop 0.8s var(--ease-out) 0.35s both;
+}
+
+.badge__ring {
+  position: absolute;
+  top: 10.14%;
+  left: 11.27%;
+  width: 78.4%;
+  height: auto;
+  overflow: visible;
+  animation: spin 24s linear infinite;
+}
+
+.badge__text {
+  font-family: var(--font);
+  font-size: 11px;
+  fill: var(--white);
+}
+
+.badge__logo {
+  position: absolute;
+  top: 30.9%;
+  left: 31.4%;
+  display: grid;
+  gap: 0.4px;
+  width: 34.5%;
+}
+
+.badge__logo img {
+  width: 100%;
+  height: auto;
+}
+
+/* Mobile: centred, stacked; the man's arch sits faded behind the text */
+@media (max-width: 1023.98px) {
+  .hero {
+    container-type: normal;
+    flex: 0 1 auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    height: auto;
+    min-height: 572px;
+    padding: 38px 22px 60px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .hero__content {
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: flex-start;
+    max-width: 357px;
+    padding-top: 127px;
+    /* room for the asterisk: 38 + 86 + gap */
+  }
+
+  .hero__title {
+    font-family: var(--font);
+    font-size: 30.42px;
+    font-weight: 600;
+    /* Outfit 600 matches STC Forward Bold's visual weight */
+    line-height: 43px;
+    text-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
+  }
+
+  .hero__lead {
+    max-width: none;
+  }
+
+  .ask {
+    margin-top: 12px;
+    padding: 0 11px 0 15px;
+    border-radius: 120px;
+  }
+
+  .ask__cta {
+    width: auto;
+    padding: 10px 20px;
+  }
+
+  .ask__orb {
+    display: none;
+  }
+
+  .hero__art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    align-self: auto;
+    /* abspos boxes honour self-alignment; let it stretch */
+    width: auto;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  .hero__asterisk {
+    top: 38px;
+    left: 50%;
+    width: 86px;
+    height: 86px;
+    margin-left: -43px;
+  }
+
+  .arch--man {
+    top: auto;
+    bottom: 0;
+    left: 50%;
+    width: 247.1px;
+    height: 353px;
+    margin-left: -123.55px;
+    border-radius: 115px 115px 0 0;
+    background: rgb(97 10 164 / 0.5);
+  }
+
+  .arch--man .arch__photo {
+    opacity: 0.6;
+  }
+
+  .arch--woman,
+  .badge {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .hero__content {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 400px) {
+  .hero {
+    padding-inline: 14px;
+  }
+
+  .ask {
+    gap: 6px;
+    padding: 0 6px 0 8px;
+  }
+
+  .ask__cta {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .ask__mic {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ask__input {
+    min-width: 48px;
+  }
+}
+
+
+/* ==========================================================================
+   9. Services
+   ========================================================================== */
+.services {
+  padding-inline: clamp(0px, 6cqw, 90px);
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-head__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* coral marker before the title */
+.section-head__title::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 10px;
+  border-radius: 12px;
+  background: var(--coral);
+}
+
+.section-head__link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--coral);
+  background: linear-gradient(currentColor, currentColor) left bottom / 0 1px no-repeat;
+  transition: background-size var(--dur) var(--ease-out);
+}
+
+.section-head__link:hover {
+  background-size: 100% 1px;
+}
+
+/* horizontal scroller */
+.services__list {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  margin-inline: -4px;
+  padding: 4px 4px 23px;
+  /* room for hover lift + shadow */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 4px;
+  scrollbar-width: none;
+}
+
+.services__list::-webkit-scrollbar {
+  display: none;
+}
+
+.services__list>li {
+  flex: none;
+  scroll-snap-align: start;
+  animation: rise 0.6s var(--ease-out) both;
+}
+
+.services__list>li:nth-child(2) {
+  animation-delay: 0.05s;
+}
+
+.services__list>li:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+.services__list>li:nth-child(4) {
+  animation-delay: 0.15s;
+}
+
+.services__list>li:nth-child(5) {
+  animation-delay: 0.2s;
+}
+
+.services__list>li:nth-child(6) {
+  animation-delay: 0.25s;
+}
+
+.service-card {
+  display: flex;
+  align-items: center;
+  gap: 11.25px;
+  height: 88px;
+  padding: 24px 56px 24px 16px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--white);
+  font-size: 16px;
+  white-space: nowrap;
+  filter: drop-shadow(var(--shadow-card));
+  transition: transform var(--dur) var(--ease-out), border-color var(--dur), filter var(--dur) var(--ease-out);
+}
+
+.service-card img {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.35s var(--ease-out);
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--purple-20);
+  filter: drop-shadow(0 10px 12px rgb(79 0 140 / 0.08));
+}
+
+.service-card:hover img {
+  transform: scale(1.08);
+}
+
+@media (max-width: 1023.98px) {
+  .services {
+    padding-inline: 0;
+  }
+}
+
+
+/* ==========================================================================
+   10. Rail – the collapsed side panel (desktop only)
+   Clicking anywhere on it opens the Spire AI panel.
+   ========================================================================== */
+.rail {
+  position: relative;
+  grid-column: 3;
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 39px;
+  padding: 30.73px 18.73px;
+  border: 1.28px solid var(--line);
+  border-radius: 25.61px;
+  background: var(--white);
+  filter: drop-shadow(0 9px 6.4px rgb(0 0 0 / 0.03));
+  overflow: hidden;
+  opacity: 0.5;
+  /* as designed; full strength on use */
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.rail:hover,
+.rail:focus-within {
+  opacity: 1;
+}
+
+.rail__widgets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 37px;
+  width: 83px;
+  padding-bottom: 39px;
+  border-bottom: 1px solid rgb(0 0 0 / 0.1);
+}
+
+.rail__widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 63px;
+}
+
+.rail__label {
+  font-size: 11px;
+  color: var(--onyx-50);
+}
+
+/* "out of gate" gauge */
+.gate {
+  width: 49.77px;
+  height: 26px;
+  border: 1.5px solid var(--coral-dark);
+  border-left-width: 1.7px;
+  border-right-width: 1.7px;
+  border-radius: 2px 5px 5px 2px;
+  background: rgb(255 153 173 / 0.5);
+}
+
+/* status ticker under the gauge */
+.ticker {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.ticker__track {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: max-content;
+  font-size: 11px;
+  line-height: 18.5px;
+  color: var(--coral-dark);
+  white-space: nowrap;
+  animation: ticker 14s linear 2s infinite;
+}
+
+.ticker__track>span:first-child {
+  margin-left: 1px;
+}
+
+.ticker__alert {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ticker__alert img {
+  width: 18.47px;
+  height: 18.47px;
+}
+
+.rail:hover .ticker__track {
+  animation-play-state: paused;
+}
+
+.rail__add {
+  position: relative;
+  z-index: 1;
+  /* above the rail-wide open button */
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 61.46px;
+  height: 61.46px;
+  border-radius: 50%;
+  background: var(--coral-10);
+  transition: transform var(--dur) var(--ease-out), background-color var(--dur);
+}
+
+/* divider under the add button */
+.rail__add::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -39px;
+  width: 83px;
+  height: 1px;
+  margin-left: -41.5px;
+  background: rgb(0 0 0 / 0.1);
+}
+
+.rail__add:hover {
+  background: var(--coral-20);
+  transform: rotate(90deg);
+}
+
+/* the sparkle button's ::before stretches over the whole rail */
+.rail__open {
+  flex: none;
+  margin-top: auto;
+}
+
+.rail__open::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.rail__open img {
+  width: 64.4px;
+  height: 68.53px;
+  transform-origin: 40% 45%;
+  animation: twinkle 3.2s var(--ease-in-out) infinite;
+}
+
+.rail__open:hover img {
+  animation-duration: 1.2s;
+}
+
+.rail__open:focus-visible {
+  outline: 0;
+}
+
+.rail__open:focus-visible::before {
+  border-radius: 24px;
+  box-shadow: inset 0 0 0 2px var(--purple);
+}
+
+@media (max-width: 1023.98px) {
+  .rail {
+    display: none;
+    /* the header's AI orb opens the panel instead */
+  }
+}
+
+
+/* ==========================================================================
+   11. Spire AI panel
+   Desktop: expands out of the rail (clip-path), over the right of the page.
+   Mobile: full-screen sheet.
+   JS toggles [hidden] and .is-open; data-state="welcome | chat" picks the view.
+   ========================================================================== */
+.ai-panel {
+  position: relative;
+  z-index: 20;
+  grid-column: 3;
+  grid-row: 1 / 3;
+  justify-self: end;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: var(--panel-w);
+  max-width: calc(100vw - var(--nav-w) - 32px);
+  padding: 20.73px 26.73px 30.73px;
+  overflow: hidden;
+  border: 1.28px solid transparent;
+  border-radius: 25.61px;
+  background-color: transparent;
+  /* closed: clipped to the rail's width, surface fades out after the clip */
+  clip-path: inset(0 0 0 calc(100% - var(--rail-w)) round 25.61px);
+  transition:
+    clip-path 0.5s var(--ease-out),
+    background-color 0.2s 0.3s,
+    border-color 0.2s 0.3s,
+    box-shadow 0.2s 0.3s;
+}
+
+.ai-panel.is-open {
+  border-color: var(--line);
+  background-color: var(--white);
+  box-shadow: var(--shadow-panel);
+  clip-path: inset(0 round 25.61px);
+  transition:
+    clip-path 0.5s var(--ease-out),
+    background-color 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+/* content fades in once the panel has started to open */
+.ai-panel>* {
+  transition: opacity 0.25s var(--ease-out);
+}
+
+.ai-panel:not(.is-open)>* {
+  opacity: 0;
+}
+
+.ai-panel.is-open>* {
+  transition-delay: 0.15s;
+}
+
+/* soft colour wash, mobile only */
+.ai-panel__bg {
+  display: none;
+}
+
+/* ---------- Header ---------- */
+.ai-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.ai-panel__spark {
+  width: 37.8px;
+  height: 37.8px;
+}
+
+.ai-panel__orb {
+  display: none;
+  width: 27px;
+  height: 27px;
+}
+
+.ai-panel__titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-panel__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.tag {
+  display: inline-grid;
+  place-items: center;
+  height: 17px;
+  padding: 0 8px;
+  border-radius: 110px;
+  background: rgb(165 78 225 / 0.8);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--white);
+}
+
+.ai-panel__subtitle {
+  height: 24px;
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 24px;
+  color: var(--text-muted);
+}
+
+.ai-panel__close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  transition: transform var(--dur) var(--ease-out), background-color var(--dur);
+}
+
+.ai-panel__close:hover {
+  background: var(--purple-10);
+}
+
+.ai-panel__close img {
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.ai-panel__close:hover img {
+  transform: translateX(3px);
+}
+
+/* desktop shows the "collapse" arrow, mobile shows an X */
+.ai-panel__close-x {
+  display: none;
+}
+
+/* ---------- Views ---------- */
+.ai-welcome,
+.ai-chat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ai-panel[data-state="welcome"] .ai-chat,
+.ai-panel[data-state="chat"] .ai-welcome {
+  display: none;
+}
+
+.ai-panel[data-state] [data-view] {
+  animation: fade-in 0.35s var(--ease-out);
+}
+
+/* ---------- Welcome: widgets ---------- */
+.ai-widgets {
+  display: flex;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.ai-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  height: 93px;
+  padding: 18px 18px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 0.8);
+}
+
+.ai-widget__label {
+  font-size: 12px;
+  color: var(--onyx-50);
+  white-space: nowrap;
+}
+
+.ai-widgets__add-item {
+  margin-left: auto;
+}
+
+.ai-widgets__add {
+  display: grid;
+  place-items: center;
+  width: 51px;
+  height: 93px;
+  border: 1px solid var(--coral-20);
+  border-radius: 12.05px;
+  background: rgb(255 204 214 / 0.6);
+  transition: background-color var(--dur);
+}
+
+.ai-widgets__add:hover {
+  background: var(--coral-20);
+}
+
+/* "out of gate" bars */
+.bars {
+  display: flex;
+  gap: 6px;
+}
+
+.bars__bar {
+  position: relative;
+  width: 20px;
+  height: 28px;
+  border-radius: 4px;
+  background: #f5f3f6;
+}
+
+.bars__bar::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  border-radius: 3px;
+  transform-origin: bottom;
+  animation: grow 0.9s var(--ease-out) 0.3s both;
+}
+
+.bars__bar--in::after {
+  height: 20px;
+  background: var(--green);
+}
+
+.bars__bar--out::after {
+  height: 9px;
+  background: var(--coral-dark);
+}
+
+/* ---------- Welcome: greeting ---------- */
+.ai-greeting {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding-block: 24px;
+  text-align: center;
+  color: #000;
+}
+
+.ai-greeting__orb {
+  width: 59px;
+  height: 59px;
+  margin-bottom: 10px;
+  animation: float 4s var(--ease-in-out) infinite;
+}
+
+.ai-greeting__title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.364;
+}
+
+.ai-greeting__text {
+  font-size: 16px;
+  line-height: 1.364;
+}
+
+/* ---------- Footer: context tray + composer ---------- */
+.ai-panel__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ai-files {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  width: calc(100% - 14px);
+  margin-bottom: -7px;
+  padding: 3px 4px 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px 10px 0 0;
+  background: var(--white);
+  font-size: 12.85px;
+  animation: rise 0.35s var(--ease-out) both;
+}
+
+.ai-files span {
+  flex: 1;
+  opacity: 0.5;
+}
+
+.ai-files img {
+  opacity: 0.5;
+  transform: rotate(-90deg);
+  /* exported pointing right, design shows it pointing up */
+}
+
+.composer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7.27px;
+  width: 100%;
+  height: 71.25px;
+  padding: 0 13.73px 0 19.75px;
+  border: 1px solid rgb(162 179 195 / 0.8);
+  border-radius: 10px;
+  background: var(--white);
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+
+.composer:focus-within {
+  border-color: var(--purple-20);
+  box-shadow: var(--focus);
+}
+
+.composer__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+}
+
+.composer__input::placeholder {
+  color: var(--text-placeholder);
+  opacity: 1;
+}
+
+.composer__mic {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 7.67px;
+  background: rgb(255 229 235 / 0.5);
+  transition: background-color var(--dur);
+}
+
+.composer__mic:hover {
+  background: var(--coral-10);
+}
+
+.composer__send {
+  flex: none;
+  border-radius: 7.66px;
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur);
+}
+
+.composer__send:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgb(255 55 94 / 0.4);
+}
+
+.composer__send:active {
+  transform: scale(0.95);
+}
+
+/* Mobile: full-screen sheet that slides up, with an orb header and an X */
+@media (max-width: 1023.98px) {
+
+  .ai-panel,
+  .ai-panel.is-open {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    justify-self: auto;
+    /* fixed boxes honour self-alignment; let it fill */
+    width: auto;
+    max-width: none;
+    padding: 20px 29px 48px;
+    border: 0;
+    border-radius: 0;
+    background-color: var(--bg);
+    box-shadow: none;
+    clip-path: none;
+    transition: opacity 0.3s var(--ease-out), transform 0.4s var(--ease-out);
+  }
+
+  .ai-panel {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  .ai-panel.is-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* the whole sheet fades, so its children don't need their own fade */
+  .ai-panel>*,
+  .ai-panel:not(.is-open)>* {
+    opacity: 1;
+    transition: none;
+  }
+
+  .ai-panel__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    background:
+      radial-gradient(40% 20% at 78% 27%, rgb(79 0 140 / 0.1), transparent 70%),
+      radial-gradient(34% 26% at 22% 62%, rgb(255 55 94 / 0.1), transparent 70%);
+  }
+
+  .ai-panel__head {
+    gap: 10px;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .ai-panel__spark,
+  .ai-panel__subtitle,
+  .tag,
+  .ai-panel__close-collapse {
+    display: none;
+  }
+
+  .ai-panel__orb,
+  .ai-panel__close-x {
+    display: block;
+  }
+
+  .ai-panel__close {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.04);
+  }
+
+  .ai-panel__close:hover {
+    background: var(--white);
+    transform: rotate(90deg);
+  }
+
+  .ai-panel__close:hover img {
+    transform: none;
+  }
+
+  .ai-widget {
+    border: 0;
+  }
+
+  /* the context tray only exists in the desktop design */
+  .ai-files {
+    display: none;
+  }
+
+  .composer {
+    height: 71px;
+    padding: 10px 14px 10px 16px;
+    border-color: var(--line-soft);
+  }
+
+  .composer__input {
+    font-size: 13px;
+  }
+
+  .composer__input::placeholder {
+    color: rgb(0 0 0 / 0.5);
+  }
+
+  .composer__mic {
+    border-radius: 10px;
+  }
+
+  .composer__send {
+    box-shadow: 0 8px 18px rgb(255 55 94 / 0.3);
+  }
+}
+
+@media (max-width: 400px) {
+
+  .ai-panel,
+  .ai-panel.is-open {
+    padding-inline: 16px;
+  }
+
+  .ai-widgets {
+    gap: 8px;
+  }
+
+  .ai-widget {
+    padding-inline: 10px;
+  }
+}
+
+
+/* ==========================================================================
+   12. Chat
+   Messages are cloned from <template>s in index.html.
+   ========================================================================== */
+.ai-chat {
+  padding-top: 15px;
+}
+
+.ai-chat__back {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  transition: background-color var(--dur);
+}
+
+.ai-chat__back:hover {
+  background: var(--purple-10);
+}
+
+.ai-chat__log {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  margin-inline: -8px;
+  padding: 10px 8px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.msg {
+  animation: rise 0.35s var(--ease-out) both;
+}
+
+/* ---------- User message ---------- */
+.msg--user {
+  align-self: flex-end;
+  max-width: 88%;
+}
+
+.msg--user .msg__bubble {
+  padding: 14px 24px;
+  border: 0.856px solid var(--purple-20);
+  border-radius: 13px 13px 0 13px;
+  background: var(--purple-10);
+  font-size: 13px;
+  line-height: 24px;
+  color: #000;
+}
+
+/* ---------- "Thinking..." ---------- */
+.msg--thinking {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-thinking);
+}
+
+.msg--thinking img {
+  animation: spin 1.2s linear infinite;
+}
+
+.dots span {
+  animation: blink 1.2s infinite both;
+}
+
+.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ---------- AI answer ---------- */
+.msg--ai {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.msg--ai .msg__bubble {
+  width: 100%;
+  max-width: 395px;
+  padding: 14px 20px 20px;
+  border: 1px solid var(--line-soft);
+  border-radius: 13px 13px 13px 0;
+  background: var(--bg);
+  font-size: 13px;
+  line-height: 24px;
+  color: #000;
+}
+
+.msg--ai strong {
+  font-weight: 500;
+}
+
+/* source reference "1" */
+.cite {
+  display: inline-grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  margin-left: 4px;
+  border-radius: 54px;
+  background: var(--purple-10);
+  font-size: 14px;
+  color: var(--onyx);
+  vertical-align: middle;
+}
+
+/* like / dislike / copy */
+.msg__tools {
+  display: flex;
+  gap: 4px;
+  margin: 10px 0 0 -6px;
+}
+
+.msg__tool {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  color: var(--onyx);
+  transition: background-color var(--dur), color var(--dur);
+}
+
+.msg__tool:hover {
+  background: var(--purple-10);
+}
+
+.msg__tool[aria-pressed="true"] {
+  color: var(--purple);
+  background: var(--purple-10);
+}
+
+/* copy confirmation */
+.msg__tool.is-done {
+  color: var(--green);
+  background: rgb(0 196 140 / 0.1);
+}
+
+/* suggested actions */
+.msg__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 12px 26px;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px 10px 10px 0;
+  background: var(--bg);
+  font-size: 13px;
+  line-height: 24px;
+  color: #000;
+  text-align: left;
+  transition: background-color var(--dur), border-color var(--dur), transform var(--dur) var(--ease-out);
+}
+
+.chip img {
+  flex: none;
+  width: 15px;
+  height: 15px;
+}
+
+.chip:hover {
+  border-color: var(--purple-20);
+  background: var(--purple-10);
+  transform: translateX(2px);
+}
+
+/* Mobile: white cards with a soft shadow on the tinted sheet */
+@media (max-width: 1023.98px) {
+  .ai-chat {
+    padding-top: 24px;
+  }
+
+  .ai-chat__back {
+    width: 34px;
+    height: 34px;
+  }
+
+  .msg--ai .msg__bubble {
+    padding-bottom: 16px;
+    background: var(--white);
+    box-shadow: var(--shadow-card);
+  }
+
+  .chip {
+    min-height: 54px;
+    background: var(--white);
+    box-shadow: var(--shadow-card);
+  }
+}
+
+
+/* ==========================================================================
+   13. Keyframes
+   ========================================================================== */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes arch-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+@keyframes arch-down {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes spin-in {
+  from {
+    opacity: 0;
+    transform: rotate(-120deg) scale(0.4);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    transform: scale(1) rotate(0);
+  }
+
+  50% {
+    transform: scale(1.06) rotate(6deg);
+  }
+}
+
+@keyframes battery-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+  }
+
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 12px rgb(255 55 94 / 0);
+  }
+}
+
+@keyframes ticker {
+
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+/* ==========================================================================
+   14. Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}

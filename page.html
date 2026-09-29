@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Poppins:wght@600&display=swap">
 
   <link rel="preload" as="image" href="assets/images/hero-man.webp">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles-os.css">
   <script src="js/main.js" defer></script>
 </head>
 
@@ -36,21 +36,55 @@
       <div class="topbar__actions">
         <form class="search" role="search" action="#">
           <label class="visually-hidden" for="site-search">Search</label>
-          <img class="search__icon" src="assets/icons/search.svg" alt="" width="16" height="16">
-          <input class="search__input" id="site-search" type="search" name="q" placeholder="Search..."
-            autocomplete="off">
+          <div class="search-input">
+            <span class="search__icon" aria-hidden="true">
+              <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7.49036" cy="7.49036" r="7.49036" transform="matrix(-1 0 0 1 16.2617 0.62499)"
+                  stroke="currentColor" stroke-width="1.24998" stroke-linecap="round" stroke-linejoin="round" />
+                <path opacity="0.6" d="M3.56165 13.714L0.624999 16.6431" stroke="currentColor" stroke-width="1.24998"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <input class="search__input" id="site-search" type="search" name="q" placeholder="Search..."
+              autocomplete="off">
+          </div>
         </form>
+        <!-- mobile -->
         <button class="icon-btn topbar__search-btn" type="button" aria-label="Search">
           <img src="assets/icons/search.svg" alt="" width="16" height="16">
         </button>
+
         <button class="icon-btn icon-btn--bare topbar__notif" type="button" aria-label="Notifications, 1 unread">
-          <img src="assets/icons/btn-bell.svg" alt="" width="50" height="50">
+          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M0 11.2143H14M1.61538 11.2143V5.85714C1.61538 2.89847 4.02616 0.5 7 0.5C9.97384 0.5 12.3846 2.89847 12.3846 5.85714V11.2143M4.84615 12.8214V13.3571C4.84615 14.5406 5.81046 15.5 7 15.5C8.18954 15.5 9.15385 14.5406 9.15385 13.3571V12.8214"
+              stroke="currentColor" />
+          </svg>
         </button>
         <button class="icon-btn icon-btn--bare topbar__desktop-only" type="button" aria-label="Apps">
-          <img src="assets/icons/btn-apps.svg" alt="" width="50" height="50">
+          <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M6.92857 0.5H1.78571C1.07563 0.5 0.5 1.07563 0.5 1.78571V6.92857C0.5 7.63865 1.07563 8.21429 1.78571 8.21429H6.92857C7.63865 8.21429 8.21429 7.63865 8.21429 6.92857V1.78571C8.21429 1.07563 7.63865 0.5 6.92857 0.5Z"
+              stroke="currentColor" />
+            <path
+              d="M17.2143 0.5H12.0714C11.3613 0.5 10.7857 1.07563 10.7857 1.78571V6.92857C10.7857 7.63865 11.3613 8.21429 12.0714 8.21429H17.2143C17.9244 8.21429 18.5 7.63865 18.5 6.92857V1.78571C18.5 1.07563 17.9244 0.5 17.2143 0.5Z"
+              stroke="currentColor" />
+            <path
+              d="M17.2143 10.7857H12.0714C11.3613 10.7857 10.7857 11.3613 10.7857 12.0714V17.2143C10.7857 17.9244 11.3613 18.5 12.0714 18.5H17.2143C17.9244 18.5 18.5 17.9244 18.5 17.2143V12.0714C18.5 11.3613 17.9244 10.7857 17.2143 10.7857Z"
+              stroke="currentColor" />
+            <path
+              d="M6.92857 10.7857H1.78571C1.07563 10.7857 0.5 11.3613 0.5 12.0714V17.2143C0.5 17.9244 1.07563 18.5 1.78571 18.5H6.92857C7.63865 18.5 8.21429 17.9244 8.21429 17.2143V12.0714C8.21429 11.3613 7.63865 10.7857 6.92857 10.7857Z"
+              stroke="currentColor" />
+          </svg>
+
         </button>
         <button class="icon-btn icon-btn--bare topbar__desktop-only" type="button" aria-label="Support">
-          <img src="assets/icons/btn-support.svg" alt="" width="50" height="50">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M1.7 11.3H2.9C3.56274 11.3 4.1 11.8373 4.1 12.5V16.1C4.1 16.7627 3.56274 17.3 2.9 17.3H1.7C1.03726 17.3 0.5 16.7627 0.5 16.1V12.5C0.5 11.8373 1.03726 11.3 1.7 11.3ZM1.7 11.3V7.7C1.7 3.72355 4.92355 0.5 8.9 0.5C12.8764 0.5 16.1 3.72355 16.1 7.7V11.3M16.1 11.3H14.9C14.2373 11.3 13.7 11.8373 13.7 12.5V16.1C13.7 16.7627 14.2373 17.3 14.9 17.3H16.1C16.7627 17.3 17.3 16.7627 17.3 16.1V12.5C17.3 11.8373 16.7627 11.3 16.1 11.3Z"
+              stroke="currentColor" />
+          </svg>
+
         </button>
         <button class="icon-btn topbar__ai" type="button" aria-controls="ai-panel" aria-expanded="false"
           aria-label="Open Spire AI" data-ai-open>
@@ -127,8 +161,7 @@
           </div>
 
           <div class="arch arch--woman">
-            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394"
-              loading="lazy">
+            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394" loading="lazy">
           </div>
 
           <div class="badge">
