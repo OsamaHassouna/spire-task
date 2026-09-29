@@ -1,11 +1,5 @@
 /**
  * Spire – page behaviour
- *  1. Spire AI side panel: open / close
- *     desktop: the panel takes the rail's column and pushes the main content
- *     mobile:  a full-screen sheet that slides in from the right (modal)
- *  2. Chat: a scripted conversation that restarts on every open
- *  3. Files-in-context tray
- *  4. Mobile navigation drawer
  */
 (() => {
   'use strict';
@@ -16,7 +10,6 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-  /** Run `done` when `el`'s own transition ends (with a safety timeout). */
   const afterTransition = (el, done, timeout = 650) => {
     let finished = false;
     const finish = (event) => {
@@ -41,21 +34,15 @@
   const composer = $('[data-composer]');
   const composerInput = $('#ai-input');
   const heroInput = $('#hero-ask');
-  // everything outside the panel that is inert while the mobile sheet is open
   const pageRegions = $$('.skip-link, .topbar, .sidenav, .main, .rail');
 
   let lastTrigger = null;
-  // source of truth for the panel; the classes follow it a frame later
   let panelOpen = false;
 
   const setExpanded = (open) => {
     openers.forEach((btn) => btn.setAttribute('aria-expanded', String(open)));
   };
 
-  /**
-   * Mobile: modal sheet, the page behind it is inert and can't scroll.
-   * Desktop: part of the layout; only the rail it replaces is inert.
-   */
   const applyPanelMode = () => {
     const modal = panelOpen && !desktopMq.matches;
     panel.setAttribute('aria-modal', String(modal));
@@ -64,11 +51,6 @@
     setLocked(modal || isNavOpen());
   };
 
-  /**
-   * @param trigger  element to return focus to on close
-   * @param question optional text typed before opening (hero input)
-   */
-  /** Returns false if `question` couldn't be sent (a reply is still pending). */
   const openPanel = (trigger, question = '') => {
     if (panelOpen) {
       composerInput.focus();
@@ -77,7 +59,6 @@
     panelOpen = true;
     lastTrigger = trigger || null;
 
-    // every open starts a fresh conversation
     resetChat();
     if (question) sendMessage(question);
     else if (desktopMq.matches) startConversation();
@@ -85,14 +66,11 @@
     panel.hidden = false;
     setExpanded(true);
     applyPanelMode();
-    // next frame, so the closed state is painted before the transition runs
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        if (!panelOpen) return; // closed again before we got here
+        if (!panelOpen) return;
         app.classList.add('is-ai-open');
         panel.classList.add('is-open');
-        // welcome screen (mobile): focus its start button, so the on-screen
-        // keyboard doesn't cover the greeting; otherwise the message input
         const target = panel.dataset.state === 'welcome' ? $('[data-ai-start]') : composerInput;
         target.focus({ preventScroll: true });
       });
@@ -110,12 +88,10 @@
     setExpanded(false);
     applyPanelMode();
 
-    // desktop animates the grid column, mobile slides the sheet
     afterTransition(desktopMq.matches ? app : panel, () => {
       if (!panelOpen) panel.hidden = true;
     });
 
-    // return focus to whatever opened the panel, if it is still visible
     const fallback = desktopMq.matches ? $('.rail__open') : $('.topbar__ai');
     const target = lastTrigger && lastTrigger.offsetParent !== null ? lastTrigger : fallback;
     if (target) target.focus({ preventScroll: true });
@@ -123,14 +99,11 @@
 
   openers.forEach((btn) => {
     btn.addEventListener('click', () => {
-      // the hero pill's button also sends whatever was typed next to it;
-      // the text is only cleared once it was actually sent
       const typed = btn.closest('[data-ask-form]') ? heroInput.value.trim() : '';
       if (openPanel(btn, typed) && typed) heroInput.value = '';
     });
   });
 
-  // Hero pill: typing + Enter opens the panel with that question
   $('[data-ask-form]').addEventListener('submit', (event) => {
     event.preventDefault();
     const typed = heroInput.value.trim();
@@ -143,8 +116,6 @@
 
   /* ======================================================================
      2. Chat
-     The first question gets an answer with document suggestions; picking
-     one (or asking anything else) gets an answer citing several sources.
      ====================================================================== */
   const FIRST_QUESTION = 'Out of Gate Analysis for 22-27 March';
   const DOC_SUGGESTIONS = [
@@ -157,7 +128,7 @@
     { sources: [1, 3, 3, 1], suggestions: [] },
   ];
   const THINKING_MS = 2500;
-  const SOURCES_SHOWN = 2; // the rest hide behind a "more" button
+  const SOURCES_SHOWN = 2;
 
   const chatLog = $('[data-chat-log]');
   const tplUser = $('#tpl-user-msg');
@@ -189,7 +160,6 @@
   const announcer = $('[data-announcer]');
   const announce = (message) => {
     announcer.textContent = '';
-    // new text on the next tick so repeated messages are read again
     window.setTimeout(() => { announcer.textContent = message; }, 50);
   };
 
@@ -212,7 +182,6 @@
     sendMessage(FIRST_QUESTION);
   }
 
-  /** "1 3 •••" – the first sources, plus a toggle for the rest */
   function renderSources(container, sources) {
     sources.forEach((number, index) => {
       const cite = document.createElement('sup');
@@ -244,10 +213,6 @@
     return reply;
   }
 
-  /**
-   * Adds the user's bubble, shows "Thinking" and then the scripted reply.
-   * Returns false (so callers keep their text) while a reply is pending.
-   */
   function sendMessage(text, { fromSuggestion = false } = {}) {
     if (isBusy()) {
       nudge(composer);
@@ -294,19 +259,16 @@
     if (sendMessage(text)) composerInput.value = '';
   });
 
-  // Mobile welcome screen: tapping the greeting starts the conversation
   $('[data-ai-start]').addEventListener('click', () => {
     startConversation();
     composerInput.focus({ preventScroll: true });
   });
 
-  // Mobile "back": return to the welcome screen
   $('[data-ai-back]').addEventListener('click', () => {
     resetChat();
     $('[data-ai-start]').focus();
   });
 
-  // Delegated handlers for content rendered from templates
   chatLog.addEventListener('click', (event) => {
     const suggestion = event.target.closest('[data-suggest]');
     if (suggestion) {
@@ -324,10 +286,8 @@
     }
   });
 
-  // Search is out of scope for the task: keep Enter from navigating away
   $('.search').addEventListener('submit', (event) => event.preventDefault());
 
-  // Voice buttons: visual toggle only (no speech API in scope)
   $$('[data-mic]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const pressed = btn.getAttribute('aria-pressed') === 'true';
@@ -344,10 +304,6 @@
 
   const isFilesOpen = () => filesToggle.getAttribute('aria-expanded') === 'true';
 
-  /**
-   * The list slides up out of the bar when opening and back down when
-   * closing; [hidden] is only set once the closing slide has finished.
-   */
   function setFilesOpen(open, { animate = true } = {}) {
     filesToggle.setAttribute('aria-expanded', String(open));
     files.classList.remove('is-closing');
@@ -359,7 +315,7 @@
     }
 
     const finish = () => {
-      if (isFilesOpen()) return; // reopened meanwhile
+      if (isFilesOpen()) return;
       files.classList.remove('is-open', 'is-closing');
       filesList.hidden = true;
     };
@@ -375,14 +331,10 @@
       finish();
     };
     filesList.addEventListener('animationend', onEnd);
-    // fallback: if the animation is cancelled (e.g. the chat view is hidden
-    // mid-slide) animationend never fires
     window.setTimeout(finish, 400);
   }
 
   function closeFiles() {
-    // closing with the panel or on reset: no animation, and also finishes
-    // a close that was still sliding
     if (isFilesOpen() || files.classList.contains('is-closing')) {
       setFilesOpen(false, { animate: false });
     }
@@ -391,12 +343,10 @@
   filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
 
   /* ======================================================================
-     Service cards: drag to scroll with a mouse
-     Touch, trackpads and keyboard already scroll the row natively; this
-     only adds mouse dragging. A drag doesn't count as a click on a card.
+     4. Service cards drag
      ====================================================================== */
   const slider = $('.services__list');
-  const DRAG_THRESHOLD = 5; // px of movement before a press becomes a drag
+  const DRAG_THRESHOLD = 5;
   let drag = null;
 
   slider.addEventListener('pointerdown', (event) => {
@@ -418,10 +368,7 @@
   const endDrag = (event) => {
     if (!drag || event.pointerId !== drag.id) return;
     if (drag.moved) {
-      slider.classList.remove('is-dragging'); // snapping resumes and settles on a card
-      // swallow the click that follows the drag so the card link doesn't open;
-      // removed on the next tick in case no click fires (released elsewhere),
-      // so it can never eat a later, real click
+      slider.classList.remove('is-dragging');
       const swallow = (e) => { e.preventDefault(); e.stopPropagation(); };
       slider.addEventListener('click', swallow, { capture: true, once: true });
       window.setTimeout(() => slider.removeEventListener('click', swallow, { capture: true }), 0);
@@ -431,11 +378,10 @@
 
   slider.addEventListener('pointerup', endDrag);
   slider.addEventListener('pointercancel', endDrag);
-  // stop the browser's native link / image dragging from taking over
   slider.addEventListener('dragstart', (event) => event.preventDefault());
 
   /* ======================================================================
-     4. Mobile navigation drawer
+     5. Mobile navigation drawer
      ====================================================================== */
   const nav = $('#sidenav');
   const navToggle = $('[data-nav-toggle]');
@@ -445,7 +391,6 @@
     return nav.classList.contains('is-open');
   }
 
-  // what sits behind the drawer
   const navBackdropRegions = $$('.skip-link, .topbar, .main');
 
   const setNavModal = (modal) => {
@@ -477,7 +422,6 @@
     if (event.matches) closeNav({ restoreFocus: false });
   });
 
-  // Keep Tab inside the drawer while it is open on mobile
   nav.addEventListener('keydown', (event) => {
     if (event.key !== 'Tab' || !isNavOpen()) return;
     const focusable = $$('a[href], button:not([disabled])', nav);
@@ -493,7 +437,7 @@
   });
 
   /* ======================================================================
-     Global: Escape closes whatever is on top
+     6. Escape key
      ====================================================================== */
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
