@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spire | Home</title>
+  <meta name="description" content="Spire employee portal: services, attendance and Spire AI assistant.">
+  <meta name="theme-color" content="#4f008c">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=Poppins:wght@600&display=swap">
+
+  <link rel="preload" as="image" href="assets/images/hero-man.webp">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="app">
+    <!-- ============ Top bar ============ -->
+    <header class="topbar">
+      <button class="icon-btn topbar__menu" type="button"
+              aria-controls="sidenav" aria-expanded="false" aria-label="Open navigation menu" data-nav-toggle>
+        <img src="assets/icons/menu.svg" alt="" width="15" height="15">
+      </button>
+
+      <a class="brand" href="#" aria-label="Spire home">
+        <svg class="brand__mark" width="37" height="37" viewBox="0 0 37 37" aria-hidden="true" focusable="false">
+          <path d="M3.15 36.5V3.15H30.13" fill="none" stroke="#4f008c" stroke-width="6.3"/>
+          <path d="M33.35 0v33.35H6.37" fill="none" stroke="#4f008c" stroke-width="6.3"/>
+          <rect x="14.28" y="13.97" width="8.25" height="8.25" fill="#ff375e"/>
+        </svg>
+        <span class="brand__name">Spire</span>
+      </a>
+
+      <div class="topbar__actions">
+        <form class="search" role="search" action="#">
+          <label class="visually-hidden" for="site-search">Search</label>
+          <img class="search__icon" src="assets/icons/search.svg" alt="" width="16" height="16">
+          <input class="search__input" id="site-search" type="search" name="q" placeholder="Search..." autocomplete="off">
+        </form>
+        <button class="icon-btn topbar__search-btn" type="button" aria-label="Search">
+          <img src="assets/icons/search.svg" alt="" width="16" height="16">
+        </button>
+        <button class="icon-btn icon-btn--bare topbar__notif" type="button" aria-label="Notifications, 1 unread">
+          <img src="assets/icons/btn-bell.svg" alt="" width="50" height="50">
+        </button>
+        <button class="icon-btn icon-btn--bare topbar__desktop-only" type="button" aria-label="Apps">
+          <img src="assets/icons/btn-apps.svg" alt="" width="50" height="50">
+        </button>
+        <button class="icon-btn icon-btn--bare topbar__desktop-only" type="button" aria-label="Support">
+          <img src="assets/icons/btn-support.svg" alt="" width="50" height="50">
+        </button>
+        <button class="icon-btn topbar__ai" type="button"
+                aria-controls="ai-panel" aria-expanded="false" aria-label="Open Spire AI" data-ai-open>
+          <img src="assets/images/ai-orb-lg.png" alt="" width="40" height="38">
+        </button>
+      </div>
+    </header>
+
+    <!-- ============ Side navigation ============ -->
+    <nav class="sidenav" id="sidenav" aria-label="Main">
+      <div class="sidenav__head">
+        <span class="brand__name">Spire</span>
+        <button class="icon-btn sidenav__close" type="button" aria-label="Close navigation menu" data-nav-close>
+          <img src="assets/icons/close.svg" alt="" width="17" height="17">
+        </button>
+      </div>
+
+      <ul class="sidenav__list">
+        <li><a class="sidenav__link is-active" href="#" aria-current="page"><img src="assets/icons/nav-home.svg" alt="" width="19" height="19"><span class="sidenav__label">Home</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-grid.svg" alt="" width="20" height="20"><span class="sidenav__label">Dashboard</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-briefcase.svg" alt="" width="20" height="20"><span class="sidenav__label">Work</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-folder.svg" alt="" width="52" height="54"><span class="sidenav__label">Files</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-calendar-tick.svg" alt="" width="20" height="20"><span class="sidenav__label">Attendance</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-document.svg" alt="" width="20" height="20"><span class="sidenav__label">Requests</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-calendar-star.svg" alt="" width="21" height="21"><span class="sidenav__label">Events</span></a></li>
+        <li><a class="sidenav__link" href="#"><img src="assets/icons/nav-receipt.svg" alt="" width="19" height="19"><span class="sidenav__label">Payslips</span></a></li>
+      </ul>
+
+      <a class="sidenav__profile" href="#" aria-label="My profile">
+        <img src="assets/images/avatar.png" alt="" width="41" height="41">
+      </a>
+    </nav>
+    <div class="scrim" data-nav-close hidden></div>
+
+    <!-- ============ Main content ============ -->
+    <main class="main" id="main" tabindex="-1">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__content">
+          <h1 class="hero__title" id="hero-title">
+            <span>Built to power a nation.</span>
+            <span>Ready to power you.</span>
+          </h1>
+          <p class="hero__lead">
+            Specialized excellence brings mission&#8209;critical<br class="hero__br">
+            intelligence to your workday.
+          </p>
+
+          <form class="ask" action="#" data-ask-form>
+            <button class="ask__cta" type="button" aria-controls="ai-panel" aria-expanded="false" data-ai-open>
+              <img class="ask__orb" src="assets/images/ai-orb-sm.png" alt="" width="27" height="27">
+              <span>ask spire ai</span>
+            </button>
+            <label class="visually-hidden" for="hero-ask">Ask Spire AI a question</label>
+            <input class="ask__input" id="hero-ask" name="message" type="text" autocomplete="off">
+            <button class="ask__mic" type="button" aria-label="Ask by voice" aria-pressed="false" data-mic>
+              <img src="assets/icons/mic.svg" alt="" width="20" height="20">
+            </button>
+          </form>
+        </div>
+
+        <div class="hero__art" aria-hidden="true">
+          <img class="hero__asterisk" src="assets/icons/asterisk.svg" alt="" width="86" height="86">
+
+          <div class="arch arch--man">
+            <img class="arch__photo" src="assets/images/hero-man.webp" alt="" width="506" height="675">
+          </div>
+
+          <div class="arch arch--woman">
+            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394">
+          </div>
+
+          <div class="badge">
+            <svg class="badge__ring" viewBox="0 0 160 160" width="160" height="160" focusable="false">
+              <defs>
+                <path id="badge-circle" d="M80 80m0-72a72 72 0 1 1 0 144a72 72 0 1 1 0-144"/>
+              </defs>
+              <text class="badge__text">
+                <textPath href="#badge-circle" textLength="440" lengthAdjust="spacing">EMPOWERED BY SPIRE AI</textPath>
+              </text>
+            </svg>
+            <span class="badge__logo">
+              <img src="assets/icons/badge-triangles.svg" alt="" width="70" height="23">
+              <img src="assets/icons/badge-triangles.svg" alt="" width="70" height="23">
+              <img src="assets/icons/badge-triangles.svg" alt="" width="70" height="23">
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="services" aria-labelledby="services-title">
+        <div class="section-head">
+          <h2 class="section-head__title" id="services-title">E-Services Categories</h2>
+          <a class="section-head__link" href="#">See All<span class="visually-hidden"> service categories</span></a>
+        </div>
+
+        <ul class="services__list">
+          <li><a class="service-card" href="#"><img src="assets/icons/cat-fleet.svg" alt="" width="40" height="40"><span>Fleet &amp; Transportation</span></a></li>
+          <li><a class="service-card" href="#"><img src="assets/icons/cat-hr.svg" alt="" width="40" height="40"><span>Human Resources</span></a></li>
+          <li><a class="service-card" href="#"><img src="assets/icons/cat-procurement.svg" alt="" width="40" height="40"><span>Procurement &amp; Sourcing</span></a></li>
+          <li><a class="service-card" href="#"><img src="assets/icons/cat-logistics.svg" alt="" width="40" height="40"><span>Logistics &amp; Inventory</span></a></li>
+          <li><a class="service-card" href="#"><img src="assets/icons/cat-office.svg" alt="" width="40" height="40"><span>My Office</span></a></li>
+          <li><a class="service-card" href="#"><img src="assets/icons/cat-procurement.svg" alt="" width="40" height="40"><span>My Procurements</span></a></li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- ============ AI rail (collapsed side panel) ============ -->
+    <aside class="rail" aria-label="Quick status">
+      <ul class="rail__widgets">
+        <li class="rail__widget">
+          <span class="battery" aria-hidden="true"><span class="battery__fill"></span><span class="battery__value">4H</span></span>
+          <span class="rail__label">Attendance</span>
+        </li>
+        <li class="rail__widget rail__widget--alert">
+          <span class="gate" aria-hidden="true"></span>
+          <span class="ticker">
+            <span class="ticker__track">
+              <span>Out of gate</span>
+              <span class="ticker__alert"><img src="assets/icons/exclamation.svg" alt="" width="18" height="18">Needs attention, No additional hours logged</span>
+              <span>Out of gate</span>
+              <span class="ticker__alert"><img src="assets/icons/exclamation.svg" alt="" width="18" height="18">Needs attention, No additional hours logged</span>
+            </span>
+          </span>
+        </li>
+      </ul>
+
+      <button class="rail__add" type="button" aria-label="Add widget">
+        <img src="assets/icons/plus.svg" alt="" width="31" height="31">
+      </button>
+
+      <button class="rail__open" type="button" aria-controls="ai-panel" aria-expanded="false" aria-label="Open Spire AI" data-ai-open>
+        <img src="assets/icons/sparkle.svg" alt="" width="64" height="69">
+      </button>
+    </aside>
+
+    <!-- ============ Spire AI panel ============ -->
+    <section class="ai-panel" id="ai-panel" role="dialog" aria-labelledby="ai-panel-title" hidden data-state="welcome">
+      <div class="ai-panel__bg" aria-hidden="true"></div>
+
+      <header class="ai-panel__head">
+        <img class="ai-panel__spark" src="assets/icons/spark.svg" alt="" width="38" height="38">
+        <img class="ai-panel__orb" src="assets/images/ai-orb-m.png" alt="" width="27" height="27">
+        <div class="ai-panel__titles">
+          <h2 class="ai-panel__title" id="ai-panel-title">Spire AI <span class="tag">Beta</span></h2>
+          <p class="ai-panel__subtitle">Session message</p>
+        </div>
+        <button class="ai-panel__close" type="button" aria-label="Close Spire AI" data-ai-close>
+          <img class="ai-panel__close-collapse" src="assets/icons/panel-collapse.svg" alt="" width="24" height="18">
+          <img class="ai-panel__close-x" src="assets/icons/close.svg" alt="" width="17" height="17">
+        </button>
+      </header>
+
+      <!-- Welcome state -->
+      <div class="ai-welcome" data-view="welcome">
+        <ul class="ai-widgets">
+          <li class="ai-widget">
+            <span class="battery battery--sm" aria-hidden="true"><span class="battery__fill"></span><span class="battery__value">4H</span></span>
+            <span class="ai-widget__label">Attendance</span>
+          </li>
+          <li class="ai-widget">
+            <span class="bars" aria-hidden="true"><span class="bars__bar bars__bar--in"></span><span class="bars__bar bars__bar--out"></span></span>
+            <span class="ai-widget__label">Out of gate</span>
+          </li>
+          <li class="ai-widgets__add-item">
+            <button class="ai-widgets__add" type="button" aria-label="Add widget">
+              <img src="assets/icons/plus-m.svg" alt="" width="27" height="27">
+            </button>
+          </li>
+        </ul>
+
+        <div class="ai-greeting">
+          <img class="ai-greeting__orb" src="assets/images/ai-orb-lg.png" alt="" width="59" height="59">
+          <p class="ai-greeting__title">Welcome back, Ahmed.</p>
+          <p class="ai-greeting__text">How may I assist you?</p>
+        </div>
+      </div>
+
+      <!-- Conversation state -->
+      <div class="ai-chat" data-view="chat">
+        <button class="ai-chat__back" type="button" aria-label="Back to start" data-ai-back>
+          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M8.5 3.5 5 7l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <ol class="ai-chat__log" aria-live="polite" aria-label="Conversation" data-chat-log></ol>
+      </div>
+
+      <footer class="ai-panel__foot">
+        <div class="ai-files" data-files hidden>
+          <span>6 files loaded into context</span>
+          <img src="assets/icons/chevron-btn.svg" alt="" width="34" height="34">
+        </div>
+        <form class="composer" action="#" data-composer>
+          <label class="visually-hidden" for="ai-input">Message Spire AI</label>
+          <input class="composer__input" id="ai-input" name="message" type="text" placeholder="ask spire AI" autocomplete="off" required>
+          <button class="composer__mic" type="button" aria-label="Ask by voice" aria-pressed="false" data-mic>
+            <img src="assets/icons/mic-sm.svg" alt="" width="18" height="18">
+          </button>
+          <button class="composer__send" type="submit" aria-label="Send message">
+            <img src="assets/icons/btn-send.svg" alt="" width="44" height="42">
+          </button>
+        </form>
+      </footer>
+    </section>
+  </div>
+
+  <!-- Templates used by js/main.js to render chat messages -->
+  <template id="tpl-user-msg">
+    <li class="msg msg--user"><p class="msg__bubble"></p></li>
+  </template>
+
+  <template id="tpl-thinking">
+    <li class="msg msg--thinking" role="status">
+      <img src="assets/icons/thinking.svg" alt="" width="16" height="16">
+      <span>Thinking<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></span>
+    </li>
+  </template>
+
+  <template id="tpl-ai-msg">
+    <li class="msg msg--ai">
+      <div class="msg__bubble">
+        <p>Based on <strong>HR policy</strong> you are eligible for submitting a compensation request through Fusion platform, in accordance with the following <span class="cite" aria-label="source 1">1</span></p>
+        <div class="msg__tools">
+          <button class="msg__tool" type="button" aria-label="Helpful" aria-pressed="false" data-feedback>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10v11H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h3Zm0 0 4-8a3 3 0 0 1 3 3v4h5.5a2 2 0 0 1 2 2.3l-1.4 8A2 2 0 0 1 18.1 21H7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="msg__tool" type="button" aria-label="Not helpful" aria-pressed="false" data-feedback>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 14V3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-3Zm0 0-4 8a3 3 0 0 1-3-3v-4H4.5a2 2 0 0 1-2-2.3l1.4-8A2 2 0 0 1 5.9 3H17" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="msg__tool" type="button" aria-label="Copy answer" data-copy>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="8" y="3" width="11" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 7v12a2 2 0 0 0 2 2h9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <ul class="msg__actions">
+        <li><button class="chip" type="button" data-suggest><img src="assets/icons/doc.svg" alt="" width="15" height="15">Open Compensation Request in Fusion</button></li>
+        <li><button class="chip" type="button" data-suggest><img src="assets/icons/doc.svg" alt="" width="15" height="15">View Detailed Weekly Breakdown</button></li>
+      </ul>
+    </li>
+  </template>
+</body>
+</html>
