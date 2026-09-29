@@ -456,6 +456,7 @@ button {
 
 /* ---------- Main card ---------- */
 .main {
+  position: relative; /* containing block for .visually-hidden inside the scroller */
   display: flex;
   flex-direction: column;
   gap: 58px;
@@ -1490,6 +1491,7 @@ button {
     justify-content: space-between;
     flex: none;
     min-height: 0;
+    gap: 32px;
     height: 652px;
     padding: 0 clamp(24px, 5.4cqw, 80px) 0 clamp(32px, 6.8cqw, 100px);
     border-radius: 20px;
@@ -1497,6 +1499,8 @@ button {
   }
 
   .hero__content {
+    flex: 1 1 auto;
+    min-width: 0;
     align-items: flex-start;
     justify-content: center;
     max-width: 563px;
@@ -1505,7 +1509,7 @@ button {
 
   .hero__title {
     font-family: var(--font-display);
-    font-size: clamp(32px, 3.3cqw, 48.42px);
+    font-size: clamp(28px, 3.3cqw, 48.42px);
     font-weight: 600;
     line-height: 1.466;
     text-shadow: none;
@@ -1944,6 +1948,80 @@ button {
 
   .composer__send {
     box-shadow: none;
+  }
+}
+
+/* Desktop panel: the white surface fades as the clip collapses back into the
+   rail, so the rail never sits under an empty white strip */
+@media (min-width: 1024px) {
+  .ai-panel.is-open {
+    transition:
+      clip-path 0.5s var(--ease-out),
+      background-color 0.15s,
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+
+  .ai-panel:not(.is-open) {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transition:
+      clip-path 0.5s var(--ease-out),
+      background-color 0.2s 0.3s,
+      border-color 0.2s 0.3s,
+      box-shadow 0.2s 0.3s;
+  }
+
+  /* laptops (1024-1180px): give the text column room for the ask input */
+  @container (max-width: 1100px) {
+    .hero__art {
+      width: clamp(220px, 36cqw, 590px);
+    }
+  }
+}
+
+/* copy-to-clipboard confirmation */
+.msg__tool.is-done {
+  color: var(--green);
+  background: rgb(0 196 140 / 0.1);
+}
+
+/* Small phones (320-400px) */
+@media (max-width: 400px) {
+  .hero {
+    padding-inline: 14px;
+  }
+
+  .ask {
+    gap: 6px;
+    padding: 0 6px 0 8px;
+  }
+
+  .ask__cta {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .ask__mic {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ask__input {
+    min-width: 48px;
+  }
+
+  .ai-panel {
+    padding-inline: 16px;
+  }
+
+  .ai-widgets {
+    gap: 8px;
+  }
+
+  .ai-widget {
+    padding-inline: 10px;
   }
 }
 

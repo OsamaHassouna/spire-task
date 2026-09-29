@@ -132,7 +132,8 @@
           </div>
 
           <div class="arch arch--woman">
-            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394">
+            <img class="arch__photo" src="assets/images/hero-woman.webp" alt="" width="525" height="394"
+              loading="lazy">
           </div>
 
           <div class="badge">
@@ -213,6 +214,7 @@
     <!-- ============ Spire AI panel ============ -->
     <section class="ai-panel" id="ai-panel" role="dialog" aria-labelledby="ai-panel-title" hidden data-state="welcome">
       <div class="ai-panel__bg" aria-hidden="true"></div>
+      <p class="visually-hidden" role="status" data-announcer></p>
 
       <header class="ai-panel__head">
         <img class="ai-panel__spark" src="assets/icons/spark.svg" alt="" width="38" height="38">
@@ -293,7 +295,7 @@
   </template>
 
   <template id="tpl-thinking">
-    <li class="msg msg--thinking" role="status">
+    <li class="msg msg--thinking">
       <img src="assets/icons/thinking.svg" alt="" width="16" height="16">
       <span>Thinking<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></span>
     </li>
@@ -303,7 +305,8 @@
     <li class="msg msg--ai">
       <div class="msg__bubble">
         <p>Based on <strong>HR policy</strong> you are eligible for submitting a compensation request through Fusion
-          platform, in accordance with the following <sup class="cite"><span class="visually-hidden">source </span>1</sup></p>
+          platform, in accordance with the following <sup class="cite"><span class="visually-hidden">source
+            </span>1</sup></p>
         <div class="msg__tools">
           <button class="msg__tool" type="button" aria-label="Helpful" aria-pressed="false" data-feedback>
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">

@@ -35,50 +35,60 @@
   const openers = $$('[data-ai-open]');
   const composer = $('[data-composer]');
   const composerInput = $('#ai-input');
+  const rail = $('.rail');
   // everything outside the panel that should be inert while it is modal
-  const pageRegions = $$('.topbar, .sidenav, .main, .rail');
+  const pageRegions = $$('.skip-link, .topbar, .sidenav, .main, .rail');
 
   let lastTrigger = null;
+  // source of truth for the panel; the .is-open class follows it a frame later
+  let panelOpen = false;
 
-  const isPanelOpen = () => panel.classList.contains('is-open');
+  const isPanelOpen = () => panelOpen;
 
   const setExpanded = (open) => {
     openers.forEach((btn) => btn.setAttribute('aria-expanded', String(open)));
   };
 
-  /** Mobile: full-screen modal. Desktop: non-modal panel next to the page. */
+  /**
+   * Mobile: full-screen modal, the page behind is inert.
+   * Desktop: non-modal, only the rail (fully covered by the panel) is inert.
+   */
   const applyPanelMode = () => {
-    const modal = isPanelOpen() && !desktopMq.matches;
+    const modal = panelOpen && !desktopMq.matches;
     panel.setAttribute('aria-modal', String(modal));
     pageRegions.forEach((region) => { region.inert = modal; });
-    setLocked(modal);
+    rail.inert = panelOpen;
+    setLocked(modal || isNavOpen());
   };
 
   const openPanel = (trigger) => {
-    if (isPanelOpen()) {
+    if (panelOpen) {
       composerInput.focus();
       return;
     }
+    panelOpen = true;
     lastTrigger = trigger || null;
     panel.hidden = false;
+    setExpanded(true);
+    applyPanelMode();
     // next frame so the closed styles are painted before the transition runs
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
+        if (!panelOpen) return; // closed again before we got here
         panel.classList.add('is-open');
-        setExpanded(true);
-        applyPanelMode();
         composerInput.focus({ preventScroll: true });
       });
     });
   };
 
   const closePanel = () => {
-    if (!isPanelOpen()) return;
+    if (!panelOpen) return;
+    panelOpen = false;
     panel.classList.remove('is-open');
     setExpanded(false);
     applyPanelMode();
     afterTransition(panel, () => {
-      if (!isPanelOpen()) panel.hidden = true;
+      if (!panelOpen) panel.hidden = true;
     });
 
     // return focus to whatever opened the panel, if it is still visible
@@ -92,10 +102,7 @@
       const heroInput = $('#hero-ask');
       const pending = btn.closest('[data-ask-form]') ? heroInput.value.trim() : '';
       openPanel(btn);
-      if (pending) {
-        heroInput.value = '';
-        sendMessage(pending);
-      }
+      if (pending && sendMessage(pending)) heroInput.value = '';
     });
   });
 
@@ -139,8 +146,22 @@
     setView('welcome');
   };
 
+  const announcer = $('[data-announcer]');
+  const announce = (message) => {
+    announcer.textContent = '';
+    // new text on the next tick so repeated messages are read again
+    window.setTimeout(() => { announcer.textContent = message; }, 50);
+  };
+
+  const isBusy = () => composer.getAttribute('aria-busy') === 'true';
+
+  /** Returns false (and keeps the caller's text) while a reply is pending. */
   function sendMessage(text) {
-    if (composer.getAttribute('aria-busy') === 'true') return;
+    if (isBusy()) {
+      nudge(composer);
+      announce('Please wait for Spire AI to finish replying.');
+      return false;
+    }
 
     setView('chat');
     const userMsg = append(tplUser);
@@ -155,14 +176,16 @@
       filesTray.hidden = false;
       composer.removeAttribute('aria-busy');
     }, reducedMotionMq.matches ? 300 : THINKING_MS);
+
+    return true;
   }
 
-  const nudge = (el) => {
+  function nudge(el) {
     el.animate(
       [{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }],
       { duration: reducedMotionMq.matches ? 0 : 280, easing: 'ease-in-out' },
     );
-  };
+  }
 
   composer.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -172,8 +195,7 @@
       composerInput.focus();
       return;
     }
-    composerInput.value = '';
-    sendMessage(text);
+    if (sendMessage(text)) composerInput.value = '';
   });
 
   // Hero pill: typing + Enter opens the panel and sends the question
@@ -182,11 +204,11 @@
     const heroInput = $('#hero-ask');
     const text = heroInput.value.trim();
     openPanel(heroInput);
-    if (text) {
-      heroInput.value = '';
-      sendMessage(text);
-    }
+    if (text && sendMessage(text)) heroInput.value = '';
   });
+
+  // Search is out of scope for the task: keep Enter from navigating away
+  $('.search').addEventListener('submit', (event) => event.preventDefault());
 
   $('[data-ai-back]').addEventListener('click', () => {
     resetChat();
@@ -212,16 +234,14 @@
     const copy = event.target.closest('[data-copy]');
     if (copy) {
       const answer = copy.closest('.msg__bubble').querySelector('p').textContent.replace(/\s+/g, ' ').trim();
-      const label = copy.getAttribute('aria-label');
-      const done = () => {
-        copy.setAttribute('aria-label', 'Copied');
-        copy.setAttribute('aria-pressed', 'true');
-        window.setTimeout(() => {
-          copy.setAttribute('aria-label', label);
-          copy.removeAttribute('aria-pressed');
-        }, 1600);
+      const copied = () => {
+        copy.classList.add('is-done');
+        announce('Answer copied to clipboard.');
+        window.setTimeout(() => copy.classList.remove('is-done'), 1600);
       };
-      if (navigator.clipboard) navigator.clipboard.writeText(answer).then(done, () => {});
+      const failed = () => announce('Copy failed. Select the text to copy it manually.');
+      if (navigator.clipboard) navigator.clipboard.writeText(answer).then(copied, failed);
+      else failed();
     }
   });
 
@@ -242,11 +262,19 @@
 
   const isNavOpen = () => nav.classList.contains('is-open');
 
+  // what sits behind the drawer
+  const navBackdropRegions = $$('.skip-link, .topbar, .main');
+
+  const setNavModal = (modal) => {
+    navBackdropRegions.forEach((region) => { region.inert = modal; });
+    setLocked(modal || (panelOpen && !desktopMq.matches));
+  };
+
   const openNav = () => {
     nav.classList.add('is-open');
     scrim.hidden = false;
     navToggle.setAttribute('aria-expanded', 'true');
-    setLocked(true);
+    setNavModal(true);
     $('.sidenav__close', nav).focus();
   };
 
@@ -255,7 +283,7 @@
     nav.classList.remove('is-open');
     scrim.hidden = true;
     navToggle.setAttribute('aria-expanded', 'false');
-    setLocked(false);
+    setNavModal(false);
     if (restoreFocus) navToggle.focus();
   };
 
