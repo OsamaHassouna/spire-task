@@ -743,10 +743,6 @@ button {
   animation-delay: 0.2s;
 }
 
-.services__list>li:nth-child(6) {
-  animation-delay: 0.25s;
-}
-
 .service-card {
   display: flex;
   align-items: center;
