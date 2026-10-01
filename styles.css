@@ -153,6 +153,9 @@
         --dur: 0.2s;
         --ease-in: cubic-bezier(0.4, 0, 1, 1);
         --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+        /* dir */
+        --dir: 1;
     }
 
     /*=== Skip Link ===*/
@@ -622,7 +625,6 @@
         inset-inline-end: 0;
     }
 
-
     .badge__logo {
         grid-area: 1 / 1;
         margin-inline: auto;
@@ -634,6 +636,108 @@
         width: 160px;
         font-size: 11px;
     }
+
+    /* === SERVICES === */
+    .services {
+        margin-block-start: 74px;
+        padding-inline: 90px;
+    }
+
+    .services__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .services__header h2 {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 22px;
+        color: var(--onyx);
+    }
+
+    .services__header h2::before {
+        content: '';
+        width: 4px;
+        height: 10px;
+        border-radius: 12px;
+        background: var(--coral);
+        display: inline-block;
+        margin-inline-end: 6px;
+    }
+
+    .services__header>a {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+        color: var(--coral);
+        background: linear-gradient(currentColor, currentColor) calc(50% - 50% * var(--dir)) 100% / 0 1px no-repeat;
+        transition: background-size var(--dur) var(--ease-out);
+    }
+
+    .services__header>a:hover {
+        background-size: 100% 1px;
+    }
+
+    .services__list {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 4px 4px 23px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 4px;
+        scrollbar-width: none;
+    }
+
+    .service-card {
+        padding-block: 24px;
+        padding-inline: 16px 40px;
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        width: max-content;
+        transition: translate var(--dur) var(--ease-out), border-color var(--dur), box-shadow var(--dur) var(--ease-out);
+    }
+
+    .service-card:hover {
+        translate: 0 -3px;
+        border-color: var(--purple-20);
+        box-shadow: 0 10px 12px rgb(79 0 140 / 0.08);
+    }
+
+    .service-card .card__icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--card-icon-bg);
+    }
+
+    .card-fleet .card__icon {
+        --card-icon-bg: #E5F9F3;
+    }
+
+    .card-hr .card__icon {
+        --card-icon-bg: #FFF0EB;
+    }
+
+    .card-procurement .card__icon {
+        --card-icon-bg: #EDDBF9;
+    }
+
+    .card-logistics .card__icon {
+        --card-icon-bg: #E5F9F3;
+    }
+
 
 
     /* === THEME === */
