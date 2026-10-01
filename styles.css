@@ -225,7 +225,7 @@
         align-items: center;
         justify-content: space-between;
         padding-block: 12px 10px;
-        padding-inline: 18px;
+        padding-inline: 18px 0;
         position: sticky;
         top: 0;
         background: var(--bg);
@@ -309,10 +309,10 @@
         background-color: white;
         opacity: 0.5;
         width: auto;
-        max-height: calc(100dvh - 12px - 72px);
         overflow-y: auto;
         scrollbar-width: none;
         box-shadow: var(--shadow-sm);
+        height: calc(100dvh - 12px - 72px);
     }
 
     .spr-sidenav:hover {
@@ -468,7 +468,7 @@
     /* === Hero === */
     .hero {
         background: var(--hero-bg);
-        border-radius: 12px;
+        border-radius: 20px;
         min-height: 652px;
         display: flex;
         align-items: center;
@@ -488,6 +488,7 @@
         line-height: 43px;
         margin-bottom: 47px;
         text-align: center;
+        letter-spacing: -0.54px;
     }
 
     .hero__content p {
@@ -541,7 +542,6 @@
         justify-content: center;
     }
 
-
     @media screen and (min-width: 1024px) {
         .hero__content {
             max-width: 570px;
@@ -555,6 +555,85 @@
         }
     }
 
+
+    .hero__art {
+        position: absolute;
+        inset-block: auto 0;
+        inset-inline: auto 80px;
+        z-index: -1;
+        width: 590px;
+        height: 652px;
+        pointer-events: none;
+
+    }
+
+    .hero__asterisk {
+        position: absolute;
+        /* inset-block-start: 55px; */
+        /* inset-inline-start: 50%; */
+        inset-block-start: 11.2%;
+        inset-inline-end: 45.5%;
+        width: 86px;
+        height: 86px;
+    }
+
+    .arch.arch--man {
+        background: var(--lilac);
+        width: 322px;
+        overflow: hidden;
+        height: 460px;
+        position: absolute;
+        inset-block-end: 0;
+        inset-inline-start: 0;
+        border-radius: 150px 150px 0 0;
+    }
+
+    .arch.arch--man>img {
+        max-width: none;
+        translate: -93px -58px;
+    }
+
+    .arch.arch--woman {
+        background: var(--lilac-light);
+        width: 204px;
+        overflow: hidden;
+        height: 376px;
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-end: 0;
+        border-radius: 0 0 40vw 40vw;
+    }
+
+    .arch.arch--woman img {
+        max-width: none;
+        translate: -29% 10px;
+    }
+
+    .badge {
+        background: var(--teal);
+        width: 204px;
+        height: 207px;
+        border-radius: 100%;
+        display: grid;
+        place-content: center;
+        align-items: center;
+        position: absolute;
+        inset-block-end: 30px;
+        inset-inline-end: 0;
+    }
+
+
+    .badge__logo {
+        grid-area: 1 / 1;
+        margin-inline: auto;
+    }
+
+    .badge__ring {
+        grid-area: 1 / 1;
+        fill: white;
+        width: 160px;
+        font-size: 11px;
+    }
 
 
     /* === THEME === */
