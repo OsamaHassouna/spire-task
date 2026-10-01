@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 
 <head>
     <meta charset="UTF-8">
@@ -348,7 +348,48 @@
 
         <!-- ============ AI rail (collapsed side panel) ============ -->
         <aside class="spr-ai">
+            <section class="panel-first">
+                <div class="panel__content">
+                    <div class="panel__widgets">
+                        <div class="panel__widget">
+                            <span class="battery">
+                                <span class="battery__fill"></span>
+                                <span class="battery__value">4H</span>
+                            </span>
+                            <span class="widget__label">Attendance</span>
+                        </div>
+                        <div class="panel__widget panel__widget--alert">
+                            <span class="gate"></span>
+                            <span class="ticker">
+                                <span class="ticker__track">
+                                    <span class="ticker__group">
+                                        <span>Out of gate</span>
+                                        <span class="ticker__alert"><img src="assets/icons/exclamation.svg" alt=""
+                                                width="18" height="18">Needs
+                                            attention, No additional hours logged</span>
+                                    </span>
+                                    <!-- Identical copy makes the forward-only loop seamless. -->
+                                    <span class="ticker__group" aria-hidden="true">
+                                        <span>Out of gate</span>
+                                        <span class="ticker__alert"><img src="assets/icons/exclamation.svg" alt=""
+                                                width="18" height="18">Needs
+                                            attention, No additional hours logged</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="widget__actions">
+                        <button class="widget__add" type="button" aria-label="Add widget">
+                            <img src="assets/icons/plus.svg" alt="" width="31" height="31">
+                        </button>
+                    </div>
+                </div>
+                <div class="panel__art">
+                    <img src="assets/icons/sparkle.svg" alt="" width="64" height="69">
+                </div>
+            </section>
         </aside>
     </div>
 
