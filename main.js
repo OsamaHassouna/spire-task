@@ -8,7 +8,7 @@
 
     if (!wrapper) return;
 
-    const firstPanel = wrapper.querySelector('.panel-first');
+    const firstPanel = wrapper.querySelector('.panel-widgets');
     const chatPanel = wrapper.querySelector('.panel-chat');
     const closeButton = chatPanel?.querySelector('.panel__close');
     const panelControls = document.querySelectorAll('[aria-controls="ai-panel"]');

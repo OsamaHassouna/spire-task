@@ -116,6 +116,7 @@
         --line-soft: #f3f3f1;
         --text-muted: #8e9aa0;
         --gray-dark: #a2b3c3;
+        --gray-dark-80: #a2b3c3cc;
         --text-placeholder: #8e9296;
         --text-thinking: #8898a8;
 
@@ -753,7 +754,7 @@
 
     /* First Panel */
 
-    .panel-first {
+    .panel-widgets {
         padding-block: 30px;
         padding-inline: 18px;
         display: flex;
@@ -956,7 +957,7 @@
         opacity: 1;
     }
 
-    .ai-opened .panel-first {
+    .ai-opened .panel-widgets {
         display: none;
     }
 
@@ -1021,14 +1022,20 @@
 
 
     /* Chat Footer */
+
+    .chat__footer {
+        isolation: isolate;
+    }
+
     .composer {
         padding: 14px;
-        border: 1px solid var(--line);
+        border: 1px solid var(--gray-dark-80);
         border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
+        background: white;
     }
 
     .composer:has(.composer__input:focus-within, .composer__input:focus-visible) {
@@ -1087,6 +1094,55 @@
         --composer-btn-hover-shadow-clr: #ff375e66;
     }
 
+
+    /* .files-wrapper {
+        position: relative;
+        z-index: 1;
+        width: calc(100% - 14px);
+        height: 36px;
+        margin-block-end: -7px;
+        margin-inline: auto;
+        z-index: -1;
+    }
+
+    .files-box {
+        padding-block: 3px;
+        padding-inline: 14px;
+        border-radius: 12px 12px 0 0;
+        background: var(--bg);
+        background: white;
+        border: 1px solid var(--line);
+    }
+
+    .files__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: 100%;
+        min-height: 35px;
+        padding-block: 0px 7px;
+        padding-inline: 14px 8px;
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--onyx);
+        opacity: 0.5;
+        transition: opacity var(--dur) var(--ease-out);
+    }
+
+    .files-head__icon {
+        width: 28px;
+        height: 28px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    .files__head:hover {
+        opacity: 1;
+    } */
 
 
 
