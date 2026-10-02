@@ -97,9 +97,11 @@
         --purple-20: #e9ccff;
         --hero-bg: #3d0867;
         --lilac: #a54ee1;
+        --lilac-80: #a54ee1cc;
         --lilac-light: #d399ff;
         --coral: #ff375e;
         --coral-10: #ffe5eb;
+        --coral-10-50: #ffe5eb80;
         --coral-20: #ffccd6;
         --coral-dark: #cd3a57;
         --teal: #1bced8;
@@ -749,6 +751,8 @@
 
     /* === AI PANEL === */
 
+    /* First Panel */
+
     .panel-first {
         padding-block: 30px;
         padding-inline: 18px;
@@ -844,7 +848,6 @@
         animation: battery-fill 1.2s var(--ease-out) 0.4s both;
     }
 
-
     .widget__label {
         font-size: 11px;
         font-weight: 400;
@@ -919,10 +922,6 @@
         }
     }
 
-
-
-
-
     @keyframes battery-fill {
         from {
             transform: scaleX(0);
@@ -946,6 +945,151 @@
             transform: translateX(calc((-50% - var(--ticker-half-gap)) * var(--dir)));
         }
     }
+
+
+    /* Second Panel */
+    .spire-wrapper.ai-opened {
+        --rail-w: 472px;
+    }
+
+    .ai-opened .spr-ai {
+        opacity: 1;
+    }
+
+    .ai-opened .panel-first {
+        display: none;
+    }
+
+    .ai-opened .panel-chat {
+        display: flex;
+    }
+
+
+    .panel-chat {
+        display: none;
+        flex-direction: column;
+        padding-block: 20px 30px;
+        padding-inline: 25px;
+        min-height: 100%;
+    }
+
+    .panel-chat .chat__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 23px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .panel-chat .head__title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .panel-chat .head__content h2 {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 20px;
+    }
+
+    .panel-chat .head__content h2 span {
+        font-size: 10px;
+        font-weight: 400;
+        line-height: 18px;
+        border-radius: 40vw;
+        color: white;
+        background: var(--lilac-80);
+        padding-block: 2px;
+        padding-inline: 7px;
+    }
+
+    .panel-chat .head__content p {
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 17px;
+        color: var(--text-muted)
+    }
+
+
+    /* Chat Content */
+    .panel-chat .chat__content {
+        padding-block: 15px;
+        flex: 1;
+    }
+
+
+    /* Chat Footer */
+    .composer {
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .composer:has(.composer__input:focus-within, .composer__input:focus-visible) {
+        border-color: var(--purple-20);
+        box-shadow: var(--shadow-sm)
+    }
+
+    .composer__input {
+        border: 0;
+        outline-color: transparent;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+        color: var(--onyx);
+        flex: 1;
+    }
+
+    .composer__input::placeholder {
+        color: var(--text-placeholder);
+    }
+
+    .composer__actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .composer__actions button[class^="composer__"] {
+        padding: 12px;
+        border-radius: 8px;
+        min-width: 42px;
+        min-height: 42px;
+        background: var(--composer-btn-bg, var(--purple));
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color var(--dur) var(--ease-out), translate var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+    }
+
+    .composer__actions button[class^="composer__"]:hover {
+        translate: 0 -1px;
+        box-shadow: var(--composer-btn-hover-shadow-clr) 0px 6px 10px;
+    }
+
+    .composer__mic {
+        --composer-btn-bg: var(--coral-10-50);
+        --composer-btn-hover-shadow-clr: #fff2f5;
+    }
+
+    .composer__mic:hover {
+        --composer-btn-bg: var(--coral-10);
+    }
+
+    .composer__send {
+        --composer-btn-bg: var(--coral);
+        --composer-btn-hover-shadow-clr: #ff375e66;
+    }
+
+
+
+
 
 
     /* === THEME === */

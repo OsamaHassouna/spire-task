@@ -347,7 +347,7 @@
         </div>
 
         <!-- ============ AI rail (collapsed side panel) ============ -->
-        <aside class="spr-ai">
+        <aside class="spr-ai" id="ai-panel" aria-label="Spire AI">
             <section class="panel-first">
                 <div class="panel__content">
                     <div class="panel__widgets">
@@ -388,6 +388,60 @@
                 </div>
                 <div class="panel__art">
                     <img src="assets/icons/sparkle.svg" alt="" width="64" height="69">
+                </div>
+            </section>
+
+            <section class="panel-chat" aria-hidden="true">
+                <div class="chat__head">
+                    <div class="head__title">
+                        <img class="panel__spark" src="assets/icons/spark.svg" alt="" width="38" height="38">
+                        <img class="panel__orb mobile-only" src="assets/images/ai-orb-m.png" alt="" width="27"
+                            height="27">
+
+                        <div class="head__content">
+                            <h2>
+                                Spire AI
+                                <span class="tag">Beta</span>
+                            </h2>
+                            <p>Session message</p>
+                        </div>
+                    </div>
+
+                    <button class="panel__close" type="button" aria-label="Close Spire AI" data-ai-close>
+                        <img class="panel__close-collapse" src="assets/icons/panel-collapse.svg" alt="" width="24"
+                            height="18">
+                        <img class="panel__close-x  mobile-only" src="assets/icons/close.svg" alt="" width="17"
+                            height="17">
+                    </button>
+                </div>
+                <div class="chat__content">
+
+                    <div class="bubble-wrapper">
+                        <div class="bubble bubble__user">
+
+                        </div>
+                    </div>
+                    <div class="bubble-wrapper">
+                        <div class="bubble">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="chat__footer">
+                    <form class="composer" action="#">
+                        <input class="composer__input" id="ai-input" name="message" type="text"
+                            placeholder="ask spire AI" autocomplete="off">
+                        <div class="composer__actions">
+                            <button class="composer__mic" type="button" aria-label="Ask by voice" aria-pressed="false"
+                                data-mic>
+                                <img src="assets/icons/mic-sm.svg" alt="" width="18" height="18">
+                            </button>
+                            <button class="composer__send" type="submit" aria-label="Send message">
+                                <img src="assets/icons/arrow-long-up.svg" alt="" width="13" height="18">
+                            </button>
+
+                        </div>
+                    </form>
                 </div>
             </section>
         </aside>
