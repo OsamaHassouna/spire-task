@@ -1,13 +1,104 @@
 (() => {
     'use strict';
 
+    // ==============================
+    //  Shared Helpers
+    // ==============================
+
     const $ = (selector, root = document) => root.querySelector(selector);
     const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
     const reducedMotionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    // =============================
-    //  1. Toggeling The AI Chat Panel
     // ==============================
+    //  1. Side Navigation Drawer
+    // ==============================
+
+    // Mobile navigation uses the same links as the desktop sidebar.
+    const sidenav = $('.spr-sidenav');
+    const navToggle = $('.nav-toggle');
+    const navClose = $('.sidenav__close');
+    const navBackdrop = $('.nav-backdrop');
+    // Keep this breakpoint aligned with the compact layout in styles.css.
+    const mobileNavMq = window.matchMedia('(max-width: 1023.98px)');
+
+    if (sidenav && navToggle && navClose && navBackdrop) {
+        let navOpen = false;
+        const backgroundState = new Map();
+        const focusableLinks = () => $$('button, a[href]', sidenav)
+            .filter((element) => !element.disabled && element.getClientRects().length);
+
+        // --- State ---
+        const setNavOpen = (open, restoreFocus = true) => {
+            navOpen = open && mobileNavMq.matches;
+            document.documentElement.classList.toggle('nav-open', navOpen);
+            navToggle.setAttribute('aria-expanded', String(navOpen));
+
+            if (navOpen) {
+                sidenav.inert = false;
+                sidenav.removeAttribute('aria-hidden');
+                sidenav.setAttribute('role', 'dialog');
+                sidenav.setAttribute('aria-modal', 'true');
+                navClose.focus({ preventScroll: true });
+                // Focus after the visibility change has reached the rendered frame.
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    if (navOpen) navClose.focus({ preventScroll: true });
+                }));
+                $$('.spr-header, .content-wrapper, .spr-ai, .skip-link').forEach((element) => {
+                    if (!backgroundState.has(element)) backgroundState.set(element, element.inert);
+                    element.inert = true;
+                });
+            } else {
+                backgroundState.forEach((inert, element) => { element.inert = inert; });
+                backgroundState.clear();
+                if (restoreFocus && mobileNavMq.matches) navToggle.focus({ preventScroll: true });
+                // A resize must not leave focus on the now-hidden close button.
+                if (!mobileNavMq.matches && document.activeElement === navClose) {
+                    $('.sidenav__link', sidenav)?.focus({ preventScroll: true });
+                }
+                sidenav.removeAttribute('role');
+                sidenav.removeAttribute('aria-modal');
+                sidenav.inert = mobileNavMq.matches;
+                if (mobileNavMq.matches) sidenav.setAttribute('aria-hidden', 'true');
+                else sidenav.removeAttribute('aria-hidden');
+            }
+        };
+
+        // --- Events ---
+        navToggle.addEventListener('click', () => setNavOpen(!navOpen));
+        navClose.addEventListener('click', () => setNavOpen(false));
+        navBackdrop.addEventListener('click', () => setNavOpen(false));
+        sidenav.addEventListener('click', (event) => {
+            if (navOpen && event.target.closest('a[href]')) setNavOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (!navOpen) return;
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                setNavOpen(false);
+            } else if (event.key === 'Tab') {
+                const items = focusableLinks();
+                const first = items[0];
+                const last = items[items.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+        mobileNavMq.addEventListener('change', () => {
+            const focusInNav = sidenav.contains(document.activeElement);
+            setNavOpen(false, focusInNav);
+        });
+        setNavOpen(false, false);
+    }
+
+    // ==============================
+    //  2. AI Chat Panel & Drawer
+    // ==============================
+
     const wrapper = document.querySelector('.spire-wrapper');
 
     if (!wrapper) return;
@@ -16,22 +107,73 @@
     const chatPanel = wrapper.querySelector('.panel-chat');
     const closeButton = chatPanel?.querySelector('.panel__close');
     const panelControls = document.querySelectorAll('[aria-controls="ai-panel"]');
+    const aiPanel = $('.spr-ai');
+    const welcomePanel = $('.panel-welcome');
+    const welcomeClose = $('.welcome__close');
+    const aiBackdrop = $('.ai-backdrop');
+    let aiDrawerOpen = false;
+    let aiReturnFocus = null;
+    const aiBackgroundState = new Map();
 
     if (!firstPanel || !chatPanel || !closeButton) return;
 
+    // --- Chat State ---
     const setPanelOpen = (isOpen) => {
         const wasOpen = wrapper.classList.contains('ai-opened');
         wrapper.classList.toggle('ai-opened', isOpen);
         chatPanel.setAttribute('aria-hidden', String(!isOpen));
 
+        welcomePanel.setAttribute('aria-hidden', String(isOpen || !aiDrawerOpen));
         panelControls.forEach((control) => {
-            control.setAttribute('aria-expanded', String(isOpen));
+            control.setAttribute('aria-expanded', String(mobileNavMq.matches ? aiDrawerOpen : isOpen));
         });
 
         if (isOpen && !wasOpen) startConversation();
         if (!isOpen) stopConversation();
     };
 
+    // --- Drawer State ---
+    const setAiDrawerOpen = (open, trigger = null) => {
+        aiDrawerOpen = open && mobileNavMq.matches;
+        wrapper.classList.toggle('ai-drawer-open', aiDrawerOpen);
+        document.documentElement.classList.toggle('ai-drawer-open', aiDrawerOpen);
+        if (aiDrawerOpen) {
+            aiReturnFocus = trigger || document.activeElement;
+            aiPanel.inert = false;
+            aiPanel.removeAttribute('aria-hidden');
+            aiPanel.setAttribute('role', 'dialog');
+            aiPanel.setAttribute('aria-modal', 'true');
+            // Opening the drawer always starts on the welcome screen.
+            setPanelOpen(false);
+            welcomeClose.focus({ preventScroll: true });
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                if (aiDrawerOpen && !wrapper.classList.contains('ai-opened')) {
+                    welcomeClose.focus({ preventScroll: true });
+                }
+            }));
+            $$('.spr-content, .skip-link').forEach((element) => {
+                aiBackgroundState.set(element, element.inert);
+                element.inert = true;
+            });
+        } else {
+            stopConversation();
+            aiBackgroundState.forEach((inert, element) => { element.inert = inert; });
+            aiBackgroundState.clear();
+            if (aiPanel.contains(document.activeElement)) {
+                const target = aiReturnFocus?.getClientRects().length ? aiReturnFocus : $('.ask__cta');
+                target?.focus({ preventScroll: true });
+            }
+            aiPanel.removeAttribute('role');
+            aiPanel.removeAttribute('aria-modal');
+            aiPanel.inert = mobileNavMq.matches;
+            if (mobileNavMq.matches) aiPanel.setAttribute('aria-hidden', 'true');
+            else aiPanel.removeAttribute('aria-hidden');
+            panelControls.forEach((control) => control.setAttribute('aria-expanded', 'false'));
+            // Keep the current screen painted while the drawer slides out.
+        }
+    };
+
+    // --- Events ---
     firstPanel.addEventListener('click', () => {
         if (!wrapper.classList.contains('ai-opened')) {
             setPanelOpen(true);
@@ -40,16 +182,50 @@
 
     closeButton.addEventListener('click', () => {
         closeFiles();
-        setPanelOpen(false);
+        if (mobileNavMq.matches) setAiDrawerOpen(false);
+        else setPanelOpen(false);
     });
 
     panelControls.forEach((control) => {
-        control.addEventListener('click', () => setPanelOpen(true));
+        control.addEventListener('click', () => {
+            if (mobileNavMq.matches) setAiDrawerOpen(true, control);
+            else setPanelOpen(true);
+        });
     });
 
-    /* ======================================================================
-       2. Scripted chat demo
-       ====================================================================== */
+    welcomeClose.addEventListener('click', () => setAiDrawerOpen(false));
+    aiBackdrop.addEventListener('click', () => setAiDrawerOpen(false));
+    $('[data-ai-start]').addEventListener('click', () => {
+        setPanelOpen(true);
+        closeButton.focus({ preventScroll: true });
+    });
+    document.addEventListener('keydown', (event) => {
+        if (!aiDrawerOpen) return;
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            setAiDrawerOpen(false);
+        } else if (event.key === 'Tab') {
+            const items = $$('button, a[href], input, [tabindex="0"]', aiPanel)
+                .filter((element) => !element.disabled && !element.closest('[inert]') && element.getClientRects().length);
+            const first = items[0];
+            const last = items[items.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+    });
+    mobileNavMq.addEventListener('change', () => {
+        setAiDrawerOpen(false);
+        setPanelOpen(false);
+    });
+
+    // ==============================
+    //  3. Scripted Chat Demo
+    // ==============================
     const FIRST_QUESTION = 'Out of Gate Analysis for 22-27 March';
     const DOC_SUGGESTIONS = [
         'Summarize this document',
@@ -82,6 +258,7 @@
         behavior: reducedMotionMq.matches ? 'auto' : 'smooth',
     });
 
+    // --- Timing & Rendering ---
     function scheduleChat(callback, delay) {
         const timer = window.setTimeout(() => {
             chatTimers.delete(timer);
@@ -137,6 +314,7 @@
         return message;
     }
 
+    // --- Conversation Flow ---
     function sendMessage(text, { fromSuggestion = false } = {}) {
         text = text.trim();
         if (!text || busy || !wrapper.classList.contains('ai-opened')) return false;
@@ -188,6 +366,7 @@
         }, OPEN_DELAY_MS);
     }
 
+    // --- Events ---
     chatLog.addEventListener('click', (event) => {
         const suggestion = event.target.closest('[data-suggest]');
         if (suggestion && !suggestion.disabled) {
@@ -210,11 +389,9 @@
         if (sendMessage(composerInput.value)) composerInput.value = '';
     });
 
-
-
-    /* ======================================================================
-       3. Files-in-context tray
-       ====================================================================== */
+    // ==============================
+    //  4. Files-in-Context Tray
+    // ==============================
     const files = $('[data-files]');
     const filesToggle = $('[data-files-toggle]');
     const filesList = $('#ai-files-list');
@@ -263,10 +440,16 @@
         }
     }
 
+    // --- Events ---
     filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
+
+    // ==============================
+    //  5. Initial State
+    // ==============================
 
     const initiallyOpen = wrapper.classList.contains('ai-opened');
     setPanelOpen(initiallyOpen);
     if (initiallyOpen) startConversation();
+    if (mobileNavMq.matches) setAiDrawerOpen(false);
 
 })();

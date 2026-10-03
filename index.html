@@ -30,6 +30,12 @@
         <div class="spr-content">
             <!-- ============ Header ============ -->
             <header class="spr-header" role="banner">
+                <button class="btn btn-icon nav-toggle mobile-only" type="button"
+                    aria-label="Open navigation" aria-controls="sidenav" aria-expanded="false">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 6h16M4 12h16M4 18h11" stroke="currentColor" stroke-width="1.6" />
+                    </svg>
+                </button>
                 <!-- Logo -->
                 <a class="brand" href="#" aria-label="Spire home">
                     <picture>
@@ -40,7 +46,7 @@
                 <!-- Header Toolbar -->
                 <div class="header__toolbar">
                     <!-- Search -->
-                    <form class="search" role="search" action="#">
+                    <form class="search desktop-only" role="search" action="#">
                         <label class="visually-hidden" for="site-search">Search</label>
                         <div class="search__field">
                             <svg class="search__icon" width="17" height="18" viewBox="0 0 17 18" fill="none"
@@ -79,7 +85,7 @@
                     </button>
 
                     <!-- Apps -->
-                    <button class="btn btn-icon" type="button" aria-label="Apps">
+                    <button class="btn btn-icon desktop-only" type="button" aria-label="Apps">
                         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" aria-hidden="true"
                             focusable="false">
                             <path
@@ -98,7 +104,7 @@
                     </button>
 
                     <!-- Support -->
-                    <button class="btn btn-icon" type="button" aria-label="Support">
+                    <button class="btn btn-icon desktop-only" type="button" aria-label="Support">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"
                             focusable="false">
                             <path
@@ -117,7 +123,15 @@
 
             <main class="spr-main">
                 <!-- ============ Side navigation ============ -->
-                <nav class="spr-sidenav">
+                <nav class="spr-sidenav" id="sidenav" aria-label="Main navigation">
+                    <div class="sidenav__head">
+                        <img src="assets/logo-text.svg" alt="Spire" width="88" height="38">
+                        <button class="sidenav__close" type="button" aria-label="Close navigation">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </button>
+                    </div>
                     <!-- Nav links -->
                     <ul class="sidenav__list">
                         <li>
@@ -238,13 +252,13 @@
                     <section class="hero">
                         <div class="hero__content">
                             <h1>
-                                Built to power a nation.
-                                <!-- <br /> -->
-                                Ready to power you.
+                                <span>Built to power a nation.</span>
+                                <span>Ready to power you.</span>
                             </h1>
                             <p>
-                                Specialized excellence brings mission-critical
-                                intelligence to your workday.
+                                <span>Specialized excellence brings</span>
+                                <span>mission-critical</span>
+                                <span>intelligence to your workday.</span>
                             </p>
 
                             <form class="ask" action="#">
@@ -296,7 +310,7 @@
                     <!-- ======= E-Services Categories ======= -->
                     <section class="services">
                         <div class="services__header">
-                            <h2>E-services Categories</h2>
+                            <h2>E-Services Categories</h2>
                             <a href="#">See All</a>
                         </div>
                         <ul class="services__list">
@@ -416,8 +430,8 @@
                 </div>
                 <div class="chat__content">
 
-                    <ol class="msgs__list" role="log" aria-label="Conversation with Spire AI"
-                        aria-live="polite" aria-relevant="additions" tabindex="0"></ol>
+                    <ol class="msgs__list" role="log" aria-label="Conversation with Spire AI" aria-live="polite"
+                        aria-relevant="additions" tabindex="0"></ol>
                 </div>
                 <div class="chat__footer">
                     <div class="files-wrapper" data-files aria-hidden="true" inert>
@@ -537,8 +551,25 @@
                     </form>
                 </div>
             </section>
+
+            <section class="panel-welcome" aria-hidden="true">
+                <button class="panel__close welcome__close" type="button" aria-label="Close Spire AI" data-ai-close>
+                    <img src="assets/icons/close.svg" alt="" width="17" height="17">
+                </button>
+                <div class="panel__content">
+                    <div class="panel__welcome">
+                        <img class="panel__orb" src="assets/images/ai-orb-lg.png" alt="" width="40" height="38">
+                        <h2>Welcome to Spire AI</h2>
+                        <p>Ask questions, get answers, and explore your workday with the power of AI.</p>
+                        <button class="btn welcome__start" type="button" data-ai-start>Start a conversation</button>
+                    </div>
+                </div>
+            </section>
         </aside>
     </div>
+
+    <div class="nav-backdrop" aria-hidden="true"></div>
+    <div class="ai-backdrop" aria-hidden="true"></div>
 
     <!-- ============ Chat templates ============ -->
     <!-- User message -->
