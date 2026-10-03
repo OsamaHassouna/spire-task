@@ -1,13 +1,12 @@
 (() => {
     'use strict';
 
-
     const $ = (selector, root = document) => root.querySelector(selector);
     const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
     const reducedMotionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // =============================
-    //  Toggeling The AI Chat Panel
+    //  1. Toggeling The AI Chat Panel
     // ==============================
     const wrapper = document.querySelector('.spire-wrapper');
 
@@ -149,6 +148,7 @@
         $('.msg__text', user).textContent = text;
         $('.msg__icon', user).hidden = !fromSuggestion;
         appendMessage(user, true);
+        if (initial) setFilesVisible(true);
 
         scheduleChat(() => {
             chatPanel.dataset.chatState = 'thinking';
@@ -168,6 +168,8 @@
     function stopConversation() {
         chatTimers.forEach((timer) => window.clearTimeout(timer));
         chatTimers.clear();
+        closeFiles();
+        setFilesVisible(false);
         $('.msg--thinking', chatLog)?.remove();
         setBusy(false);
         chatPanel.dataset.chatState = 'idle';
@@ -218,6 +220,12 @@
     const filesList = $('#ai-files-list');
 
     const isFilesOpen = () => filesToggle.getAttribute('aria-expanded') === 'true';
+
+    function setFilesVisible(visible) {
+        files.classList.toggle('is-visible', visible);
+        files.inert = !visible;
+        files.setAttribute('aria-hidden', String(!visible));
+    }
 
     function setFilesOpen(open, { animate = true } = {}) {
         filesToggle.setAttribute('aria-expanded', String(open));

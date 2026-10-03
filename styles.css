@@ -1028,11 +1028,15 @@
 
     /* Chat Footer */
     .chat__footer {
+        position: relative;
+        z-index: 1;
         flex: none;
         isolation: isolate;
     }
 
     .composer {
+        position: relative;
+        z-index: 2;
         padding: 14px;
         border: 1px solid var(--gray-dark-80);
         border-radius: 16px;
@@ -1102,14 +1106,27 @@
     .files-wrapper {
         position: relative;
         z-index: 1;
+        visibility: hidden;
+        transition: none;
         width: calc(100% - 14px);
-        /* height: 36px; */
+        /* Reserve only the collapsed header; the tray grows upward over messages. */
+        height: 37px;
         margin-inline: auto;
-        z-index: -1;
+        margin-block-end: -4px;
     }
 
-    .files-wrapper.is-open {
-        margin-block-end: -4px;
+    .files-wrapper.is-visible {
+        visibility: visible;
+    }
+
+    .files-wrapper.is-visible .files-box {
+        animation: files-tray-reveal 0.35s var(--ease-out) both;
+    }
+
+    /* The higher composer layer masks the tray as it slides upward. */
+    @keyframes files-tray-reveal {
+        from { transform: translateY(calc(100% - 4px)); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
     }
 
     .files-wrapper.is-closing .files__list {
@@ -1117,6 +1134,9 @@
     }
 
     .files-box {
+        position: absolute;
+        inset-inline: 0;
+        inset-block-end: 0;
         border-radius: 12px 12px 0 0;
         background: white;
         border: 1px solid var(--line);
@@ -1125,10 +1145,6 @@
     .files-wrapper.is-open .files-box {
         background: var(--bg);
         box-shadow: 0 -8px 24px rgb(29 37 45 / 0.08);
-    }
-
-    .files-wrapper:not(.is-open) .files-box {
-        margin-block-end: -4px;
     }
 
     .files__head {
@@ -1493,7 +1509,8 @@
         .msg,
         .msg--thinking img,
         .msg--thinking .dots > span,
-        .cites .cite {
+        .cites .cite,
+        .files-wrapper.is-visible .files-box {
             animation: none;
         }
     }
