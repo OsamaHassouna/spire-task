@@ -416,22 +416,14 @@
                 </div>
                 <div class="chat__content">
 
-                    <div class="bubble-wrapper">
-                        <div class="bubble bubble__user">
-
-                        </div>
-                    </div>
-                    <div class="bubble-wrapper">
-                        <div class="bubble">
-
-                        </div>
-                    </div>
+                    <ol class="msgs__list"></ol>
                 </div>
                 <div class="chat__footer">
-                    <!-- <div class="files-wrapper">
+                    <div class="files-wrapper" data-files>
                         <div class="files-box">
-                            <button class="files__head" type="button" aria-expanded="false" aria-controls="ai-files-list">
-                                <h3>6 files loaded into context</h3>
+                            <button class="files__head" type="button" aria-expanded="false"
+                                aria-controls="ai-files-list" data-files-toggle>
+                                <span>6 files loaded into context</span>
                                 <span class="ai-files__chevron" aria-hidden="true">
                                     <svg width="10" height="6" viewBox="0 0 10 6" fill="none" focusable="false">
                                         <path d="M1 5l4-4 4 4" stroke="currentColor" stroke-width="1.2"
@@ -439,23 +431,95 @@
                                     </svg>
                                 </span>
                             </button>
-    
+
                             <ul class="files__list" id="ai-files-list" aria-label="Files in context" hidden>
                                 <li>
                                     <label class="file">
-                                        <span class="file__type file__type--doc">
-                                            <img src="assets/icons/file-doc.svg" alt="DOC" width="22" height="22">
-                                        </span>
-                                        <span class="file__info">
-                                            <span class="file__name">Data Governance Policy</span>
-                                            <span class="file__time">3:30pm</span>
-                                        </span>
+                                        <div class="file_head">
+                                            <span class="file__type file__type--doc">
+                                                <img src="assets/icons/file-doc.svg" alt="DOC" width="22" height="22">
+                                            </span>
+                                            <span class="file__info">
+                                                <span class="file__name">Data Governance Policy</span>
+                                                <span class="file__time">3:30pm</span>
+                                            </span>
+                                        </div>
+                                        <input class="switch" type="checkbox" role="switch" checked>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="file">
+                                        <div class="file_head">
+                                            <span class="file__type file__type--csv">
+                                                <img src="assets/icons/file-csv.svg" alt="CSV" width="22" height="22">
+                                            </span>
+                                            <span class="file__info">
+                                                <span class="file__name">Data Governance Policy</span>
+                                                <span class="file__time">3:30pm</span>
+                                            </span>
+                                        </div>
+                                        <input class="switch" type="checkbox" role="switch" checked>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="file">
+                                        <div class="file_head">
+                                            <span class="file__type file__type--doc">
+                                                <img src="assets/icons/file-doc.svg" alt="DOC" width="22" height="22">
+                                            </span>
+                                            <span class="file__info">
+                                                <span class="file__name">Data Governance Policy</span>
+                                                <span class="file__time">3:30pm</span>
+                                            </span>
+                                        </div>
+                                        <input class="switch" type="checkbox" role="switch" checked>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="file">
+                                        <div class="file_head">
+                                            <span class="file__type file__type--ppt">
+                                                <img src="assets/icons/file-ppt.svg" alt="PPT" width="22" height="22">
+                                            </span>
+                                            <span class="file__info">
+                                                <span class="file__name">Data Governance Policy</span>
+                                                <span class="file__time">3:30pm</span>
+                                            </span>
+                                        </div>
+                                        <input class="switch" type="checkbox" role="switch" checked>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="file">
+                                        <div class="file_head">
+                                            <span class="file__type file__type--ppt">
+                                                <img src="assets/icons/file-ppt.svg" alt="PPT" width="22" height="22">
+                                            </span>
+                                            <span class="file__info">
+                                                <span class="file__name">Data Governance Policy</span>
+                                                <span class="file__time">3:30pm</span>
+                                            </span>
+                                        </div>
+                                        <input class="switch" type="checkbox" role="switch" checked>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="file">
+                                        <div class="file_head">
+                                            <span class="file__type file__type--doc">
+                                                <img src="assets/icons/file-doc.svg" alt="DOC" width="22" height="22">
+                                            </span>
+                                            <span class="file__info">
+                                                <span class="file__name">Data Governance Policy</span>
+                                                <span class="file__time">3:30pm</span>
+                                            </span>
+                                        </div>
                                         <input class="switch" type="checkbox" role="switch" checked>
                                     </label>
                                 </li>
                             </ul>
                         </div>
-                    </div> -->
+                    </div>
                     <form class="composer" action="#">
                         <input class="composer__input" id="ai-input" name="message" type="text"
                             placeholder="ask spire AI" autocomplete="off">
@@ -475,6 +539,61 @@
         </aside>
     </div>
 
+    <!-- ============ Chat templates ============ -->
+    <!-- User message -->
+    <template id="tpl-user-msg">
+        <li class="msg msg--user">
+            <div class="msg__bubble">
+                <img class="msg__icon" src="assets/icons/doc.svg" alt="" width="15" height="15" hidden="">
+                <span class="msg__text"></span>
+            </div>
+        </li>
+    </template>
+
+    <!-- Thinking -->
+    <template id="tpl-thinking">
+        <li class="msg msg--thinking">
+            <img src="assets/icons/thinking.svg" alt="" width="16" height="16">
+            <span>Thinking<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></span>
+        </li>
+    </template>
+
+    <!-- AI answer -->
+    <template id="tpl-ai-msg">
+        <li class="msg msg--ai">
+            <div class="msg__bubble">
+                <span class="msg__text">
+                    Based on <strong>HR policy</strong> you are eligible for submitting a compensation
+                    request through Fusion
+                    platform, in accordance with the following
+                    <span class="cites" data-cites=""></span>
+                </span>
+            </div>
+            <ul class="msg__actions" data-actions></ul>
+        </li>
+    </template>
+
+    <!-- Sources toggle -->
+    <template id="tpl-sources-toggle">
+        <button class="cite-more" type="button" aria-expanded="false" data-sources-toggle>
+            <span class="cite-more__dots" aria-hidden="true">&bull;&bull;&bull;</span>
+            <svg class="cite-more__chev" width="5" height="8" viewBox="0 0 5 8" fill="none" aria-hidden="true"
+                focusable="false">
+                <path d="M3.70715 0.707031L0.707153 3.70703L3.70715 6.70703" stroke="currentColor"
+                    stroke-linecap="square" />
+            </svg>
+        </button>
+    </template>
+
+    <!-- Suggestion chip -->
+    <template id="tpl-chip">
+        <li class="msg msg--ai">
+            <button class="chip" type="button" data-suggest>
+                <img src="assets/icons/doc.svg" alt="" width="15" height="15">
+                <span class="chip__text"></span>
+            </button>
+        </li>
+    </template>
 
 </body>
 
