@@ -1313,7 +1313,7 @@
         flex: 1;
         min-height: 0;
         flex-direction: column;
-        justify-content: safe center;
+        /* justify-content: safe center; */
         gap: 12px;
         overflow-y: auto;
         overscroll-behavior: contain;
@@ -1321,12 +1321,70 @@
     }
 
     .msg {
+        flex: none;
+        min-width: 0;
         max-width: calc(100% - 24px);
+        animation: message-enter 0.25s var(--ease-out) var(--message-delay, 0ms) backwards;
     }
+
+    .msg__actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-block-start: 12px;
+    }
+
+    .msg__actions > .msg {
+        max-width: 100%;
+    }
+
+    .msg__text,
+    .chip__text {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .msg__icon,
+    .chip > img {
+        flex: none;
+    }
+
+    .chip:disabled,
+    .composer__send:disabled {
+        opacity: 0.55;
+        cursor: default;
+        translate: none;
+    }
+
+    .msgs__list:focus-visible,
+    .chip:focus-visible,
+    .cite-more:focus-visible {
+        outline: 2px solid var(--purple);
+        outline-offset: -2px;
+    }
+
+    @keyframes message-enter {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes chat-dot {
+        0%, 80%, 100% { opacity: 0.3; }
+        40% { opacity: 1; }
+    }
+
+    .msg--thinking .dots > span {
+        animation: chat-dot 1.2s ease-in-out infinite;
+    }
+
+    .msg--thinking .dots > span:nth-child(2) { animation-delay: 0.15s; }
+    .msg--thinking .dots > span:nth-child(3) { animation-delay: 0.3s; }
 
     .msg__bubble,
     .chip {
-        padding: 14px 24px;
+        max-width: 100%;
+        padding: 14px 20px;
         border: 1px solid var(--msg-bubble-border-clr, var(--line-soft));
         border-radius: 13px;
         display: inline-flex;
@@ -1359,6 +1417,19 @@
     .msg--ai .msg__bubble,
     .msg--ai .chip {
         border-end-start-radius: 0;
+    }
+
+    /* Thinking */
+    .msg--thinking {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--text-thinking);
+    }
+
+    .msg--thinking img {
+        animation: spin 1.2s linear infinite;
     }
 
     /* numbers */
@@ -1418,6 +1489,15 @@
         display: block;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+        .msg,
+        .msg--thinking img,
+        .msg--thinking .dots > span,
+        .cites .cite {
+            animation: none;
+        }
+    }
+
 
 
 
@@ -1464,6 +1544,7 @@
     }
 
     @keyframes ticker {
+
         0%,
         12.5% {
             transform: translateX(0);

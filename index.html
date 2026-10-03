@@ -416,7 +416,8 @@
                 </div>
                 <div class="chat__content">
 
-                    <ol class="msgs__list"></ol>
+                    <ol class="msgs__list" role="log" aria-label="Conversation with Spire AI"
+                        aria-live="polite" aria-relevant="additions" tabindex="0"></ol>
                 </div>
                 <div class="chat__footer">
                     <div class="files-wrapper" data-files>
@@ -522,7 +523,7 @@
                     </div>
                     <form class="composer" action="#">
                         <input class="composer__input" id="ai-input" name="message" type="text"
-                            placeholder="ask spire AI" autocomplete="off">
+                            placeholder="ask spire AI" autocomplete="off" aria-label="Message Spire AI">
                         <div class="composer__actions">
                             <button class="composer__mic" type="button" aria-label="Ask by voice" aria-pressed="false"
                                 data-mic>
