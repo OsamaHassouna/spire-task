@@ -9,6 +9,9 @@
     const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
     const reducedMotionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+    // Give keyboard users a real destination beyond the navigation.
+    $('.skip-link')?.addEventListener('click', () => $('#main')?.focus());
+
     // ==============================
     //  1. Side Navigation Drawer
     // ==============================
@@ -173,23 +176,36 @@
         }
     };
 
+    const openDesktopPanel = (trigger) => {
+        aiReturnFocus = trigger;
+        setPanelOpen(true);
+        closeButton.focus({ preventScroll: true });
+    };
+
+    const closeDesktopPanel = () => {
+        setPanelOpen(false);
+        const target = aiReturnFocus?.getClientRects().length ? aiReturnFocus : $('.widget__add');
+        target?.focus({ preventScroll: true });
+    };
+
     // --- Events ---
-    firstPanel.addEventListener('click', () => {
+    firstPanel.addEventListener('click', (event) => {
+        if (event.target.closest('button')) return;
         if (!wrapper.classList.contains('ai-opened')) {
-            setPanelOpen(true);
+            openDesktopPanel($('.widget__add'));
         }
     });
 
     closeButton.addEventListener('click', () => {
         closeFiles();
         if (mobileNavMq.matches) setAiDrawerOpen(false);
-        else setPanelOpen(false);
+        else closeDesktopPanel();
     });
 
     panelControls.forEach((control) => {
         control.addEventListener('click', () => {
             if (mobileNavMq.matches) setAiDrawerOpen(true, control);
-            else setPanelOpen(true);
+            else openDesktopPanel(control);
         });
     });
 
@@ -200,11 +216,15 @@
         closeButton.focus({ preventScroll: true });
     });
     document.addEventListener('keydown', (event) => {
-        if (!aiDrawerOpen) return;
+        if (!aiDrawerOpen && !wrapper.classList.contains('ai-opened')) return;
         if (event.key === 'Escape') {
             event.preventDefault();
-            setAiDrawerOpen(false);
-        } else if (event.key === 'Tab') {
+            if (isFilesOpen()) {
+                closeFiles();
+                filesToggle.focus({ preventScroll: true });
+            } else if (aiDrawerOpen) setAiDrawerOpen(false);
+            else if (!mobileNavMq.matches) closeDesktopPanel();
+        } else if (event.key === 'Tab' && aiDrawerOpen) {
             const items = $$('button, a[href], input, [tabindex="0"]', aiPanel)
                 .filter((element) => !element.disabled && !element.closest('[inert]') && element.getClientRects().length);
             const first = items[0];

@@ -43,10 +43,6 @@
         color: inherit;
     }
 
-    a:-webkit-any-link:focus-visible {
-        outline-color: transparent;
-    }
-
     h1,
     h2,
     h3,
@@ -168,6 +164,18 @@
         --dir: 1;
     }
 
+    /* Two-color focus indicators remain visible on white and purple surfaces. */
+    :where(a, button, input, [tabindex]):focus-visible {
+        outline: 2px solid var(--purple);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px var(--white);
+    }
+
+    input::placeholder {
+        color: var(--text-placeholder);
+        opacity: 1;
+    }
+
     /*=== Skip Link ===*/
     .skip-link {
         position: fixed;
@@ -176,7 +184,7 @@
         z-index: 100;
         padding: 10px 16px;
         border-radius: 10px;
-        background: var(--primary, #007bff);
+        background: var(--purple);
         color: var(--white, #ffffff);
         transform: translateY(-160%);
         transition: transform 0.2s ease-out;
@@ -339,10 +347,6 @@
         gap: 10px;
     }
 
-    .sidenav__link .sidenav__label {
-        display: none;
-    }
-
     .sidenav__list li {
         display: flex;
         align-items: center;
@@ -404,8 +408,19 @@
     }
 
     @media screen and (min-width: 1024px) {
+
+        /* Keep names available to assistive technology in the icon-only rail. */
+        .sidenav__link .sidenav__label,
         .sidenav__profile .sidenav__user {
-            display: none;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+            border: 0;
         }
 
     }
@@ -479,6 +494,10 @@
 
 @layer theme {
 
+    #main {
+        scroll-margin-block-start: 90px;
+    }
+
     /*=== Drawer Defaults & Focus ===*/
     .sidenav__head,
     .panel-welcome,
@@ -496,6 +515,7 @@
 
     /*=== Compact Layout || Phones & Tablets ===*/
     @media screen and (max-width: 1023.98px) {
+
         html.nav-open,
         .nav-open body,
         html.ai-drawer-open,
@@ -530,7 +550,7 @@
             gap: 8px;
         }
 
-        .header__toolbar > *:not(:hover, :focus-within) {
+        .header__toolbar>*:not(:hover, :focus-within) {
             opacity: 1;
         }
 
@@ -690,7 +710,7 @@
             border-radius: 18px;
         }
 
-        .sidenav__profile > img {
+        .sidenav__profile>img {
             width: 52px;
             height: 52px;
         }
@@ -911,6 +931,7 @@
 
     /*=== Hero || Phones & Tablets ===*/
     @media screen and (max-width: 1023.98px) {
+
         /* Center the copy over a single portrait on narrow screens. */
         .hero {
             min-height: 460px;
@@ -960,7 +981,7 @@
             display: none;
         }
 
-        .ask > input {
+        .ask>input {
             min-width: 0;
             width: 0;
         }
@@ -997,7 +1018,7 @@
             background: var(--purple);
         }
 
-        .arch.arch--man > img {
+        .arch.arch--man>img {
             width: 158%;
             height: auto;
             translate: -18.4% -8.6%;
@@ -1160,7 +1181,7 @@
             font-size: clamp(14px, 3.6vw, 18px);
         }
 
-        .services__header > a {
+        .services__header>a {
             flex: none;
             font-size: 13px;
         }
@@ -1170,7 +1191,7 @@
             margin-inline: -4px;
         }
 
-        .services__list > li {
+        .services__list>li {
             flex: none;
             scroll-snap-align: start;
         }
@@ -1187,7 +1208,7 @@
             margin-block-start: 40px;
         }
 
-        .services__header > a {
+        .services__header>a {
             font-size: 14px;
         }
 
@@ -1382,7 +1403,17 @@
             will-change: auto;
         }
 
-        .ticker__group[aria-hidden="true"] {
+        .ticker__alert {
+            display: block;
+        }
+
+        .ticker__alert img {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .ticker__group[aria-hidden="true"],
+        .ticker__toggle {
             display: none;
         }
     }
@@ -1934,6 +1965,7 @@
 
     /*=== AI Drawer || Phones & Tablets ===*/
     @media screen and (max-width: 1023.98px) {
+
         /* The fixed rail stays mounted so both opening and closing animate. */
         .spr-ai {
             display: block;
@@ -2073,6 +2105,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+
         .spr-sidenav,
         .nav-backdrop,
         .spr-ai,
@@ -2080,7 +2113,10 @@
             transition: none;
         }
 
-        .hero__asterisk {
+        .hero__asterisk,
+        .badge__ring,
+        .panel__art img,
+        .battery__fill {
             animation: none;
         }
     }
