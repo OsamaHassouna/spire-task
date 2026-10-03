@@ -114,6 +114,9 @@
     const welcomePanel = $('.panel-welcome');
     const welcomeClose = $('.welcome__close');
     const aiBackdrop = $('.ai-backdrop');
+    const heroForm = $('.ask');
+    const heroInput = $('#hero-ask');
+    const heroButton = $('.ask__cta');
     let aiDrawerOpen = false;
     let aiReturnFocus = null;
     const aiBackgroundState = new Map();
@@ -121,7 +124,7 @@
     if (!firstPanel || !chatPanel || !closeButton) return;
 
     // --- Chat State ---
-    const setPanelOpen = (isOpen) => {
+    const setPanelOpen = (isOpen, initialQuestion) => {
         const wasOpen = wrapper.classList.contains('ai-opened');
         wrapper.classList.toggle('ai-opened', isOpen);
         chatPanel.setAttribute('aria-hidden', String(!isOpen));
@@ -131,7 +134,7 @@
             control.setAttribute('aria-expanded', String(mobileNavMq.matches ? aiDrawerOpen : isOpen));
         });
 
-        if (isOpen && !wasOpen) startConversation();
+        if (isOpen && !wasOpen) startConversation(initialQuestion);
         if (!isOpen) stopConversation();
     };
 
@@ -176,9 +179,9 @@
         }
     };
 
-    const openDesktopPanel = (trigger) => {
+    const openDesktopPanel = (trigger, initialQuestion) => {
         aiReturnFocus = trigger;
-        setPanelOpen(true);
+        setPanelOpen(true, initialQuestion);
         closeButton.focus({ preventScroll: true });
     };
 
@@ -203,10 +206,31 @@
     });
 
     panelControls.forEach((control) => {
+        // The hero button submits its form; do not also start the default demo.
+        if (control === heroButton) return;
         control.addEventListener('click', () => {
             if (mobileNavMq.matches) setAiDrawerOpen(true, control);
             else openDesktopPanel(control);
         });
+    });
+
+    heroForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const question = heroInput.value.trim();
+        if (mobileNavMq.matches) {
+            setAiDrawerOpen(true, heroButton);
+            if (question) {
+                setPanelOpen(true, question);
+                closeButton.focus({ preventScroll: true });
+            }
+        } else if (wrapper.classList.contains('ai-opened') && question) {
+            // Keep the draft if AI is busy; never discard an unaccepted question.
+            if (!sendMessage(question)) return;
+            composerInput.focus({ preventScroll: true });
+        } else {
+            openDesktopPanel(heroButton, question || undefined);
+        }
+        heroInput.value = '';
     });
 
     welcomeClose.addEventListener('click', () => setAiDrawerOpen(false));
@@ -373,7 +397,7 @@
         chatPanel.dataset.chatState = 'idle';
     }
 
-    function startConversation() {
+    function startConversation(initialQuestion = FIRST_QUESTION) {
         stopConversation();
         chatLog.replaceChildren();
         chatLog.scrollTop = 0;
@@ -382,7 +406,7 @@
         chatPanel.dataset.chatState = 'waiting';
         scheduleChat(() => {
             setBusy(false);
-            sendMessage(FIRST_QUESTION);
+            sendMessage(initialQuestion);
         }, OPEN_DELAY_MS);
     }
 
@@ -415,8 +439,14 @@
     const files = $('[data-files]');
     const filesToggle = $('[data-files-toggle]');
     const filesList = $('#ai-files-list');
+    const filesCount = $('[data-files-count]', files);
 
     const isFilesOpen = () => filesToggle.getAttribute('aria-expanded') === 'true';
+
+    function updateFilesCount() {
+        const count = $$('input[type="checkbox"]:checked', filesList).length;
+        filesCount.textContent = `${count} ${count === 1 ? 'file' : 'files'} loaded into context`;
+    }
 
     function setFilesVisible(visible) {
         files.classList.toggle('is-visible', visible);
@@ -462,11 +492,15 @@
 
     // --- Events ---
     filesToggle.addEventListener('click', () => setFilesOpen(!isFilesOpen()));
+    filesList.addEventListener('change', (event) => {
+        if (event.target.matches('input[type="checkbox"]')) updateFilesCount();
+    });
 
     // ==============================
     //  5. Initial State
     // ==============================
 
+    updateFilesCount();
     const initiallyOpen = wrapper.classList.contains('ai-opened');
     setPanelOpen(initiallyOpen);
     if (initiallyOpen) startConversation();
