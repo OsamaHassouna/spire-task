@@ -25,6 +25,7 @@
         let aiReturnFocus = null;
         const aiBackgroundState = new Map();
 
+        // --- Chat State ---
         const setPanelOpen = (isOpen, initialQuestion) => {
             const wasOpen = wrapper.classList.contains('ai-opened');
             wrapper.classList.toggle('ai-opened', isOpen);
@@ -38,6 +39,7 @@
             if (!isOpen) chat.stop();
         };
 
+        // --- Drawer State ---
         const setAiDrawerOpen = (open, trigger = null) => {
             aiDrawerOpen = open && mobileNavMq.matches;
             wrapper.classList.toggle('ai-drawer-open', aiDrawerOpen);
@@ -88,6 +90,7 @@
             target?.focus({ preventScroll: true });
         };
 
+        // --- Events ---
         firstPanel.addEventListener('click', (event) => {
             if (event.target.closest('button')) return;
             if (!wrapper.classList.contains('ai-opened')) openDesktopPanel($('.widget__add'));
@@ -170,6 +173,7 @@
             setPanelOpen(false);
         });
 
+        // --- Initial State ---
         const initiallyOpen = wrapper.classList.contains('ai-opened');
         setPanelOpen(initiallyOpen);
         if (initiallyOpen) chat.start();

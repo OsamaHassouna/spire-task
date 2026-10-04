@@ -60,6 +60,7 @@
             }
         };
 
+        // --- Events ---
         toggle.addEventListener('click', () => setOpen(!isOpen()));
         list.addEventListener('change', (event) => {
             if (event.target.matches('input[type="checkbox"]')) updateCount();

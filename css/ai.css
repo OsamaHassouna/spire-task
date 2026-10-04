@@ -1,6 +1,6 @@
 @layer features {
 
-
+    /* === Widgets Panel || Collapsed === */
     .panel-widgets {
         padding-block: 30px;
         padding-inline: 18px;
@@ -175,6 +175,7 @@
         animation-play-state: paused;
     }
 
+    /* === Widgets Panel || Reduced Motion === */
     @media (prefers-reduced-motion: reduce) {
         .ticker__track {
             animation: none;
@@ -195,6 +196,7 @@
         }
     }
 
+    /* === Chat Panel === */
     .spire-wrapper.ai-opened {
         --rail-w: 472px;
     }
@@ -261,6 +263,7 @@
         color: var(--text-muted)
     }
 
+    /* chat footer */
     .chat__footer {
         position: relative;
         z-index: 1;
@@ -337,13 +340,13 @@
         --composer-btn-hover-shadow-clr: #ff375e66;
     }
 
+    /* files tray */
     .files-wrapper {
         position: relative;
         z-index: 1;
         visibility: hidden;
         transition: none;
         width: calc(100% - 14px);
-        /* Reserve only the collapsed header; the tray grows upward over messages. */
         height: 37px;
         margin-inline: auto;
         margin-block-end: -4px;
@@ -496,6 +499,7 @@
         --file-type-bg: #fff0e8;
     }
 
+    /* on / off switch */
     .switch {
         --knob-w: 14px;
         --knob-gap: 3px;
@@ -530,6 +534,7 @@
         inset-inline-start: calc(100% - var(--knob-w) - var(--knob-gap));
     }
 
+    /* chat content */
     .panel-chat .chat__content {
         display: flex;
         flex-direction: column;
@@ -644,6 +649,7 @@
         border-end-start-radius: 0;
     }
 
+    /* thinking */
     .msg--thinking {
         display: flex;
         align-items: center;
@@ -656,6 +662,7 @@
         animation: spin 1.2s linear infinite;
     }
 
+    /* numbers */
     .cites {
         display: inline;
     }
@@ -712,10 +719,12 @@
         display: block;
     }
 
+    /* direction */
     [dir="rtl"] .directional-icon {
         transform: scaleX(-1);
     }
 
+    /* === Chat Panel || Reduced Motion === */
     @media (prefers-reduced-motion: reduce) {
 
         .msg,
@@ -727,9 +736,8 @@
         }
     }
 
+    /* === AI Drawer || Phones & Tablets === */
     @media screen and (max-width: 1023.98px) {
-
-        /* The fixed rail stays mounted so both opening and closing animate. */
         .spr-ai {
             display: block;
             position: fixed;
@@ -755,7 +763,6 @@
             transition-delay: 0s;
         }
 
-        /* Reset mounted content animations while the mobile drawer is closed. */
         .spire-wrapper:not(.ai-drawer-open) .spr-ai *,
         .spire-wrapper:not(.ai-drawer-open) .spr-ai *::before,
         .spire-wrapper:not(.ai-drawer-open) .spr-ai *::after {
@@ -815,7 +822,6 @@
             transform: skew(-40deg, 0deg) scale(0.6);
             rotate: 115deg;
         }
-
 
         .welcome__head,
         .welcome__tools,
@@ -896,7 +902,6 @@
             backdrop-filter: blur(10px);
         }
 
-
         .welcome__tools .widget__label {
             font-size: 0.75rem;
             line-height: 1.25;
@@ -925,6 +930,7 @@
             line-height: 1.1875rem;
         }
 
+        /* out-of-gate bars */
         .bars {
             display: flex;
             gap: 6px;
@@ -1085,6 +1091,7 @@
             transition-delay: 0s;
         }
 
+        /* === AI Drawer || Small Phones === */
         @media screen and (max-width: 399.98px) {
             .panel-welcome {
                 padding-inline: 20px;
@@ -1101,12 +1108,14 @@
         }
     }
 
+    /* === Responsive Visibility === */
     @media screen and (min-width: 1024px) {
         .mobile-only {
             display: none;
         }
     }
 
+    /* === Responsive Visibility & Focus === */
     @media screen and (max-width: 1023.98px) {
         .desktop-only {
             display: none;
@@ -1120,6 +1129,7 @@
         }
     }
 
+    /* === Reduced Motion === */
     @media (prefers-reduced-motion: reduce) {
 
         .spr-sidenav,
@@ -1139,7 +1149,8 @@
         }
     }
 
-
+    /* === Keyframes === */
+    /* hero */
     @keyframes spin-in {
         from {
             opacity: 0;
@@ -1153,7 +1164,7 @@
         }
     }
 
-    /* The higher composer layer masks the tray as it slides upward. */
+    /* chat panel */
     @keyframes files-tray-reveal {
         from {
             transform: translateY(calc(100% - 4px));
@@ -1204,7 +1215,6 @@
             transform: translateX(0);
         }
 
-        /* Scroll until the end of the first copy is visible, then hold for 2s. */
         68.75%,
         81.25% {
             transform: translateX(calc((-50% + var(--ticker-half-gap) + var(--ticker-viewport)) * var(--dir)));

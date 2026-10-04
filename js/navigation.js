@@ -17,6 +17,7 @@
         const focusableLinks = () => $$('button, a[href]', sidenav)
             .filter((element) => !element.disabled && element.getClientRects().length);
 
+        // --- State ---
         const setNavOpen = (open, restoreFocus = true) => {
             navOpen = open && mobileNavMq.matches;
             document.documentElement.classList.toggle('nav-open', navOpen);
@@ -50,6 +51,7 @@
             }
         };
 
+        // --- Events ---
         navToggle.addEventListener('click', () => setNavOpen(!navOpen));
         navClose.addEventListener('click', () => setNavOpen(false));
         navBackdrop.addEventListener('click', () => setNavOpen(false));

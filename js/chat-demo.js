@@ -38,6 +38,7 @@
             behavior: reducedMotionMq.matches ? 'auto' : 'smooth',
         });
 
+        // --- Timing & Rendering ---
         function scheduleChat(callback, delay) {
             const timer = window.setTimeout(() => {
                 chatTimers.delete(timer);
@@ -93,6 +94,7 @@
             return message;
         }
 
+        // --- Conversation Flow ---
         function send(text, { fromSuggestion = false } = {}) {
             text = text.trim();
             if (!text || busy || !wrapper.classList.contains('ai-opened')) return false;
@@ -144,6 +146,7 @@
             }, OPEN_DELAY_MS);
         }
 
+        // --- Events ---
         chatLog.addEventListener('click', (event) => {
             const suggestion = event.target.closest('[data-suggest]');
             if (suggestion && !suggestion.disabled) {

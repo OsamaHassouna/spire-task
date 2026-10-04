@@ -1,5 +1,6 @@
 @layer layout {
 
+    /* === Layout === */
     .spire-wrapper {
         display: grid;
         grid-template-columns: [content-start] minmax(0, 1fr) [content-end-ai-start] var(--rail-w) [ai-end];
@@ -11,12 +12,14 @@
         transition: grid-template-columns var(--dur) var(--ease-out);
     }
 
+    /* === Content === */
     .spr-content {
         position: relative;
         height: 100%;
         grid-column: content-start / content-end-ai-start;
     }
 
+    /* === Header === */
     .spr-header {
         display: flex;
         align-items: center;
@@ -82,6 +85,7 @@
         color: var(--text-muted);
     }
 
+    /* === Main === */
     .spr-main {
         min-height: 500px;
         display: grid;
@@ -89,6 +93,7 @@
         gap: var(--gap);
     }
 
+    /* === Nav === */
     .spr-sidenav {
         position: sticky;
         top: 72px;
@@ -180,9 +185,8 @@
         gap: 4px;
     }
 
+    /* === Nav || Desktop === */
     @media screen and (min-width: 1024px) {
-
-        /* Keep names available to assistive technology in the icon-only rail. */
         .sidenav__link .sidenav__label,
         .sidenav__profile .sidenav__user {
             position: absolute;
@@ -198,6 +202,7 @@
 
     }
 
+    /* === Content || Main === */
     .content-wrapper {
         container: hero-region / inline-size;
         min-width: 0;
@@ -208,6 +213,7 @@
         box-shadow: 0 7px 10px rgb(0 0 0 / 0.03);
     }
 
+    /* === AI Panel === */
     .spr-ai {
         position: sticky;
         inset-inline-end: 0;
@@ -231,6 +237,7 @@
 
 @layer components {
 
+    /* === Buttons === */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -263,6 +270,7 @@
         scroll-margin-block-start: 90px;
     }
 
+    /* === Drawer Defaults & Focus === */
     .sidenav__head,
     .panel-welcome,
     .ai-backdrop,
@@ -278,6 +286,7 @@
         outline-offset: 3px;
     }
 
+    /* === Compact Layout || Phones & Tablets === */
     @media screen and (max-width: 1023.98px) {
 
         html.nav-open,
@@ -340,6 +349,7 @@
         }
     }
 
+    /* === Compact Layout || Tablets === */
     @media screen and (min-width: 768px) and (max-width: 1023.98px) {
         .spire-wrapper {
             padding-inline: 12px;
@@ -371,6 +381,7 @@
         }
     }
 
+    /* === Side Navigation || Phones & Tablets === */
     @media screen and (max-width: 1023.98px) {
         .spr-sidenav {
             position: fixed;
