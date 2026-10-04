@@ -427,6 +427,7 @@
 
     /*=== Content || Main ===*/
     .content-wrapper {
+        container: hero-region / inline-size;
         min-width: 0;
         padding: 20px;
         background: white;
@@ -940,6 +941,70 @@
 
         .hero__content h1 span {
             display: block;
+        }
+    }
+
+    /* Compact only the hero copy/form when the desktop AI panel narrows the main column. */
+    @media screen and (min-width: 1024px) {
+        @container hero-region (max-width: 580px) {
+            .hero {
+                padding-inline: 28px;
+            }
+
+            .hero__content {
+                flex: 1 1 auto;
+                width: 100%;
+                max-width: none;
+                text-align: center;
+            }
+
+            .hero__content h1 {
+                font-size: clamp(18px, 5.65vw, 28px);
+                line-height: 1.55;
+                letter-spacing: -.5px;
+                margin-bottom: 36px;
+                text-align: center;
+            }
+
+            .hero__content h1 span,
+            .hero__content p span {
+                display: block;
+            }
+
+            .hero__content p {
+                font-size: clamp(16px, 4.1vw, 20px);
+                line-height: 1.65;
+                margin-bottom: 12px;
+            }
+
+            .hero .ask {
+                min-height: 56px;
+                align-items: center;
+                gap: 4px;
+                padding: 8px 10px;
+            }
+
+            .ask__cta {
+                flex: none;
+                min-height: 40px;
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .ask__orb {
+                display: none;
+            }
+
+            .ask>input {
+                width: 0;
+                min-width: 0;
+            }
+
+            .ask__mic {
+                flex: none;
+                width: 40px;
+                height: 40px;
+            }
         }
     }
 
@@ -2391,7 +2456,9 @@
         .hero__asterisk,
         .badge__ring,
         .panel__art img,
-        .battery__fill {
+        .battery__fill,
+        .bars__bar::after,
+        .panel__welcome .panel__orb {
             animation: none;
         }
     }
