@@ -10,6 +10,10 @@ document.querySelector(".skip-link")?.addEventListener("click", () => {
   document.querySelector("#main")?.focus();
 });
 
+document.querySelector(".search")?.addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
 initNavigation({ mobileNavMq });
 
 const wrapper = document.querySelector(".spire-wrapper");

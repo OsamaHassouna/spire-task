@@ -141,9 +141,9 @@
 
         /* compact hero values shared by viewport and container layouts */
         --hero-compact-padding-inline: 28px;
-        --hero-compact-title-size: clamp(18px, 5.65vw, 28px);
+        --hero-compact-title-size: clamp(1.125rem, 5.65vw, 1.75rem);
         --hero-compact-title-margin: 36px;
-        --hero-compact-text-size: clamp(16px, 4.1vw, 20px);
+        --hero-compact-text-size: clamp(1rem, 4.1vw, 1.25rem);
         --hero-compact-text-margin: 12px;
         --hero-compact-control-size: 40px;
         --hero-compact-form-height: 56px;
@@ -151,10 +151,14 @@
 
     [dir="rtl"] {
         --dir: -1;
+        --offscreen-inline-start: 100%;
+        --offscreen-inline-end: -100%;
     }
 
     [dir="ltr"] {
         --dir: 1;
+        --offscreen-inline-start: -100%;
+        --offscreen-inline-end: 100%;
     }
 
     /* Two-color focus indicators remain visible on white and purple surfaces. */
@@ -187,20 +191,6 @@
         transform: none;
     }
 
-    /*=== Reduced Motion ===*/
-    @media (prefers-reduced-motion: reduce) {
-
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms;
-            animation-iteration-count: 1;
-            animation-delay: 0s;
-            transition-duration: 0.01ms;
-            transition-delay: 0s;
-            scroll-behavior: auto;
-        }
-    }
 }
 
 @layer utilities {
@@ -221,6 +211,21 @@
         clip: rect(0 0 0 0);
         white-space: nowrap;
         border: 0;
+    }
+
+    /* This layer follows theme, so later component animations cannot override it. */
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms;
+            animation-iteration-count: 1;
+            animation-delay: 0s;
+            transition-duration: 0.01ms;
+            transition-delay: 0s;
+            scroll-behavior: auto;
+        }
     }
 
     /*=== ===*/

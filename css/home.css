@@ -18,7 +18,7 @@
     }
 
     .hero__content h1 {
-        font-size: 28px;
+        font-size: 1.75rem;
         font-weight: 600;
         line-height: 43px;
         margin-bottom: 47px;
@@ -27,7 +27,7 @@
     }
 
     .hero__content p {
-        font-size: 20px;
+        font-size: 1.25rem;
         line-height: 34px;
         margin-bottom: 70px;
     }
@@ -169,7 +169,7 @@
         grid-area: 1 / 1;
         fill: white;
         width: 160px;
-        font-size: 11px;
+        font-size: 0.6875rem;
         animation: spin 24s linear infinite;
     }
 
@@ -183,7 +183,7 @@
         }
 
         .hero__content h1 {
-            font-size: 48.5px;
+            font-size: 3.03125rem;
             line-height: 1.466;
             text-align: start;
         }
@@ -237,7 +237,7 @@
                 flex: none;
                 min-height: var(--hero-compact-control-size);
                 padding: 10px 16px;
-                font-size: 14px;
+                font-size: 0.875rem;
             }
 
             .ask__orb {
@@ -302,7 +302,7 @@
             flex: none;
             min-height: var(--hero-compact-control-size);
             padding: 10px 16px;
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .ask__orb {
@@ -368,7 +368,7 @@
         }
 
         .hero__content h1 {
-            font-size: 32px;
+            font-size: 2rem;
             line-height: 1.45;
             margin-bottom: 28px;
         }
@@ -412,7 +412,7 @@
     }
 
     .services__header h2 {
-        font-size: 18px;
+        font-size: 1.125rem;
         font-weight: 500;
         line-height: 22px;
         color: var(--onyx);
@@ -429,7 +429,7 @@
     }
 
     .services__header>a {
-        font-size: 14px;
+        font-size: 0.875rem;
         font-weight: 500;
         line-height: 22px;
         color: var(--coral);
@@ -506,12 +506,12 @@
         }
 
         .services__header h2 {
-            font-size: clamp(14px, 3.6vw, 18px);
+            font-size: clamp(0.875rem, 3.6vw, 1.125rem);
         }
 
         .services__header>a {
             flex: none;
-            font-size: 13px;
+            font-size: 0.8125rem;
         }
 
         .services__list {
@@ -525,8 +525,9 @@
         }
 
         .service-card {
-            padding: 18px 28px 18px 12px;
-            font-size: 14px;
+            padding-block: 18px;
+            padding-inline: 12px 28px;
+            font-size: 0.875rem;
         }
     }
 
@@ -537,12 +538,12 @@
         }
 
         .services__header>a {
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .service-card {
             padding-block: 20px;
-            font-size: 16px;
+            font-size: 1rem;
         }
     }
 

@@ -94,7 +94,7 @@
     }
 
     .battery__value {
-        font-size: 15px;
+        font-size: 0.9375rem;
         font-weight: 500;
         line-height: 1.5;
         color: white;
@@ -117,7 +117,7 @@
     }
 
     .widget__label {
-        font-size: 11px;
+        font-size: 0.6875rem;
         font-weight: 400;
         text-align: center;
         color: var(--onyx);
@@ -153,7 +153,7 @@
         align-items: center;
         gap: var(--ticker-gap);
         width: max-content;
-        font-size: 11px;
+        font-size: 0.6875rem;
         line-height: 18.5px;
         color: var(--coral-dark);
         white-space: nowrap;
@@ -243,13 +243,13 @@
     }
 
     .panel-chat .head__content h2 {
-        font-size: 18px;
+        font-size: 1.125rem;
         font-weight: 500;
         line-height: 20px;
     }
 
     .panel-chat .head__content h2 span {
-        font-size: 10px;
+        font-size: 0.625rem;
         font-weight: 400;
         line-height: 18px;
         border-radius: 40vw;
@@ -260,7 +260,7 @@
     }
 
     .panel-chat .head__content p {
-        font-size: 11px;
+        font-size: 0.6875rem;
         font-weight: 400;
         line-height: 17px;
         color: var(--text-muted)
@@ -295,7 +295,7 @@
     .composer__input {
         border: 0;
         outline-color: transparent;
-        font-size: 14px;
+        font-size: 0.875rem;
         font-weight: 400;
         line-height: 18px;
         color: var(--onyx);
@@ -390,7 +390,7 @@
         min-height: 35px;
         padding-block: 3px 7px;
         padding-inline: 14px 8px;
-        font-size: 13px;
+        font-size: 0.8125rem;
         font-weight: 400;
         color: var(--onyx);
         opacity: 0.5;
@@ -481,12 +481,12 @@
     }
 
     .file__name {
-        font-size: 13px;
+        font-size: 0.8125rem;
         color: var(--onyx);
     }
 
     .file__time {
-        font-size: 11px;
+        font-size: 0.6875rem;
         color: var(--text-muted);
     }
 
@@ -633,7 +633,7 @@
         display: inline-flex;
         align-items: center;
         background: var(--msg-bubble-bg, var(--bg));
-        font-size: 13px;
+        font-size: 0.8125rem;
         line-height: 24px;
         font-weight: 400;
         color: black;
@@ -667,7 +667,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        font-size: 12px;
+        font-size: 0.75rem;
         color: var(--text-thinking);
     }
 
@@ -693,7 +693,7 @@
         height: 25px;
         border-radius: 54px;
         background: var(--purple-10);
-        font-size: 14px;
+        font-size: 0.875rem;
         line-height: 1;
         color: var(--onyx);
     }
@@ -719,7 +719,7 @@
     }
 
     .cite-more__dots {
-        font-size: 8px;
+        font-size: 0.5rem;
         letter-spacing: 1px;
     }
 
@@ -751,7 +751,8 @@
             display: block;
             position: fixed;
             z-index: 30;
-            inset: 0 0 0 auto;
+            inset-block: 0;
+            inset-inline: auto 0;
             width: 100%;
             height: 100dvh;
             margin: 0;
@@ -759,7 +760,7 @@
             opacity: 1;
             visibility: hidden;
             pointer-events: none;
-            transform: translateX(100%);
+            transform: translateX(var(--offscreen-inline-end));
             transition: transform .28s var(--ease-out), visibility 0s .28s;
             background: var(--bg);
         }
@@ -866,7 +867,7 @@
 
         .welcome__brand h2,
         .panel-chat .head__content h2 {
-            font-size: 18px;
+            font-size: 1.125rem;
             font-weight: 500;
             line-height: 1.2224;
             margin-top: 5px;
@@ -914,7 +915,7 @@
 
 
         .welcome__tools .widget__label {
-            font-size: 12px;
+            font-size: 0.75rem;
             line-height: 1.25;
         }
 
@@ -925,7 +926,7 @@
         }
 
         .welcome__tools .battery::after {
-            right: -5px;
+            inset-inline-end: -5px;
             width: 2px;
             height: 8px;
         }
@@ -937,7 +938,7 @@
 
         .welcome__tools .battery__value {
             max-width: 29px;
-            font-size: 14px;
+            font-size: 0.875rem;
             line-height: 19px;
         }
 
@@ -1021,13 +1022,13 @@
 
         .panel__welcome h2 {
             color: black;
-            font-size: 20px;
+            font-size: 1.25rem;
             font-weight: 500;
             line-height: 1.35;
         }
 
         .panel__welcome p {
-            font-size: 16px;
+            font-size: 1rem;
             line-height: 1.5;
         }
 
@@ -1035,7 +1036,8 @@
             flex: none;
             width: 100%;
             min-height: 70px;
-            padding: 12px 13px 12px 18px;
+            padding-block: 12px;
+            padding-inline: 18px 13px;
             border-color: #eeeaf0;
             border-radius: 12px;
             box-shadow: 0 7px 18px rgb(29 37 45 / 0.04);
