@@ -30,8 +30,8 @@
         <div class="spr-content">
             <!-- ============ Header ============ -->
             <header class="spr-header" role="banner">
-                <button class="btn btn-icon nav-toggle mobile-only" type="button"
-                    aria-label="Open navigation" aria-controls="sidenav" aria-expanded="false">
+                <button class="btn btn-icon nav-toggle mobile-only" type="button" aria-label="Open navigation"
+                    aria-controls="sidenav" aria-expanded="false">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M4 6h16M4 12h16M4 18h11" stroke="currentColor" stroke-width="1.6" />
                     </svg>
@@ -128,7 +128,8 @@
                         <img src="assets/logo-text.svg" alt="Spire" width="88" height="38">
                         <button class="sidenav__close" type="button" aria-label="Close navigation">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
                             </svg>
                         </button>
                     </div>
@@ -395,8 +396,8 @@
                     </div>
 
                     <div class="widget__actions">
-                        <button class="widget__add" type="button" aria-label="Open Spire AI"
-                            aria-controls="ai-panel" aria-expanded="false">
+                        <button class="widget__add" type="button" aria-label="Open Spire AI" aria-controls="ai-panel"
+                            aria-expanded="false">
                             <img src="assets/icons/plus.svg" alt="" width="31" height="31">
                         </button>
                     </div>
@@ -429,6 +430,13 @@
                             height="17">
                     </button>
                 </div>
+                <button class="panel__back mobile-only" type="button" aria-label="Back to Spire AI welcome"
+                    data-ai-back>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="m14 6-6 6 6 6" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
                 <div class="chat__content">
 
                     <ol class="msgs__list" role="log" aria-label="Conversation with Spire AI" aria-live="polite"
@@ -554,17 +562,59 @@
             </section>
 
             <section class="panel-welcome" aria-hidden="true">
-                <button class="panel__close welcome__close" type="button" aria-label="Close Spire AI" data-ai-close>
-                    <img src="assets/icons/close.svg" alt="" width="17" height="17">
-                </button>
+                <div class="welcome__head">
+                    <div class="welcome__brand">
+                        <img src="assets/images/ai-orb-m.png" alt="" width="27" height="27">
+                        <h2>Spire AI</h2>
+                    </div>
+                    <button class="panel__close welcome__close" type="button" aria-label="Close Spire AI" data-ai-close>
+                        <img src="assets/icons/close.svg" alt="" width="17" height="17">
+                    </button>
+                </div>
+
+                <div class="welcome__tools" role="group" aria-label="Spire AI shortcuts">
+                    <div class="welcome__widgets">
+                        <div class="panel__widget">
+                            <span class="battery">
+                                <span class="battery__fill"></span>
+                                <span class="battery__value">4H</span>
+                            </span>
+                            <span class="widget__label">Attendance</span>
+                        </div>
+                        <div class="panel__widget panel__widget--alert">
+                            <span class="bars" aria-hidden="true">
+                                <span class="bars__bar bars__bar--in"></span>
+                                <span class="bars__bar bars__bar--out"></span>
+                            </span>
+                            <span class="widget__label">Out of gate</span>
+                        </div>
+                    </div>
+                    <button class="welcome__add" type="button" aria-label="Add a Spire AI shortcut">
+                        <img src="assets/icons/plus-m.svg" alt="" width="27" height="27">
+                    </button>
+                </div>
+
                 <div class="panel__content">
                     <div class="panel__welcome">
-                        <img class="panel__orb" src="assets/images/ai-orb-lg.png" alt="" width="40" height="38">
-                        <h2>Welcome to Spire AI</h2>
-                        <p>Ask questions, get answers, and explore your workday with the power of AI.</p>
-                        <button class="btn welcome__start" type="button" data-ai-start>Start a conversation</button>
+                        <img class="panel__orb" src="assets/images/ai-orb-lg.png" alt="" width="64" height="61">
+                        <h2>Welcome back, Ahmed.</h2>
+                        <p>How may I assist you?</p>
                     </div>
                 </div>
+
+                <form class="composer welcome__composer" action="#">
+                    <label class="visually-hidden" for="welcome-ai-input">Message Spire AI</label>
+                    <input class="composer__input" id="welcome-ai-input" name="message" type="text"
+                        placeholder="ask spire AI" autocomplete="off">
+                    <div class="composer__actions">
+                        <button class="composer__mic" type="button" aria-label="Ask by voice" aria-pressed="false">
+                            <img src="assets/icons/mic-sm.svg" alt="" width="18" height="18">
+                        </button>
+                        <button class="composer__send" type="submit" aria-label="Send message">
+                            <img src="assets/icons/arrow-long-up.svg" alt="" width="13" height="18">
+                        </button>
+                    </div>
+                </form>
             </section>
         </aside>
     </div>

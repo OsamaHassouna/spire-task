@@ -113,6 +113,8 @@
     const aiPanel = $('.spr-ai');
     const welcomePanel = $('.panel-welcome');
     const welcomeClose = $('.welcome__close');
+    const welcomeForm = $('.welcome__composer');
+    const welcomeInput = $('#welcome-ai-input');
     const aiBackdrop = $('.ai-backdrop');
     const heroForm = $('.ask');
     const heroInput = $('#hero-ask');
@@ -234,9 +236,20 @@
     });
 
     welcomeClose.addEventListener('click', () => setAiDrawerOpen(false));
+    $('[data-ai-back]').addEventListener('click', () => {
+        setPanelOpen(false);
+        welcomeClose.focus({ preventScroll: true });
+    });
     aiBackdrop.addEventListener('click', () => setAiDrawerOpen(false));
-    $('[data-ai-start]').addEventListener('click', () => {
+    $('[data-ai-start]')?.addEventListener('click', () => {
         setPanelOpen(true);
+        closeButton.focus({ preventScroll: true });
+    });
+    welcomeForm?.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const question = welcomeInput.value.trim();
+        setPanelOpen(true, question || undefined);
+        welcomeInput.value = '';
         closeButton.focus({ preventScroll: true });
     });
     document.addEventListener('keydown', (event) => {
