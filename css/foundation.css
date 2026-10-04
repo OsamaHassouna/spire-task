@@ -100,7 +100,6 @@
 
         /* neutrals */
         --onyx: #1d252d;
-        --onyx-50: rgb(29 37 45 / 0.5);
         --white: #fff;
         --bg: #f8f8f8;
         --line: #e0e6eb;
@@ -119,13 +118,11 @@
         /* motion */
         --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
         --dur: 0.2s;
-        --ease-in: cubic-bezier(0.4, 0, 1, 1);
         --ease-out: cubic-bezier(0, 0, 0.2, 1);
 
         /* layout */
         --nav-w: 115px;
         --rail-w: 120px;
-        --panel-w: 473px;
         --gap: 10px;
 
         /* body */
@@ -142,19 +139,21 @@
         --hero-compact-text-margin: 12px;
         --hero-compact-control-size: 40px;
         --hero-compact-form-height: 56px;
+        --hero-art-dim: .55;
     }
 
     /* === Direction === */
-    [dir="rtl"] {
-        --dir: -1;
-        --offscreen-inline-start: 100%;
-        --offscreen-inline-end: -100%;
-    }
-
+    :root,
     [dir="ltr"] {
         --dir: 1;
         --offscreen-inline-start: -100%;
         --offscreen-inline-end: 100%;
+    }
+
+    [dir="rtl"] {
+        --dir: -1;
+        --offscreen-inline-start: 100%;
+        --offscreen-inline-end: -100%;
     }
 
     /* === Focus === */

@@ -78,6 +78,7 @@
             }
         };
 
+        // --- Desktop Panel ---
         const openDesktopPanel = (trigger, initialQuestion) => {
             aiReturnFocus = trigger;
             setPanelOpen(true, initialQuestion);

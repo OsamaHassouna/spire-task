@@ -196,7 +196,7 @@
 
     /* === Hero || Desktop === */
     @media screen and (min-width: 1024px) {
-        @container hero-region (min-width: 670.01px) {
+        @container hero-region (width > 670px) {
             .hero {
                 padding-inline: 100px 0;
             }
@@ -253,6 +253,12 @@
                 height: 48px;
             }
         }
+
+        /* === Hero || AI Open === */
+        .ai-opened .arch,
+        .ai-opened .badge {
+            opacity: var(--hero-art-dim);
+        }
     }
 
     /* === Hero || Phones & Tablets === */
@@ -294,7 +300,7 @@
             width: 158%;
             height: auto;
             translate: calc(var(--dir) * -18.4%) -8.6%;
-            opacity: .55;
+            opacity: var(--hero-art-dim);
         }
     }
 

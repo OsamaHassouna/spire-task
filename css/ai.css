@@ -108,7 +108,8 @@
         display: flex;
         z-index: -1;
         grid-area: 1/1;
-        border-radius: 2px 0 0 2px;
+        border-start-start-radius: 2px;
+        border-end-start-radius: 2px;
         transform-origin: calc(50% - 50% * var(--dir)) 50%;
         animation: battery-fill 1.2s var(--ease-out) 0.4s both;
     }
@@ -452,7 +453,7 @@
         border-color: var(--lilac-light);
     }
 
-    .file_head {
+    .file__head {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -685,10 +686,6 @@
         color: var(--onyx);
     }
 
-    .cite:not([hidden]) {
-        animation: pop 0.25s var(--ease-out);
-    }
-
     .cite-more {
         display: inline-grid;
         place-items: center;
@@ -730,7 +727,6 @@
         .msg,
         .msg__thinking-icon,
         .dots__dot,
-        .cites .cite,
         .files-wrapper.is-visible .files-box {
             animation: none;
         }
@@ -1049,6 +1045,10 @@
             --msg-bubble-bg: var(--white);
         }
 
+        .msgs__list {
+            padding-inline: 8px;
+        }
+
         .panel-chat .chat__head {
             margin-inline: 14px;
             padding-bottom: 0;
@@ -1158,9 +1158,46 @@
         }
     }
 
+    /* shared */
     @keyframes spin {
         to {
             transform: rotate(360deg);
+        }
+    }
+
+    /* widgets panel */
+    @keyframes battery-fill {
+        from {
+            transform: scaleX(0);
+        }
+    }
+
+    @keyframes ticker {
+
+        0%,
+        12.5% {
+            transform: translateX(0);
+        }
+
+        68.75%,
+        81.25% {
+            transform: translateX(calc((-50% + var(--ticker-half-gap) + var(--ticker-viewport)) * var(--dir)));
+        }
+
+        100% {
+            transform: translateX(calc((-50% - var(--ticker-half-gap)) * var(--dir)));
+        }
+    }
+
+    @keyframes twinkle {
+
+        0%,
+        100% {
+            transform: scale(1) rotate(0);
+        }
+
+        50% {
+            transform: scale(1.06) rotate(6deg);
         }
     }
 
@@ -1202,29 +1239,6 @@
         }
     }
 
-    @keyframes battery-fill {
-        from {
-            transform: scaleX(0);
-        }
-    }
-
-    @keyframes ticker {
-
-        0%,
-        12.5% {
-            transform: translateX(0);
-        }
-
-        68.75%,
-        81.25% {
-            transform: translateX(calc((-50% + var(--ticker-half-gap) + var(--ticker-viewport)) * var(--dir)));
-        }
-
-        100% {
-            transform: translateX(calc((-50% - var(--ticker-half-gap)) * var(--dir)));
-        }
-    }
-
     @keyframes files-slide-open {
         from {
             max-height: 0;
@@ -1237,18 +1251,7 @@
         }
     }
 
-    @keyframes twinkle {
-
-        0%,
-        100% {
-            transform: scale(1) rotate(0);
-        }
-
-        50% {
-            transform: scale(1.06) rotate(6deg);
-        }
-    }
-
+    /* ai drawer */
     @keyframes float {
         50% {
             transform: translateY(-6px);

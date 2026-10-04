@@ -101,7 +101,6 @@
             const initial = turn === 0;
             turn += 1;
             setBusy(true);
-            chatPanel.dataset.chatState = 'user';
             const user = clone(templates.user);
             $('.msg__text', user).textContent = text;
             $('.msg__icon', user).hidden = !fromSuggestion;
@@ -109,7 +108,6 @@
             if (initial) filesTray.setVisible(true);
 
             scheduleChat(() => {
-                chatPanel.dataset.chatState = 'thinking';
                 const thinking = clone(templates.thinking);
                 appendMessage(thinking);
                 scheduleChat(() => {
@@ -117,7 +115,6 @@
                     thinking.remove();
                     appendMessage(renderReply(initial), follow);
                     setBusy(false);
-                    chatPanel.dataset.chatState = initial ? 'suggestions' : 'complete';
                 }, THINKING_MS);
             }, reducedMotionMq.matches ? 0 : MESSAGE_ENTER_MS);
             return true;
@@ -130,7 +127,6 @@
             filesTray.setVisible(false);
             $('.msg--thinking', chatLog)?.remove();
             setBusy(false);
-            chatPanel.dataset.chatState = 'idle';
         }
 
         function start(initialQuestion = FIRST_QUESTION) {
@@ -139,7 +135,6 @@
             chatLog.scrollTop = 0;
             turn = 0;
             setBusy(true);
-            chatPanel.dataset.chatState = 'waiting';
             scheduleChat(() => {
                 setBusy(false);
                 send(initialQuestion);

@@ -24,6 +24,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 14px;
         padding-block: 12px 10px;
         padding-inline: 18px 0;
         position: sticky;
@@ -32,10 +33,15 @@
         z-index: 1;
     }
 
+    .brand {
+        flex: none;
+    }
+
     .header__toolbar {
         display: flex;
         align-items: center;
         gap: 14px;
+        min-width: 0;
     }
 
     .header__toolbar>*:not(:hover, :focus-within) {
@@ -51,6 +57,7 @@
         max-height: 50px;
         transition: width var(--dur) var(--ease-out);
         width: 268px;
+        min-width: 0;
     }
 
     .search:focus-within,
@@ -71,6 +78,7 @@
 
     .search__input {
         flex: 1;
+        min-width: 0;
         border: 0;
         font-size: 0.875rem;
         font-weight: 400;
@@ -81,7 +89,7 @@
         outline-color: transparent;
     }
 
-    .search__field::placeholder {
+    .search__input::placeholder {
         color: var(--text-muted);
     }
 
@@ -247,7 +255,6 @@
         font-weight: 600;
         text-align: center;
         text-decoration: none;
-        border-radius: 0.25rem;
         transition: background-color var(--dur) ease-in-out, color var(--dur) ease-in-out;
         border: 1px solid transparent;
         border-radius: 12px;
@@ -512,10 +519,6 @@
             opacity: 1;
             visibility: visible;
             transition-delay: 0s;
-        }
-
-        .msgs__list {
-            padding-inline: 8px;
         }
     }
 
