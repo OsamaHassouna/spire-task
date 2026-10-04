@@ -1,14 +1,5 @@
 @layer layout {
 
-    /* === LAYOUT === */
-    .container {
-        width: 100%;
-        max-width: var(--container-max-width, 1200px);
-        margin-inline: auto;
-        padding-inline: var(--container-padding-inline, 1rem);
-    }
-
-    /*=== Layout ===*/
     .spire-wrapper {
         display: grid;
         grid-template-columns: [content-start] minmax(0, 1fr) [content-end-ai-start] var(--rail-w) [ai-end];
@@ -20,14 +11,12 @@
         transition: grid-template-columns var(--dur) var(--ease-out);
     }
 
-    /*=== Content ===*/
     .spr-content {
         position: relative;
         height: 100%;
         grid-column: content-start / content-end-ai-start;
     }
 
-    /*=== Header ===*/
     .spr-header {
         display: flex;
         align-items: center;
@@ -77,15 +66,15 @@
         aspect-ratio: 1 / 1;
     }
 
-    .search__field input {
+    .search__input {
         flex: 1;
         border: 0;
         font-size: 0.875rem;
         font-weight: 400;
-        line-height: 17px;
+        line-height: 1.0625rem;
     }
 
-    .search__field input:focus-visible {
+    .search__input:focus-visible {
         outline-color: transparent;
     }
 
@@ -93,7 +82,6 @@
         color: var(--text-muted);
     }
 
-    /*=== Main ===*/
     .spr-main {
         min-height: 500px;
         display: grid;
@@ -101,7 +89,6 @@
         gap: var(--gap);
     }
 
-    /*=== Nav===*/
     .spr-sidenav {
         position: sticky;
         top: 72px;
@@ -134,7 +121,7 @@
         gap: 10px;
     }
 
-    .sidenav__list li {
+    .sidenav__item {
         display: flex;
         align-items: center;
         justify-content: flex-start;
@@ -178,7 +165,7 @@
         background: var(--purple-10);
     }
 
-    .sidenav__profile>img {
+    .sidenav__avatar {
         border-radius: 50%;
         width: 41px;
         height: 41px;
@@ -211,7 +198,6 @@
 
     }
 
-    /*=== Content || Main ===*/
     .content-wrapper {
         container: hero-region / inline-size;
         min-width: 0;
@@ -222,8 +208,6 @@
         box-shadow: 0 7px 10px rgb(0 0 0 / 0.03);
     }
 
-    /*=== === ===*/
-    /*=== AI Panel ===*/
     .spr-ai {
         position: sticky;
         inset-inline-end: 0;
@@ -247,7 +231,6 @@
 
 @layer components {
 
-    /* === COMPONENTS === */
     .btn {
         display: inline-flex;
         align-items: center;
@@ -265,11 +248,6 @@
         background-color: var(--btn-bg, var(--white));
     }
 
-    .btn-primary {
-        --btn-bg: #007bff;
-        --btn-clr: #fff;
-    }
-
     .btn-icon {
         padding: 0.5rem;
         min-width: 50px;
@@ -277,16 +255,14 @@
         border-color: var(--line);
     }
 
-    /*=== ===*/
 }
 
-@layer theme {
+@layer features {
 
     #main {
         scroll-margin-block-start: 90px;
     }
 
-    /*=== Drawer Defaults & Focus ===*/
     .sidenav__head,
     .panel-welcome,
     .ai-backdrop,
@@ -296,12 +272,12 @@
 
     .nav-toggle:focus-visible,
     .sidenav__close:focus-visible,
-    .spr-sidenav a:focus-visible {
+    .sidenav__link:focus-visible,
+    .sidenav__profile:focus-visible {
         outline: 2px solid var(--purple);
         outline-offset: 3px;
     }
 
-    /*=== Compact Layout || Phones & Tablets ===*/
     @media screen and (max-width: 1023.98px) {
 
         html.nav-open,
@@ -351,7 +327,7 @@
             border-radius: 12px;
         }
 
-        .spr-header [data-ai-open] img {
+        .ai-open__orb {
             width: 44px;
             height: auto;
             margin-top: 4px;
@@ -364,7 +340,6 @@
         }
     }
 
-    /*=== Compact Layout || Tablets ===*/
     @media screen and (min-width: 768px) and (max-width: 1023.98px) {
         .spire-wrapper {
             padding-inline: 12px;
@@ -396,7 +371,6 @@
         }
     }
 
-    /*=== Side Navigation || Phones & Tablets ===*/
     @media screen and (max-width: 1023.98px) {
         .spr-sidenav {
             position: fixed;
@@ -457,7 +431,7 @@
             margin: -4px;
         }
 
-        .sidenav__list li {
+        .sidenav__item {
             flex: none;
         }
 
@@ -495,7 +469,7 @@
             border-radius: 18px;
         }
 
-        .sidenav__profile>img {
+        .sidenav__avatar {
             width: 52px;
             height: 52px;
         }

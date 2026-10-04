@@ -1,4 +1,4 @@
-@layer reset, base, layout, components, theme, utilities;
+@layer reset, base, layout, components, features, utilities;
 
 @import url("./css/foundation.css");
 @import url("./css/shell.css");

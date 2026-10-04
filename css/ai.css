@@ -1,8 +1,5 @@
-@layer theme {
+@layer features {
 
-    /* === AI PANEL === */
-
-    /*=== Widgets Panel || Collapsed ===*/
 
     .panel-widgets {
         padding-block: 30px;
@@ -31,7 +28,7 @@
         gap: 37px;
     }
 
-    .panel__art img {
+    .panel__art-image {
         width: 64.4px;
         height: 68.53px;
         transform-origin: 40% 45%;
@@ -61,7 +58,7 @@
         background: var(--coral-20);
     }
 
-    .widget__add:hover img {
+    .widget__add:hover .widget__add-icon {
         transition: rotate var(--dur) var(--ease-out);
         rotate: 90deg
     }
@@ -154,7 +151,7 @@
         gap: var(--ticker-gap);
         width: max-content;
         font-size: 0.6875rem;
-        line-height: 18.5px;
+        line-height: 1.15625rem;
         color: var(--coral-dark);
         white-space: nowrap;
         animation: ticker 16s linear infinite;
@@ -188,18 +185,16 @@
             display: block;
         }
 
-        .ticker__alert img {
+        .ticker__alert-icon {
             display: inline-block;
             vertical-align: middle;
         }
 
-        .ticker__group[aria-hidden="true"],
-        .ticker__toggle {
+        .ticker__group[aria-hidden="true"] {
             display: none;
         }
     }
 
-    /*=== Chat Panel ===*/
     .spire-wrapper.ai-opened {
         --rail-w: 472px;
     }
@@ -242,16 +237,16 @@
         gap: 10px;
     }
 
-    .panel-chat .head__content h2 {
+    .head__heading {
         font-size: 1.125rem;
         font-weight: 500;
-        line-height: 20px;
+        line-height: 1.25rem;
     }
 
-    .panel-chat .head__content h2 span {
+    .head__heading .tag {
         font-size: 0.625rem;
         font-weight: 400;
-        line-height: 18px;
+        line-height: 1.125rem;
         border-radius: 40vw;
         color: white;
         background: var(--lilac-80);
@@ -259,14 +254,13 @@
         padding-inline: 7px;
     }
 
-    .panel-chat .head__content p {
+    .head__description {
         font-size: 0.6875rem;
         font-weight: 400;
-        line-height: 17px;
+        line-height: 1.0625rem;
         color: var(--text-muted)
     }
 
-    /* Chat Footer */
     .chat__footer {
         position: relative;
         z-index: 1;
@@ -297,7 +291,7 @@
         outline-color: transparent;
         font-size: 0.875rem;
         font-weight: 400;
-        line-height: 18px;
+        line-height: 1.125rem;
         color: var(--onyx);
         flex: 1;
     }
@@ -312,7 +306,7 @@
         gap: 7px;
     }
 
-    .composer__actions button[class^="composer__"] {
+    .composer__actions [class^="composer__"] {
         padding: 12px;
         border-radius: 8px;
         min-width: 42px;
@@ -324,7 +318,7 @@
         transition: background-color var(--dur) var(--ease-out), translate var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
     }
 
-    .composer__actions button[class^="composer__"]:hover {
+    .composer__actions [class^="composer__"]:hover {
         translate: 0 -1px;
         box-shadow: var(--composer-btn-hover-shadow-clr) 0px 6px 10px;
     }
@@ -400,16 +394,6 @@
     .files-wrapper.is-open .files-box .files__head {
         opacity: 1;
         padding-block: 10px;
-    }
-
-    .files-head__icon {
-        width: 28px;
-        height: 28px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
     }
 
     .files__head:hover {
@@ -512,7 +496,6 @@
         --file-type-bg: #fff0e8;
     }
 
-    /* on / off switch */
     .switch {
         --knob-w: 14px;
         --knob-gap: 3px;
@@ -547,7 +530,6 @@
         inset-inline-start: calc(100% - var(--knob-w) - var(--knob-gap));
     }
 
-    /* Chat Content */
     .panel-chat .chat__content {
         display: flex;
         flex-direction: column;
@@ -594,7 +576,7 @@
     }
 
     .msg__icon,
-    .chip>img {
+    .chip__icon {
         flex: none;
     }
 
@@ -612,15 +594,15 @@
         outline-offset: -2px;
     }
 
-    .msg--thinking .dots>span {
+    .dots__dot {
         animation: chat-dot 1.2s ease-in-out infinite;
     }
 
-    .msg--thinking .dots>span:nth-child(2) {
+    .dots__dot:nth-child(2) {
         animation-delay: 0.15s;
     }
 
-    .msg--thinking .dots>span:nth-child(3) {
+    .dots__dot:nth-child(3) {
         animation-delay: 0.3s;
     }
 
@@ -634,7 +616,7 @@
         align-items: center;
         background: var(--msg-bubble-bg, var(--bg));
         font-size: 0.8125rem;
-        line-height: 24px;
+        line-height: 1.5rem;
         font-weight: 400;
         color: black;
         gap: 12px;
@@ -662,7 +644,6 @@
         border-end-start-radius: 0;
     }
 
-    /* Thinking */
     .msg--thinking {
         display: flex;
         align-items: center;
@@ -671,11 +652,10 @@
         color: var(--text-thinking);
     }
 
-    .msg--thinking img {
+    .msg__thinking-icon {
         animation: spin 1.2s linear infinite;
     }
 
-    /* numbers */
     .cites {
         display: inline;
     }
@@ -732,18 +712,21 @@
         display: block;
     }
 
+    [dir="rtl"] .directional-icon {
+        transform: scaleX(-1);
+    }
+
     @media (prefers-reduced-motion: reduce) {
 
         .msg,
-        .msg--thinking img,
-        .msg--thinking .dots>span,
+        .msg__thinking-icon,
+        .dots__dot,
         .cites .cite,
         .files-wrapper.is-visible .files-box {
             animation: none;
         }
     }
 
-    /*=== AI Drawer || Phones & Tablets ===*/
     @media screen and (max-width: 1023.98px) {
 
         /* The fixed rail stays mounted so both opening and closing animate. */
@@ -859,14 +842,14 @@
             gap: 0px;
         }
 
-        .welcome__brand img,
+        .welcome__brand-icon,
         .panel-chat .head__title .panel__orb {
             width: 40px;
             height: 40px;
         }
 
-        .welcome__brand h2,
-        .panel-chat .head__content h2 {
+        .welcome__brand-title,
+        .head__heading {
             font-size: 1.125rem;
             font-weight: 500;
             line-height: 1.2224;
@@ -939,10 +922,9 @@
         .welcome__tools .battery__value {
             max-width: 29px;
             font-size: 0.875rem;
-            line-height: 19px;
+            line-height: 1.1875rem;
         }
 
-        /* out-of-gate bars */
         .bars {
             display: flex;
             gap: 6px;
@@ -1020,14 +1002,14 @@
             animation: float 4s var(--ease-in-out) infinite;
         }
 
-        .panel__welcome h2 {
+        .panel__welcome-title {
             color: black;
             font-size: 1.25rem;
             font-weight: 500;
             line-height: 1.35;
         }
 
-        .panel__welcome p {
+        .panel__welcome-copy {
             font-size: 1rem;
             line-height: 1.5;
         }
@@ -1043,7 +1025,7 @@
             box-shadow: 0 7px 18px rgb(29 37 45 / 0.04);
         }
 
-        .welcome__composer .composer__actions button[class^="composer__"] {
+        .welcome__composer .composer__actions [class^="composer__"] {
             min-width: 43px;
             min-height: 43px;
             padding: 12px;
@@ -1069,7 +1051,7 @@
 
         .panel-chat .panel__spark,
         .panel-chat .head__content .tag,
-        .panel-chat .head__content p {
+        .head__description {
             display: none;
         }
 
@@ -1084,10 +1066,6 @@
             border: 1px solid var(--line);
             border-radius: 12px;
             color: var(--onyx);
-        }
-
-        [dir="rtl"] .panel__back svg {
-            transform: scaleX(-1);
         }
 
         .ai-backdrop {
@@ -1123,14 +1101,12 @@
         }
     }
 
-    /*=== Responsive Visibility ===*/
     @media screen and (min-width: 1024px) {
         .mobile-only {
             display: none;
         }
     }
 
-    /*=== Responsive Visibility & Focus ===*/
     @media screen and (max-width: 1023.98px) {
         .desktop-only {
             display: none;
@@ -1155,7 +1131,7 @@
 
         .hero__asterisk,
         .badge__ring,
-        .panel__art img,
+        .panel__art-image,
         .battery__fill,
         .bars__bar::after,
         .panel__welcome .panel__orb {
@@ -1163,11 +1139,6 @@
         }
     }
 
-    /*=== ===*/
-
-    /*=== KEYFRAMES===*/
-
-    /* HERO SECTION ANIMATIONS */
 
     @keyframes spin-in {
         from {
@@ -1181,8 +1152,6 @@
             transform: rotate(360deg);
         }
     }
-
-    /* CHAT PANEL ANIMATIONS */
 
     /* The higher composer layer masks the tray as it slides upward. */
     @keyframes files-tray-reveal {
